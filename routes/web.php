@@ -19,5 +19,9 @@ Route::get('/', function () {
 });
 
 Route::get('home', function() {
-	return view('pages.home');
+    return view('pages.home');
 })->middleware('na.authenticate');
+
+Route::get('sample' function() {
+    return 'test';
+});
