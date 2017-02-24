@@ -21,3 +21,7 @@ Route::get('/', function () {
 Route::get('home', function() {
 	return view('pages.home');
 })->middleware('na.authenticate');
+
+Route::get('new', function () {
+    return view('new');
+});
