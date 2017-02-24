@@ -1,27 +1,24 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::group(['middleware' => 'na.authenticate'], function () {
+	Route::resource('documents', 'DocumentController', ['except' => ['index']]);
+	Route::resource('audit_trails', 'AuditTrailController');
+	Route::resource('revision_logs', 'RevisionLogController');
+	Route::resource('sections', 'SectionController');
+	Route::resource('users', 'UserController');
+	Route::resource('request_revision', 'RequestARevisionController');
+	Route::resource('revision_requests', 'RevisionRequestController');
+    Route::get('home', function() {	return view('pages.home');});
+}); 
+
+Route::get('nomatch', 'PageController@nomatch');
+
+Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+Route::post('show', ['as' => 'audit_trails.show', 'uses' => 'AuditTrailController@show']);
 
 Route::get('login', 'NAController@login');
 Route::get('callback', 'NAController@callback');
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('home', function() {
-	return view('pages.home');
-})->middleware('na.authenticate');
-
-Route::get('new', function () {
-    return view('new');
 });
