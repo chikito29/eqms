@@ -39,6 +39,7 @@ class NAController extends Controller
     		'headers' => ['Authorization' => 'Bearer ' . $accessToken['access_token'], 'Accept' => 'application/json']
     	]);
 
-    	return $userDetailsResponse->getBody();
+    	// return $userDetailsResponse->getBody();
+        return redirect('home');
     }
 }

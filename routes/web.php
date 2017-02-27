@@ -1,20 +1,21 @@
 <?php
 
-Route::group(['middleware' => 'na.authenticate'], function () {
-	Route::resource('documents', 'DocumentController', ['except' => ['index']]);
-	Route::resource('audit_trails', 'AuditTrailController');
-	Route::resource('revision_logs', 'RevisionLogController');
-	Route::resource('sections', 'SectionController');
-	Route::resource('users', 'UserController');
-	Route::resource('request_revision', 'RequestARevisionController');
-	Route::resource('revision_requests', 'RevisionRequestController');
-    Route::get('home', function() {	return view('pages.home');});
-}); 
+// Route::group(['middleware' => 'na.authenticate'], function () {
+Route::resource('documents', 'DocumentController', ['except' => ['index']]);
+// 	Route::resource('audit_trails', 'AuditTrailController');
+// 	Route::resource('revision_logs', 'RevisionLogController');
+// 	Route::resource('sections', 'SectionController');
+// 	Route::resource('users', 'UserController');
+// 	Route::resource('request_revision', 'RequestARevisionController');
+// 	Route::resource('revision_requests', 'RevisionRequestController');
+// });
 
-Route::get('nomatch', 'PageController@nomatch');
+Route::get('home', 'PageController@home')->middleware('na.authenticate');
 
-Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
-Route::post('show', ['as' => 'audit_trails.show', 'uses' => 'AuditTrailController@show']);
+// Route::get('nomatch', 'PageController@nomatch');
+
+// Route::post('search', ['as' => 'search', 'uses' => 'SearchController@search']);
+// Route::post('show', ['as' => 'audit_trails.show', 'uses' => 'AuditTrailController@show']);
 
 Route::get('login', 'NAController@login');
 Route::get('callback', 'NAController@callback');
