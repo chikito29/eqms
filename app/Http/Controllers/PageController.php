@@ -11,4 +11,8 @@ class PageController extends Controller
         $sections = Section::with('documents')->get();
         return view('pages.home', compact('sections'));
     }
+
+    public function search() {
+        return request()->all();
+    }
 }

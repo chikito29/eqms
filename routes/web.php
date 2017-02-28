@@ -1,7 +1,7 @@
 <?php
 
 // Route::group(['middleware' => 'na.authenticate'], function () {
-Route::resource('documents', 'DocumentController', ['except' => ['index']]);
+Route::resource('documents', 'DocumentController');
 // 	Route::resource('audit_trails', 'AuditTrailController');
 // 	Route::resource('revision_logs', 'RevisionLogController');
 // 	Route::resource('sections', 'SectionController');
@@ -11,6 +11,7 @@ Route::resource('documents', 'DocumentController', ['except' => ['index']]);
 // });
 
 Route::get('home', 'PageController@home')->middleware('na.authenticate');
+Route::get('serach', 'PageController@search')->middleware('na.authenticate');
 
 // Route::get('nomatch', 'PageController@nomatch');
 

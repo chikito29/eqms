@@ -66,9 +66,11 @@
                                 <span class="fa fa-bars"></span>
                             </div>
                             <div class="pull-right">
-                                <div class="x-features-search">
-                                    <input type="text" name="search">
-                                    <input type="submit">
+                                <div class="x-features-search @if(request('search')) active @endif">
+                                    <form class="form-horizontal" action="{{ route('documents.index') }}" method="get">
+                                        <input type="text" name="search" value="@if(request('search')){{ request('search') }}@endif">
+                                        <input type="submit">
+                                    </form>
                                 </div>
                                 <div class="x-features-profile">
                                     <img src="{{ url('img/no-profile-image.png') }}">

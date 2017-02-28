@@ -13,6 +13,12 @@ class DocumentController extends Controller {
         $this->middleware('na.authenticate');
     }
 
+    public function index() {
+        $documents = Document::where('body', 'like', '%' . request('search') . '%')->get();
+        $sections = Section::with('documents')->get();
+        return view('documents.search', compact('sections', 'documents'));
+    }
+
     public function create() {
         $sections = Section::with('documents')->get();
         return view('documents.create', compact('sections'));

@@ -1,5 +1,7 @@
 @extends('./layouts/super-admin')
 
+@section('page-title'){{ $document->title }} |eQMS @endsection
+
 @section('nav-document') active @endsection
 
 @section('page-content')
@@ -47,16 +49,18 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12 col-xs-12">
-                                        <textarea class="summernote" name="body">{{ $document->body }}</textarea>
+                                    <div class="x-todo-content" style="padding:40px;">
+                                        <div class="form-group">
+                                            <div class="col-md-12 col-xs-12">
+                                                <textarea class="summernote" name="body">{{ $document->body }}</textarea>
+                                            </div>
+                                            @if ($errors->has('body'))
+                                                <span class="help-block successful">
+                                                    <strong class="text-danger">{{ $errors->first('body') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    @if ($errors->has('body'))
-                                        <span class="help-block successful">
-                                            <strong class="text-danger">{{ $errors->first('body') }}</strong>
-                                        </span>
-                                    @endif
                                 </div>
                             </form>
                         </div>

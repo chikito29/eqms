@@ -34,7 +34,7 @@
 
                     <div class="x-block">
                         <div class="x-block-head">
-                            <h3>COMMENTS</h3>
+                            <h3>REVISION REQUESTS</h3>
                             <div class="pull-right">
                                 <button class="btn btn-default">ACTIONS <span class="fa fa-angle-down" style="margin-left: 20px;"></span></button>
                             </div>
@@ -126,7 +126,7 @@
 
                     <div class="x-block">
                         <div class="x-block-head">
-                            <h3>TO DO LIST</h3>
+                            <h3>REVISION LOGS</h3>
                             <div class="pull-right">
                                 <button class="btn btn-default">ACTIONS <span class="fa fa-angle-down" style="margin-left: 20px;"></span></button>
                             </div>
