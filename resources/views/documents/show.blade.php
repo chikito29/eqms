@@ -3,7 +3,7 @@
 @section('nav-document') active @endsection
 
 @section('page-content')
-    <div class="row">
+    <div class="row" style="margin-bottom: 30px;">
 
         <div class="col-md-9">
             <div class="x-content">

@@ -26,6 +26,7 @@ class DocumentController extends Controller {
 		$document->body = request('body');
 		$document->created_by = request('user.first_name');
 		$document->save();
+        session()->flash('notify', ['message' => 'Posting \'' . $document->title . '\' successfull!', 'type' => 'success']);
         return redirect()->route('documents.show', $document->id);
     }
 
@@ -42,6 +43,7 @@ class DocumentController extends Controller {
     }
 
     public function update(Request $request, $id) {
+        $request->all();
         Validator::make($request->all(), ['section-id' => 'required', 'title' => 'required|max:255', 'body' => 'required'])->validate();
         $sections = Section::with('documents')->get();
         $document = Document::find($id);
@@ -49,13 +51,15 @@ class DocumentController extends Controller {
         $document->section_id = $request->input('section-id');
         $document->body = $request->input('body');
         $document->updated_by = $request->user['id'];
-        $document->save;
+        $document->save();
+        session()->flash('notify', ['message' => $document->title . ' has been updated.', 'type' => 'success']);
         return redirect()->route('documents.show', $document->id);
     }
 
     public function destroy($id) {
         $document = Document::find($id);
         $document->delete();
+        session()->flash('notify', ['message' => $document->title . ' has been removed!', 'type' => 'success']);
         return redirect('home');
     }
 }

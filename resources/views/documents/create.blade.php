@@ -17,7 +17,7 @@
                                         <button class="btn btn-success"> POST </button>
                                     </div>
                                 </div>
-                                <div class="x-block-content x-todo" style="margin-bottom:20px;">
+                                <div class="x-block-content x-todo" style="margin-bottom: 20px;">
                                     <div class="x-todo-header">
                                         <div class="form-group">
                                             <label class="col-md-2 col-xs-12 control-label">Document Title</label>
@@ -46,16 +46,18 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12 col-xs-12">
-                                        <textarea class="summernote" name="body"></textarea>
+                                    <div class="x-todo-content" style="padding: 40px;">
+                                        <div class="form-group">
+                                            <div class="col-md-12 col-xs-12">
+                                                <textarea class="summernote" name="body"></textarea>
+                                            </div>
+                                            @if ($errors->has('body'))
+                                                <span class="help-block successful">
+                                                    <strong class="text-danger">{{ $errors->first('body') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    @if ($errors->has('body'))
-                                        <span class="help-block successful">
-                                            <strong class="text-danger">{{ $errors->first('body') }}</strong>
-                                        </span>
-                                    @endif
                                 </div>
                             </form>
                         </div>
@@ -67,6 +69,6 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" src="/js/plugins/summernote/summernote.js"></script>
-<script type="text/javascript" src="/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
+<script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
 @endsection

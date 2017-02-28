@@ -130,7 +130,17 @@
         <!-- START THIS PAGE PLUGINS-->
         <script type="text/javascript" src="{{ url('js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
         <script type="text/javascript" src="{{ url('js/plugins/scrolltotop/scrolltopcontrol.js') }}"></script>
+        <script type='text/javascript' src="{{ url('js/plugins/noty/jquery.noty.js') }}"></script>
+        <script type='text/javascript' src="{{ url('js/plugins/noty/layouts/topRight.js') }}"></script>
+        <script type='text/javascript' src="{{ url('js/plugins/noty/themes/default.js') }}"></script>
         @yield('scripts')
+        <script type="text/javascript">
+            $(function(){
+                @if($notify = session('notify'))
+                    noty({text: '{{ $notify['message'] }}', layout: 'topRight', type: '{{ $notify['type'] }}'});
+                @endif
+            });
+        </script>
         <!-- END THIS PAGE PLUGINS-->
 
         <!-- START TEMPLATE -->

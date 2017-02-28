@@ -13,9 +13,9 @@
                                 {{ csrf_field() }}
                                 {{ method_field('put') }}
                                 <div class="x-block-head">
-                                    <h3>New Document</h3>
+                                    <h3>Edit Document</h3>
                                     <div class="pull-right">
-                                        <button class="btn btn-default">ACTIONS <span class="fa fa-angle-down" style="margin-left: 20px;"></span></button>
+                                        <button class="btn btn-success"> SAVE </button>
                                     </div>
                                 </div>
                                 <div class="x-block-content x-todo" style="margin-bottom:20px;">
@@ -68,6 +68,6 @@
 @endsection
 
 @section('scripts')
-<script type="text/javascript" src="/js/plugins/summernote/summernote.js"></script>
-<script type="text/javascript" src="/js/plugins/bootstrap/bootstrap-select.js"></script>
+<script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
+<script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
 @endsection
