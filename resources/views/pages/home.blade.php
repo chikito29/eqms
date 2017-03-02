@@ -36,7 +36,13 @@
                         <div class="x-block-head">
                             <h3>REVISION REQUESTS</h3>
                             <div class="pull-right">
-                                <button class="btn btn-default">ACTIONS <span class="fa fa-angle-down" style="margin-left: 20px;"></span></button>
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">NEW   <span class="caret" style="margin-left: 20px;"></span></a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Draft</a></li>
+                                        <li><a href="#">Revision Request</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="x-block-content">
@@ -137,77 +143,22 @@
                                 <h3>7 NEW TASKS FOR TODAY</h3>
                                 <button class="btn btn-default pull-right">TODAY: 14 SEP. 2015 <span class="fa fa-angle-down"></span></button>
                             </div>
-                            <div class="x-todo-content scroll" style="height: 550px;">
-                                <div class="item">
-                                    <div class="head">
-                                        <div class="pull-left"><span class="status status-high"></span> Priority: High</div>
-                                        <div class="pull-left">Project: ATLANT Template</div>
-                                        <div class="pull-right"><span class="fa fa-clock-o"></span> added few minutes ago</div>
+                            <div class="x-todo-content">
+                                @foreach($revisionLogs as $revisionLog)
+                                    <div class="item">
+                                        <div class="head">
+                                            <div class="pull-left"><span class="status status-high"></span> Priority: High</div>
+                                            <div class="pull-left">{{ $revisionLog->section }}</div>
+                                            <div class="pull-right"><span class="fa fa-clock-o"></span> {{ Carbon\Carbon::createFromFormat('Y-m-d', $revisionLog->revision_date)->toFormattedDateString() }}</div>
+                                        </div>
+                                        <div class="title">
+                                            <h4><span class="fa fa-file-text-o"></span>  {{ $revisionLog->manual_reference }}</h4>
+                                        </div>
+                                        <div class="content">
+                                            {{ $revisionLog->description }}
+                                        </div>
                                     </div>
-                                    <div class="title">
-                                        <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                        <h4>MAKE NEW ATLANT DASHBOARD</h4>
-                                    </div>
-                                    <div class="content">
-                                        Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="head">
-                                        <div class="pull-left"><span class="status status-low"></span> Priority: Low</div>
-                                        <div class="pull-left">Project: New awesome projec</div>
-                                        <div class="pull-right"><span class="fa fa-clock-o"></span> added 15 minutes ago</div>
-                                    </div>
-                                    <div class="title">
-                                        <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                        <h4>CALL MARTIN PHILLIPS ABOUT NEW PROJECT </h4>
-                                    </div>
-                                    <div class="content">
-                                        Fusce eu nunc nisl. Duis tincidunt dui lectus. Suspendisse urna dolor, venenatis eu bibendum ut, placerat id sem. Nulla iaculis augue in nulla rutrum
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="head">
-                                        <div class="pull-left"><span class="status status-low"></span> Priority: Low</div>
-                                        <div class="pull-left">Project: Imaginary Shop</div>
-                                        <div class="pull-right"><span class="fa fa-clock-o"></span> added 3 hours ago</div>
-                                    </div>
-                                    <div class="title">
-                                        <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                        <h4>PRINT THE INOVOISES FOR BRIAN DAWSON</h4>
-                                    </div>
-                                    <div class="content">
-                                        Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="head">
-                                        <div class="pull-left"><span class="status status-medium"></span> Priority: Medium</div>
-                                        <div class="pull-left">Project: Landing page for Themeforest</div>
-                                        <div class="pull-right"><span class="fa fa-clock-o"></span> added 7 hours ago</div>
-                                    </div>
-                                    <div class="title">
-                                        <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                        <h4>NEW ATLANT DASHBOARD</h4>
-                                    </div>
-                                    <div class="content">
-                                        Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="head">
-                                        <div class="pull-left"><span class="status status-low"></span> Priority: Medium</div>
-                                        <div class="pull-left">Project: Shop for Themeforest</div>
-                                        <div class="pull-right"><span class="fa fa-clock-o"></span> added 8 hours ago</div>
-                                    </div>
-                                    <div class="title">
-                                        <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                        <h4>OS-COMMERCE SHOP TEMPLATE</h4>
-                                    </div>
-                                    <div class="content">
-                                        Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                             <div class="x-todo-footer">
                                 <div class="pull-right">

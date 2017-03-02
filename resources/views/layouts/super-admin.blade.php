@@ -28,7 +28,7 @@
                         </div>
                         <ul>
                             <li class="@yield('nav-home')">
-                                <a href="{{ url('home') }}">Home</a>
+                                <a href="{{ route('pages.home') }}">Home</a>
                             </li>
                             <li class="xn-openable @yield('nav-document')">
                                 <a href="#">Documents</a>
@@ -56,7 +56,7 @@
                                 <ul>
                                     <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Document</a></li>
                                     <li><a href="#"><span class="fa fa-bell-o"></span> Revision Request</a></li>
-                                    <li><a href="#"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
+                                    <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -96,6 +96,7 @@
         </div>
         <!-- END PAGE CONTAINER -->
 
+        @yield('message-box')
 
         <!-- MESSAGE BOX-->
         <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
@@ -116,6 +117,8 @@
             </div>
         </div>
         <!-- END MESSAGE BOX-->
+
+        @yield('modals')
 
         <!-- START PRELOADS -->
         <audio id="audio-alert" src="{{ url('audio/alert.mp3') }}" preload="auto"></audio>
