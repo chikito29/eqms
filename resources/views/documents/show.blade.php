@@ -36,7 +36,9 @@
         </div>
 
     </div>
+@endsection
 
+@section('message-box')
     <!-- MESSAGE BOX-->
     <div class="message-box animated fadeIn" data-sound="alert" id="mb-remove-document">
         <div class="mb-container">

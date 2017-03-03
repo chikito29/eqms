@@ -30,7 +30,7 @@
     <div class="x-content" >
         <div class="x-content-inner" style="margin-top:-20px;">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
 
                     <div class="x-block">
                         <div class="x-block-head">
@@ -40,7 +40,7 @@
                                     <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">NEW   <span class="caret" style="margin-left: 20px;"></span></a>
                                     <ul class="dropdown-menu" role="menu">
                                         <li><a href="#">Draft</a></li>
-                                        <li><a href="#">Revision Request</a></li>
+                                        <li><a href="{{ route('revision-requests.create') }}">Revision Request</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -48,71 +48,27 @@
                         <div class="x-block-content">
                             <table class="table x-table">
                                 <tr>
-                                    <th><label class="check"><input type="checkbox" name="checkall" class="icheckbox"></label></th>
-                                    <th width="30%">AUTHOR</th>
-                                    <th width="40%">COMMENT</th>
-                                    <th width="30%">THEME</th>
+
+                                    <th width="30%">USER</th>
+                                    <th width="40%">TARGET</th>
+                                    <th width="30%">REMARKS</th>
+                                    <th></th>
                                 </tr>
-                                <tr>
-                                    <td><label class="check"><input type="checkbox" class="icheckbox"></label></td>
-                                    <td>
-                                        <a href="#" class="x-user">
-                                            <img src="assets/images/users/user2.jpg">
-                                            <span>Roger Parker</span>
-                                        </a>
-                                        <span>16.09.2015 1:15 pm</span>
-                                    </td>
-                                    <td>Nice job with maecenas mi lorem, placerat eget dolor id, porta iaculis tortor. Nam suscipit tempus nisi, sed condimentum arcu. Vivamus elementum quam ut mattis porttitor.</td>
-                                    <td>New design layout for ATLANT admin template</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="check"><input type="checkbox" class="icheckbox"></label></td>
-                                    <td>
-                                        <a href="#" class="x-user">
-                                            <img src="assets/images/users/user3.jpg">
-                                            <span>Maria Jackson</span>
-                                        </a>
-                                        <span>16.09.2015 1:15 pm</span>
-                                    </td>
-                                    <td>It looks like maecenas mi lorem, placerat eget dolor id, porta iaculis tortor. Nam suscipit tempus nisi, sed condimentum arcu. Vivamus elementum quam ut mattis porttitor.</td>
-                                    <td>New design layout for ATLANT admin template</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="check"><input type="checkbox" class="icheckbox"></label></td>
-                                    <td>
-                                        <a href="#" class="x-user">
-                                            <img src="assets/images/users/user4.jpg">
-                                            <span>Douglas Cook</span>
-                                        </a>
-                                        <span>16.09.2015 1:15 pm</span>
-                                    </td>
-                                    <td>We need to add some praesent et erat ex. Maecenas mi lorem, placerat eget dolor id, porta iaculis tortor. Nam suscipit tempus nisi, sed condimentum arcu.</td>
-                                    <td>New design layout for ATLANT admin template</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="check"><input type="checkbox" class="icheckbox"></label></td>
-                                    <td>
-                                        <a href="#" class="x-user">
-                                            <img src="assets/images/users/user5.jpg">
-                                            <span>Brian Dawson</span>
-                                        </a>
-                                        <span>16.09.2015 1:15 pm</span>
-                                    </td>
-                                    <td>I’ve chacked this template and maecenas mi lorem, placerat eget dolor id, porta iaculis tortor. Nam suscipit tempus nisi, sed condimentum arcu. Vivamus elementum quam ut mattis porttitor.</td>
-                                    <td>New design layout for ATLANT admin template</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="check"><input type="checkbox" class="icheckbox"></label></td>
-                                    <td>
-                                        <a href="#" class="x-user">
-                                            <img src="assets/images/users/user2.jpg">
-                                            <span>Roger Parker</span>
-                                        </a>
-                                        <span>16.09.2015 1:15 pm</span>
-                                    </td>
-                                    <td>I’ve chacked this template and maecenas mi lorem, placerat eget dolor id, porta iaculis tortor. Nam suscipit tempus nisi, sed condimentum arcu. Vivamus elementum quam ut mattis porttitor.</td>
-                                    <td>New design layout for ATLANT admin template</td>
-                                </tr>
+                                @foreach($revisionRequests as $revisionRequest)
+                                    <tr>
+
+                                        <td>
+                                            <a href="#" class="x-user">
+                                                <img src="/assets/images/users/user2.jpg">
+                                                <span>{{ $revisionRequest->requested_by }}</span>
+                                            </a>
+                                            <span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
+                                        </td>
+                                        <td><a href="#">{{ $revisionRequest->targetDocument->title }}</a></td>
+                                        <td>{{ $revisionRequest->remarks }}</td>
+                                        <td><button class="btn btn-info btn-rounded btn-condensed btn-sm">View</button></td>
+                                    </tr>
+                                @endforeach
                             </table>
                         </div>
                     </div>
@@ -128,7 +84,7 @@
                     </ul>
 
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
 
                     <div class="x-block">
                         <div class="x-block-head">
@@ -147,7 +103,7 @@
                                 @foreach($revisionLogs as $revisionLog)
                                     <div class="item">
                                         <div class="head">
-                                            <div class="pull-left"><span class="status status-high"></span> Priority: High</div>
+                                            <div class="pull-left"><span class="status status-medium"></span> Status: Approved</div>
                                             <div class="pull-left">{{ $revisionLog->section }}</div>
                                             <div class="pull-right"><span class="fa fa-clock-o"></span> {{ Carbon\Carbon::createFromFormat('Y-m-d', $revisionLog->revision_date)->toFormattedDateString() }}</div>
                                         </div>

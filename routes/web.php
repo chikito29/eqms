@@ -3,6 +3,7 @@
 // Route::group(['middleware' => 'na.authenticate'], function () {
 Route::resource('documents', 'DocumentController');
 Route::resource('sections', 'SectionController');
+Route::resource('revision-requests', 'RevisionRequestController');
 // 	Route::resource('audit_trails', 'AuditTrailController');
 // 	Route::resource('revision_logs', 'RevisionLogController');
 // 	Route::resource('sections', 'SectionController');
