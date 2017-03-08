@@ -98,6 +98,66 @@
                 </div>
             </form>
 
+            <form class="form-horizontal">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Section C: Approval/Disapproval</h3>
+                        <p>For Approval/Disapproval</p>
+                    </div>
+                    <div class="panel-body form-group-separated">
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-7 control-label">CEO Approval Status</label>
+                            <div class="col-md-9 col-xs-5">
+                                <select class="form-control select" name="recommendation_status">
+                                    <option value="for-approval">Approved</option>
+                                    <option value="for-disapproval">Denied</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-5 control-label">Attachment</label>
+                            <div class="col-md-9 col-xs-7">
+                                <input type="file" multiple class="file" data-preview-file-type="any" name="attachments"/>
+                                <span class="help-block">Upload the signed revision request by the CEO.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-5 control-label">Remarks</label>
+                            <div class="col-md-9 col-xs-7">
+                                <textarea class="form-control" rows="5" name="recommendation_reason"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form class="form-horizontal">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Section D: Action Taken</h3>
+                    </div>
+                    <div class="panel-body form-group-separated">
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-7 control-label">Action Taken</label>
+                            <div class="col-md-9 col-xs-5">
+                                <select class="form-control select" name="recommendation_status">
+                                    <option value="for-approval">Document Revised</option>
+                                    <option value="for-disapproval">Updated</option>
+                                    <option value="for-disapproval">Distributed to Holders</option>
+                                    <option value="for-disapproval">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-5 control-label">If others, please specify</label>
+                            <div class="col-md-9 col-xs-7">
+                                <textarea class="form-control" rows="5" name="recommendation_reason"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
         </div>
         <div class="col-md-3">
 

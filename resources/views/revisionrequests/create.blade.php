@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 col-xs-5 control-label">Highlighted Document</label>
+                            <label class="col-md-2 col-xs-5 control-label">Reference Document</label>
                             <div class="col-md-10 col-xs-7">
                                 <textarea id="summernote" name="reference_document_body">{{ $referenceDocument->body }}</textarea>
                                 <span class="help-block">Highlight the section of the document you are trying to address.</span>
@@ -43,6 +43,13 @@
                             @endif
                         </div>
                         @endif
+                        <div class="form-group">
+                            <label class="col-md-2 col-xs-12 control-label">Section / Page / Process</label>
+                            <div class="col-md-10 col-xs-12">
+                                <input type="text" class="tagsinput" value=""/>
+                                <span class="help-block">Tag the section(s) of the document you are trying to address. e.g. 4.2.3.2</span>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-2 col-xs-5 control-label">Proposed Revision</label>
                             <div class="col-md-10 col-xs-7">
@@ -134,11 +141,11 @@
 <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
+<script type="text/javascript" src="{{ url('js/plugins/tagsinput/jquery.tagsinput.min.js') }}"></script>
 <script type="text/javascript">
     $('#summernote').summernote({
         height: 300,
         toolbar: [
-            ['color', ['color']],
             ['misc', ['fullscreen']],
         ]
     });
