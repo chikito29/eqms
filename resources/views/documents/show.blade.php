@@ -13,6 +13,7 @@
                 <div class="x-content-title" style="margin-bottom:60px;">
                     <h1 class="text-warning">{{ $document->title }}</h1>
                     <div class="pull-right">
+                        <button class="btn btn-default btn-condensed" onclick="location.href = '{{ route('revision-requests.create') . '?reference_document=' . $document->id }}';"><i class="fa fa-pencil"></i></button>
                         <button class="btn btn-default btn-condensed" onclick="location.href = '{{ route('documents.edit', $document->id) }}';"><i class="glyphicon glyphicon-edit"></i></button>
                         <button class="btn btn-default btn-condensed" onclick="delete_document({{ $document->id }})"><i class="glyphicon glyphicon-trash"></i></button>
                         <form class="form-horizontal" action="{{ route('documents.destroy', $document->id) }}" method="post" id="form-delete{{ $document->id }}">

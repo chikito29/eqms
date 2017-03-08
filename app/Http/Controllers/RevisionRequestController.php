@@ -9,81 +9,59 @@ use App\Document;
 
 class RevisionRequestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return RevisionRequest::all();
+    public function __construct() {
+        $this->middleware('na.authenticate');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function index() {
+        $sections = Section::with('documents')->get();
+        $revisionRequests = RevisionRequest::with('reference_document')->get();
+        return view('revisionrequests.index', compact('sections', 'revisionRequests'));
+    }
+
+    public function create() {
         $sections = Section::with('documents')->get();
         $documentTitles = Document::select('id', 'title')->get();
+        if($referenceDocumentId = request('reference_document')) {
+            $referenceDocument = Document::find($referenceDocumentId);
+            return view('revisionrequests.create', compact('sections', 'documentTitles', 'referenceDocument'));
+        }
         return view('revisionrequests.create', compact('sections', 'documentTitles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        // Validator::make($request->all(), ['section-id' => 'required', 'title' => 'required|max:255', 'body' => 'required'])->validate();
+        $revisionRequest = new RevisionRequest();
+        $revisionRequest->author_id = $request->input('user.id');
+        $revisionRequest->author_name = $request->input('user.first_name') . ' ' . $request->input('user.last_name');
+        $revisionRequest->reference_document_id = $request->input('reference_document_id');
+        $revisionRequest->reference_document_body = $request->input('reference_document_body');
+        $revisionRequest->proposed_revision = $request->input('proposed_revision');
+        $revisionRequest->revision_reason = $request->input('revision_reason');
+        $revisionRequest->save();
+        return $revisionRequest;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function show($id) {
+        $sections = Section::with('documents')->get();
+        $revisionRequest = RevisionRequest::with('reference_document')->find($id);
+        return view('revisionrequests.show', compact('sections', 'revisionRequest'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+    public function edit($id) {
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Request $request, $id) {
+        $sections = Section::with('documents')->get();
+        $revisionRequest = RevisionRequest::find($id);
+        $revisionRequest->recommendation_status = $request->input('recommendation_status');
+        $revisionRequest->recommendation_reason = $request->input('recommendation_reason');
+        $revisionRequest->save();
+        return $revisionRequest;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
 }

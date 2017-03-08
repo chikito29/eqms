@@ -50,23 +50,22 @@
                                 <tr>
 
                                     <th width="30%">USER</th>
-                                    <th width="40%">TARGET</th>
-                                    <th width="30%">REMARKS</th>
+                                    <th width="40%">REFERENCE DOCUMENT</th>
+                                    <th width="30%">STATUS</th>
                                     <th></th>
                                 </tr>
                                 @foreach($revisionRequests as $revisionRequest)
                                     <tr>
-
                                         <td>
                                             <a href="#" class="x-user">
-                                                <img src="/assets/images/users/user2.jpg">
-                                                <span>{{ $revisionRequest->requested_by }}</span>
+                                                <img src="{{ url('img/no-profile-image.png') }}">
+                                                <span>{{ $revisionRequest->author_name }}</span>
                                             </a>
                                             <span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
                                         </td>
-                                        <td><a href="#">{{ $revisionRequest->targetDocument->title }}</a></td>
-                                        <td>{{ $revisionRequest->remarks }}</td>
-                                        <td><button class="btn btn-info btn-rounded btn-condensed btn-sm">View</button></td>
+                                        <td><a href="#">{{ $revisionRequest->reference_document->title }}</a></td>
+                                        <td><span class="label label-default" style="color: white;">pending</span></td>
+                                        <td><button class="btn btn-info btn-rounded btn-condensed btn-sm" onclick="location.href = '{{ route('revision-requests.show', $revisionRequest->id) }}';">View</button></td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -105,7 +104,7 @@
                                         <div class="head">
                                             <div class="pull-left"><span class="status status-medium"></span> Status: Approved</div>
                                             <div class="pull-left">{{ $revisionLog->section }}</div>
-                                            <div class="pull-right"><span class="fa fa-clock-o"></span> {{ Carbon\Carbon::createFromFormat('Y-m-d', $revisionLog->revision_date)->toFormattedDateString() }}</div>
+                                            <div class="pull-right"><span class="fa fa-clock-o"></span> {{ $revisionLog->created_at->toDayDateTimeString() }}</div>
                                         </div>
                                         <div class="title">
                                             <h4><span class="fa fa-file-text-o"></span>  {{ $revisionLog->manual_reference }}</h4>

@@ -55,7 +55,7 @@
                                 <a href="#">Actions</a>
                                 <ul>
                                     <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Document</a></li>
-                                    <li><a href="#"><span class="fa fa-bell-o"></span> Revision Request</a></li>
+                                    <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-pencil"></span> Revision Request</a></li>
                                     <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
                                 </ul>
                             </li>

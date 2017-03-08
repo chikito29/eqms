@@ -1,5 +1,7 @@
 @extends('./layouts/super-admin')
 
+@section('page-title')New Document |eQMS @endsection
+
 @section('nav-actions') active @endsection
 
 @section('page-content')
