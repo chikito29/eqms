@@ -41,6 +41,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3 col-xs-12 control-label">Section / Page / Process</label>
+                            <div class="col-md-9 col-xs-12">
+                                <input type="text" class="tagsinput" value="{{ $revisionRequest->reference_document_tags }}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                             <div class="col-md-9 col-xs-7">
                                 <input type="file" multiple class="file" data-preview-file-type="any" name="attachments"/>
@@ -49,7 +55,7 @@
                         <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Reason for Revision</label>
                             <div class="col-md-9 col-xs-7">
-                                <textarea class="form-control" rows="5" name="revision_reason"></textarea>
+                                <textarea class="form-control" rows="5" name="revision_reason">{{ $revisionRequest->revision_reason }}</textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -216,4 +222,5 @@
 @section('scripts')
 <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
+<script type="text/javascript" src="{{ url('js/plugins/tagsinput/jquery.tagsinput.min.js') }}"></script>
 @endsection

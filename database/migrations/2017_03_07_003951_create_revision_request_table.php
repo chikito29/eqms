@@ -19,7 +19,7 @@ class CreateRevisionRequestTable extends Migration
             $table->integer('author_id');
             $table->string('author_name');
             $table->integer('reference_document_id')->nullable();
-            $table->mediumText('reference_document_body')->nullable();
+            $table->mediumText('reference_document_tags')->nullable();
             $table->mediumText('proposed_revision');
             $table->mediumText('revision_reason');
             $table->mediumText('recommendation_reason')->nullable();

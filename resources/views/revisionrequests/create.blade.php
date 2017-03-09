@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-9">
 
-            <form enctype="multipart/form-data" class="form-horizontal" action="{{ route('revision-requests.store') }}" method="POST">
+            <form enctype="multipart/form-data" class="form-horizontal" action="{{ route('revision-requests.store') }}" method="POST" role="form">
                 {{ csrf_field() }}
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-5 control-label">Reference Document</label>
                             <div class="col-md-10 col-xs-7">
-                                <textarea id="summernote" name="reference_document_body">{{ $referenceDocument->body }}</textarea>
+                                <textarea id="summernote">{{ $referenceDocument->body }}</textarea>
                                 <span class="help-block">Highlight the section of the document you are trying to address.</span>
                             </div>
                             @if ($errors->has('referenceDocument'))
@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-12 control-label">Section / Page / Process</label>
                             <div class="col-md-10 col-xs-12">
-                                <input type="text" class="tagsinput" value=""/>
+                                <input type="text" class="tagsinput" name="reference_document_tags"/>
                                 <span class="help-block">Tag the section(s) of the document you are trying to address. e.g. 4.2.3.2</span>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-5 control-label">Attachments</label>
                             <div class="col-md-10 col-xs-7">
-                                <input type="file" multiple class="file" data-preview-file-type="any" name="attachments"/>
+                                <input type="file" multiple id="file-simple" name="attachments[]"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -143,6 +143,17 @@
 <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/tagsinput/jquery.tagsinput.min.js') }}"></script>
 <script type="text/javascript">
+    $(function(){
+        $("#file-simple").fileinput({
+            showUpload: false,
+            showCaption: true,
+            uploadUrl: "{{ route('revision-requests.store') }}",
+            browseClass: "btn btn-primary",
+            browseLabel: "Browse Document",
+            allowedFileExtensions : ['.jpg']
+        });
+    });
+
     $('#summernote').summernote({
         height: 300,
         toolbar: [
