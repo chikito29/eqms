@@ -15,13 +15,11 @@ class DocumentController extends Controller {
 
     public function index() {
         $documents = Document::where('body', 'like', '%' . request('search') . '%')->get();
-        $sections = Section::with('documents')->get();
-        return view('documents.search', compact('sections', 'documents'));
+        return view('documents.search', compact('documents'));
     }
 
     public function create() {
-        $sections = Section::with('documents')->get();
-        return view('documents.create', compact('sections'));
+        return view('documents.create');
     }
 
     public function store(Request $request) { 
@@ -38,20 +36,17 @@ class DocumentController extends Controller {
 
     public function show($id) {
         $document = Document::find($id);
-        $sections = Section::with('documents')->get();
-        return view('documents.show', compact('sections', 'document'));
+        return view('documents.show', compact('document'));
     }
 
     public function edit($id) {
         $document = Document::find($id);
-        $sections = Section::with('documents')->get();
-        return view('documents.edit', compact('sections', 'document'));
+        return view('documents.edit', compact('document'));
     }
 
     public function update(Request $request, $id) {
         $request->all();
         Validator::make($request->all(), ['section-id' => 'required', 'title' => 'required|max:255', 'body' => 'required'])->validate();
-        $sections = Section::with('documents')->get();
         $document = Document::find($id);
         $document->title = $request->input('title');
         $document->section_id = $request->input('section-id');

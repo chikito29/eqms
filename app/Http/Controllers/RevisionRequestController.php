@@ -15,19 +15,17 @@ class RevisionRequestController extends Controller
     }
 
     public function index() {
-        $sections = Section::with('documents')->get();
         $revisionRequests = RevisionRequest::with('reference_document')->get();
-        return view('revisionrequests.index', compact('sections', 'revisionRequests'));
+        return view('revisionrequests.index', compact('revisionRequests'));
     }
 
     public function create() {
-        $sections = Section::with('documents')->get();
         $documentTitles = Document::select('id', 'title')->get();
         if($referenceDocumentId = request('reference_document')) {
             $referenceDocument = Document::find($referenceDocumentId);
-            return view('revisionrequests.create', compact('sections', 'documentTitles', 'referenceDocument'));
+            return view('revisionrequests.create', compact('documentTitles', 'referenceDocument'));
         }
-        return view('revisionrequests.create', compact('sections', 'documentTitles'));
+        return view('revisionrequests.create', compact('documentTitles'));
     }
 
     public function store(Request $request) {
@@ -57,9 +55,8 @@ class RevisionRequestController extends Controller
     }
 
     public function show($id) {
-        $sections = Section::with('documents')->get();
         $revisionRequest = RevisionRequest::with('reference_document')->find($id);
-        return view('revisionrequests.show', compact('sections', 'revisionRequest'));
+        return view('revisionrequests.show', compact('revisionRequest'));
     }
 
     public function edit($id) {
@@ -67,7 +64,6 @@ class RevisionRequestController extends Controller
     }
 
     public function update(Request $request, $id) {
-        $sections = Section::with('documents')->get();
         $revisionRequest = RevisionRequest::find($id);
         $revisionRequest->recommendation_status = $request->input('recommendation_status');
         $revisionRequest->recommendation_reason = $request->input('recommendation_reason');
