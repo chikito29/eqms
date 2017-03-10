@@ -27,11 +27,11 @@
                         <div class="x-block-content">
                             <table class="table x-table">
                                 <tr>
-
                                     <th>AUTHOR</th>
                                     <th>REFERENCE DOCUMENT</th>
                                     <th>STATUS</th>
-                                    <th>RECOMMENDATION</th>
+                                    <th>QMR</th>
+                                    <th>CEO</th>
                                     <th>ACTIONS</th>
                                 </tr>
                                 @foreach($revisionRequests as $revisionRequest)
@@ -39,13 +39,41 @@
                                         <td>
                                             <a href="#" class="x-user">
                                                 <img src="{{ url('img/no-profile-image.png') }}">
-                                                <span>{{ $revisionRequest->author_name }}</span>
+                                                <span>{{ $revisionRequest->user_name }}</span>
                                             </a>
                                             <span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
                                         </td>
                                         <td><a href="#">{{ $revisionRequest->reference_document->title }}</a></td>
-                                        <td><span class="label label-info" style="color: white;">new</span></td>
-                                        <td><span class="label label-danger" style="color: white;">denied</span></td>
+                                        @if($revisionRequest->status == 'New')
+                                        <td><span class="label label-info" style="color: white;">{{ $revisionRequest->status }}</span></td>
+                                        @elseif($revisionRequest->status == 'Processing')
+                                        <td><span class="label label-warning" style="color: white;">{{ $revisionRequest->status }}</span></td>
+                                        @elseif($revisionRequest->status == 'Done')
+                                        <td><span class="label label-default" style="color: white;">{{ $revisionRequest->status }}</span></td>
+                                        @else
+                                        <td><span class="label label-danger" style="color: white;">{{ $revisionRequest->status }}</span></td>
+                                        @endif
+
+                                        @if($revisionRequest->section_b)
+                                            @if($revisionRequest->section_b->recommendation_status == 'For Approval')
+                                                <td><span class="label label-success" style="color: white;">{{ $revisionRequest->section_b->recommendation_status }}</span></td>
+                                            @else
+                                                <td><span class="label label-danger" style="color: white;">{{ $revisionRequest->section_b->recommendation_status }}</span></td>
+                                            @endif
+                                        @else
+                                            <td></td>
+                                        @endif
+
+                                        @if($revisionRequest->section_c)
+                                            @if($revisionRequest->section_c->approved)
+                                                <td><span class="label label-success" style="color: white;">Approved</span></td>
+                                            @else
+                                                <td><span class="label label-danger" style="color: white;">Denied</span></td>
+                                            @endif
+                                        @else
+                                            <td></td>
+                                        @endif
+
                                         <td><button class="btn btn-info btn-rounded btn-condensed btn-sm" onclick="location.href = '{{ route('revision-requests.show', $revisionRequest->id) }}';">View</button></td>
                                     </tr>
                                 @endforeach

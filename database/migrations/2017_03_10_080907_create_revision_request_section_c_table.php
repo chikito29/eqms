@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAttachmentsTable extends Migration
+class CreateRevisionRequestSectionCTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreateAttachmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('revision_requests_section_c', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('revision_request_id')->nullable();
-            $table->integer('cpar_id')->nullable();
-            $table->string('file_name');
-            $table->string('file_path');
-            $table->string('section');
-            $table->string('uploaded_by');
+            $table->string('revision_request_id')->nullable();
+            $table->integer('user_id');
+            $table->string('user_name');
+            $table->mediumText('ceo_remarks')->nullable();
+            $table->tinyInteger('approved')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +32,6 @@ class CreateAttachmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('revision_requests_section_c');
     }
 }
