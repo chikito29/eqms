@@ -13,8 +13,7 @@ class SectionController extends Controller
 
     public function index()
     {
-        $sections = Section::all();
-        return view('sections.index', compact('sections'));
+        return view('sections.index');
     }
 
     public function store(Request $request)
@@ -29,8 +28,7 @@ class SectionController extends Controller
 
     public function edit(Section $section)
     {
-        $sections = Section::all();
-        return view('sections.edit', compact('sections', 'section'));
+        return view('sections.edit', compact('section'));
     }
 
     public function update(Request $request, $id)

@@ -59,6 +59,14 @@
                                     <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
                                 </ul>
                             </li>
+                            <li class="xn-openable @yield('nav-audit-findings')">
+                                <a href="#">Audit Findings</a>
+                                <ul>
+                                    <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Audit Findings</a></li>
+                                    <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil"></span> CPAR</a></li>
+                                    <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li>
+                                </ul>
+                            </li>
                         </ul>
 
                         <div class="x-features">

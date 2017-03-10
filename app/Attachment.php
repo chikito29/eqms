@@ -12,4 +12,8 @@ class Attachment extends Model
     public function revision_request() {
         return $this->belongsTo('App\RevisionRequest', 'revision_request_id');
     }
+
+    public function cpar() {
+        return $this->belongsTo(Cpar::class);
+    }
 }

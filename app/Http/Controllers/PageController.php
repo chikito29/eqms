@@ -13,6 +13,10 @@ class PageController extends Controller
         $sections = Section::with('documents')->get();
         $revisionLogs = RevisionLog::all();
         $revisionRequests = RevisionRequest::with('reference_document')->get();
-        return view('pages.home', compact('sections', 'revisionLogs', 'revisionRequests'));
+        return view('pages.home', compact('revisionLogs', 'revisionRequests'));
+    }
+
+    public function actionSummary() {
+        return view('pages.action-summary');
     }
 }

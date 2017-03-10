@@ -19,20 +19,24 @@ class RevisionRequestController extends Controller
     }
 
     public function index() {
+<<<<<<< HEAD
         $revisionRequest = RevisionRequest::with('section_b')->find(1);
         $sections = Section::with('documents')->get();
         $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
         return view('revisionrequests.index', compact('sections', 'revisionRequests'));
+=======
+        $revisionRequests = RevisionRequest::with('reference_document')->get();
+        return view('revisionrequests.index', compact('revisionRequests'));
+>>>>>>> 6a58f8ba803e152163cb06a9081df05fb030c550
     }
 
     public function create() {
-        $sections = Section::with('documents')->get();
         $documentTitles = Document::select('id', 'title')->get();
         if($referenceDocumentId = request('reference_document')) {
             $referenceDocument = Document::find($referenceDocumentId);
-            return view('revisionrequests.create', compact('sections', 'documentTitles', 'referenceDocument'));
+            return view('revisionrequests.create', compact('documentTitles', 'referenceDocument'));
         }
-        return view('revisionrequests.create', compact('sections', 'documentTitles'));
+        return view('revisionrequests.create', compact('documentTitles'));
     }
 
     public function store(Request $request) {
@@ -64,9 +68,8 @@ class RevisionRequestController extends Controller
     }
 
     public function show($id) {
-        $sections = Section::with('documents')->get();
         $revisionRequest = RevisionRequest::with('reference_document', 'attachments', 'section_b', 'section_c', 'section_d')->find($id);
-        return view('revisionrequests.show', compact('sections', 'revisionRequest'));
+        return view('revisionrequests.show', compact('revisionRequest'));
     }
 
     public function edit($id) {

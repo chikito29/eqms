@@ -1,4 +1,4 @@
-@extends('./layouts/super-admin')
+@extends('layouts.super-admin')
 
 @section('page-title')New Revision Request |eQMS @endsection
 
