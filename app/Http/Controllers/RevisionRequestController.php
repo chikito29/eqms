@@ -19,15 +19,8 @@ class RevisionRequestController extends Controller
     }
 
     public function index() {
-<<<<<<< HEAD
-        $revisionRequest = RevisionRequest::with('section_b')->find(1);
-        $sections = Section::with('documents')->get();
-        $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
-        return view('revisionrequests.index', compact('sections', 'revisionRequests'));
-=======
         $revisionRequests = RevisionRequest::with('reference_document')->get();
         return view('revisionrequests.index', compact('revisionRequests'));
->>>>>>> 6a58f8ba803e152163cb06a9081df05fb030c550
     }
 
     public function create() {

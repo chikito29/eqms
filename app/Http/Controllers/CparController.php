@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cpar;
 use App\Document;
 use App\DocumentVersion;
+use App\Section;
 use Illuminate\Http\Request;
 
 class CparController extends Controller
@@ -16,7 +17,7 @@ class CparController extends Controller
      */
     public function index()
     {
-        return 'true';
+
     }
 
     /**
@@ -26,7 +27,8 @@ class CparController extends Controller
      */
     public function create()
     {
-        return view('cpars.create');
+        $sections = Section::with('documents')->get();
+        return view('cpars.create', compact('sections'));
     }
 
     /**

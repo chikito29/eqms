@@ -13,9 +13,8 @@ Route::resource('revision-requests', 'RevisionRequestController');
 // 	Route::resource('revision_requests', 'RevisionRequestController');
 // });
 
-Route::get('home', ['as' => 'pages.home', 'uses' => 'PageController@home'])->middleware('na.authenticate');
+Route::get('home', ['as' => 'pages.home', 'uses' => 'PageController@home']); //->middleware('na.authenticate')
 Route::get('action-summary', 'PageController@actionSummary');
-Route::get('lookfor/{name?}', 'CparController@lookfor');
 
 // Route::get('nomatch', 'PageController@nomatch');
 

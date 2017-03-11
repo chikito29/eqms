@@ -10,6 +10,7 @@ class Section extends Model
     use SoftDeletes;
 
     protected $fillable = ['name'];
+
     protected $searchable = [
 		'columns' => [
 		    'sections.name' => 10,
@@ -21,6 +22,6 @@ class Section extends Model
 	];
 
 	public function documents() {
-	    return $this->hasMany('App\Document');
+	    return $this->hasMany(Document::class);
 	}
 }
