@@ -14,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->share('sections', Section::with('documents')->get());
+        view()->composer('layouts.hnavigation', function ($view) {
+            $view->with('sections', Section::with('documents')->get());
+        });
     }
 
     /**

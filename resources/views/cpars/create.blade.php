@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Accetance Of CPAR</label>
+                                <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
                                 <div class="col-md-9 col-xs-12">
                                     <textarea class="form-control" rows="4" name="cpar-acceptance" disabled="disabled"></textarea>
                                     <span class="help-block">Comments If Any</span>
