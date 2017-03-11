@@ -134,7 +134,10 @@
                             <div class="col-md-12 col-xs-12">
                                 @if( ! $revisionRequest->section_b)
                                 <button class="btn btn-primary btn-rounded pull-right">Submit</button>
+                                @else
+                                <a href="http://google.com/" class="btn btn-info btn-rounded pull-right" target="_blank"><span class="fa fa-print"></span> Print</a>
                                 @endif
+
                             </div>
                         </div>
                     </div>
@@ -344,6 +347,19 @@
             browseLabel: "Browse Document",
             allowedFileExtensions : ['.jpg']
         });
+
+        function print() {
+            // var form = $("#form-filter");
+            // form.attr({
+            //     "action": "http://mbhs.dev/reports/print/student-enrollment",
+            //     "target": "_blank"
+            // });
+            // form.submit();
+            // form.attr("action", "http://mbhs.dev/reports/student-enrollment");
+            // form.removeAttr("target");
+
+        }
+
     });
 </script>
 @endsection

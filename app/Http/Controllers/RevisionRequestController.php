@@ -131,4 +131,9 @@ class RevisionRequestController extends Controller
     public function destroy($id) {
         //
     }
+
+    public function printRevisionRequest($id) {
+        return view('revisionrequests.print');
+    }
+
 }
