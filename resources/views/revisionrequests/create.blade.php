@@ -71,7 +71,8 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-5 control-label">Reason for Revision</label>
                             <div class="col-md-10 col-xs-7">
-                                <textarea class="form-control" rows="5" name="revision_reason"></textarea>
+                                <textarea class="form-control" rows="5" name="revision_reason" maxlength="600"></textarea>
+                                <span class="help-block">Maximum: 600 characters</span>
                             </div>
                         </div>
                         <div class="form-group">

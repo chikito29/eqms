@@ -8,7 +8,8 @@ Route::resource('revision-requests', 'RevisionRequestController');
 // For printing revision-requests
 Route::get('revision-requests/{revision_request}/print', 'RevisionRequestController@printRevisionRequest')->name('revision-requests.print');
 
-Route::get('home', ['as' => 'pages.home', 'uses' => 'PageController@home']); //->middleware('na.authenticate')
+Route::get('home', 'PageController@home')->name('pages.home')->middleware('na.authenticate');
+Route::get('dashboard', 'PageController@dashboard')->name('pages.dashboard')->middleWare('na.authenticate');
 Route::get('action-summary', 'PageController@actionSummary');
 
 Route::get('login', 'NAController@login');

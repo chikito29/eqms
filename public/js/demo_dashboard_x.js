@@ -1,7 +1,7 @@
-$(function(){        
+$(function(){
     /* reportrange */
-    if($("#reportrange").length > 0){   
-        $("#reportrange").daterangepicker({                    
+    if($("#reportrange").length > 0){
+        $("#reportrange").daterangepicker({
             ranges: {
                'Today': [moment(), moment()],
                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -17,20 +17,20 @@ $(function(){
             format: 'MM.DD.YYYY',
             separator: ' to ',
             startDate: moment().subtract('days', 29),
-            endDate: moment()            
+            endDate: moment()
           },function(start, end) {
               $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         });
-        
+
         $("#reportrange span").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
     }
-    /* end reportrange */   
-    
+    /* end reportrange */
+
     /* Line dashboard chart */
     Morris.Line({
       element: 'x-dashboard-line',
       data: [
-        { y: '2014-10-10', a: 2,b: 4},
+        { y: '2014-10-10', a: 5,b: 4},
         { y: '2014-10-11', a: 4,b: 6},
         { y: '2014-10-12', a: 7,b: 10},
         { y: '2014-10-13', a: 5,b: 7},
@@ -46,7 +46,7 @@ $(function(){
       xkey: 'y',
       ykeys: ['a','b'],
       labels: ['Sales','Event'],
-      resize: true,      
+      resize: true,
       pointSize: '8px',
       //pointStrokeColors: '#DEE4EC',
       xLabels: 'day',
@@ -55,8 +55,7 @@ $(function(){
       gridLineColor: '#95ABBB',
       gridTextColor: '#95ABBB',
       gridTextWeight: 'bold'
-    });   
+    });
     /* EMD Line dashboard chart */
 
 });
-

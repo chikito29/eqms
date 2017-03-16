@@ -19,7 +19,7 @@ class RevisionRequestController extends Controller
     }
 
     public function index() {
-        $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
+        $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->paginate(5);
         return view('revisionrequests.index', compact('revisionRequests'));
     }
 
@@ -33,7 +33,7 @@ class RevisionRequestController extends Controller
     }
 
     public function store(Request $request) {
-        Validator::make($request->all(), ['proposed_revision' => 'required', 'revision_reason' => 'required'])->validate();
+        Validator::make($request->all(), ['proposed_revision' => 'required', 'revision_reason' => 'required|max:600'])->validate();
 
         $revisionRequest = new RevisionRequest();
         $revisionRequest->user_id = $request->input('user.id');
@@ -57,6 +57,7 @@ class RevisionRequestController extends Controller
                 $attachment->save();
             }
         }
+        session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
         return redirect()->route('revision-requests.index');
     }
 
@@ -133,7 +134,8 @@ class RevisionRequestController extends Controller
     }
 
     public function printRevisionRequest($id) {
-        return view('revisionrequests.print');
+        $revisionRequest = RevisionRequest::with('reference_document')->find($id);
+        return view('revisionrequests.print', compact('revisionRequest'));
     }
 
 }

@@ -122,7 +122,8 @@
                             <label class="col-md-3 col-xs-5 control-label">Reason for Recommendation / Disapproval</label>
                             <div class="col-md-9 col-xs-7">
                                 @if( ! $revisionRequest->section_b)
-                                <textarea class="form-control" rows="5" name="recommendation_reason"></textarea>
+                                <textarea class="form-control" rows="5" name="recommendation_reason" maxlength="600"></textarea>
+                                <span class="help-block">Maximum: 600 characters.</span>
                                 @else
                                 <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
                                     {{ $revisionRequest->section_b->recommendation_reason }}
@@ -133,11 +134,12 @@
                         <div class="form-group">
                             <div class="col-md-12 col-xs-12">
                                 @if( ! $revisionRequest->section_b)
-                                <button class="btn btn-primary btn-rounded pull-right">Submit</button>
+                                    <button class="btn btn-primary btn-rounded pull-right">Submit</button>
                                 @else
-                                <a href="http://google.com/" class="btn btn-info btn-rounded pull-right" target="_blank"><span class="fa fa-print"></span> Print</a>
+                                    @if($revisionRequest->section_b->recommendation_status == 'For Approval')
+                                    <a href="{{ route('revision-requests.print', $revisionRequest->id) }}" class="btn btn-info btn-rounded pull-right" target="_blank"><span class="fa fa-print"></span> Print</a>
+                                    @endif
                                 @endif
-
                             </div>
                         </div>
                     </div>
@@ -230,8 +232,8 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h3>Section D: Action Taken</h3>
-                        @if($revisionRequest->section_b)
-                        <p>{{ $revisionRequest->section_b->created_at->toDayDateTimeString() }}</p>
+                        @if($revisionRequest->section_d)
+                        <p>{{ $revisionRequest->section_d->created_at->toDayDateTimeString() }}</p>
                         @endif
                     </div>
                     <div class="panel-body form-group-separated">
@@ -281,26 +283,30 @@
         </div>
         <div class="col-md-3">
 
-            <div class="panel panel-primary">
+            <div class="panel panel-default form-horizontal">
                 <div class="panel-body">
-                    <h3>Search</h3>
-                    <form id="faqForm">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="faqSearchKeyword" placeholder="Search..."/>
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary" id="faqSearch">Search</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="push-up-10"><strong>Search Result:</strong> <span id="faqSearchResult">Please fill keyword field</span></div>
-                    <div class="push-up-10">
-                        <button class="btn btn-primary" id="faqRemoveHighlights">Remove Highlights</button>
-                        <div class="pull-right">
-                            <button class="btn btn-default" id="faqOpenAll"><span class="fa fa-angle-down"></span> Open All</button>
-                            <button class="btn btn-default" id="faqCloseAll"><span class="fa fa-angle-up"></span> Close All</button>
-                        </div>
+                    <h3><span class="fa fa-info-circle"></span> Quick Info</h3>
+                    <p>Some quick info about this user</p>
+                </div>
+                <div class="panel-body form-group-separated">
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Last visit</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">12:46 27.11.2015</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Registration</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">01:15 21.11.2015</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Groups</label>
+                        <div class="col-md-8 col-xs-7">administrators, managers, team-leaders, developers</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Birthday</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">14.02.1989</div>
                     </div>
                 </div>
+
             </div>
 
             <div class="panel panel-primary">
@@ -347,19 +353,6 @@
             browseLabel: "Browse Document",
             allowedFileExtensions : ['.jpg']
         });
-
-        function print() {
-            // var form = $("#form-filter");
-            // form.attr({
-            //     "action": "http://mbhs.dev/reports/print/student-enrollment",
-            //     "target": "_blank"
-            // });
-            // form.submit();
-            // form.attr("action", "http://mbhs.dev/reports/student-enrollment");
-            // form.removeAttr("target");
-
-        }
-
     });
 </script>
 @endsection

@@ -13,6 +13,12 @@ class PageController extends Controller
         return view('pages.home', compact('revisionLogs', 'revisionRequests'));
     }
 
+    public function dashboard() {
+        $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
+        $chartData = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
+        return view('pages.dashboard', compact('chartData', 'revisionRequests'));
+    }
+
     public function actionSummary() {
         return view('pages.action-summary');
     }
