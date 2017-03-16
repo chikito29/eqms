@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Cpar;
 use App\RevisionLog;
 use App\RevisionRequest;
 
-class PageController extends Controller
-{
+class PageController extends Controller {
     public function home() {
         $revisionLogs = RevisionLog::all();
         $revisionRequests = RevisionRequest::with('reference_document')->get();
+
         return view('pages.home', compact('revisionLogs', 'revisionRequests'));
     }
 
@@ -19,7 +20,7 @@ class PageController extends Controller
         return view('pages.dashboard', compact('chartData', 'revisionRequests'));
     }
 
-    public function actionSummary() {
-        return view('pages.action-summary');
+    public function actionSummary(Cpar $cpar) {
+        return view('pages.action-summary', ['cpar']);
     }
 }

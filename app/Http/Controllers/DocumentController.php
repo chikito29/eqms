@@ -41,7 +41,8 @@ class DocumentController extends Controller {
 
     public function edit($id) {
         $document = Document::find($id);
-        return view('documents.edit', compact('document'));
+        $sections = Section::all();
+        return view('documents.edit', compact('document', 'sections'));
     }
 
     public function update(Request $request, $id) {

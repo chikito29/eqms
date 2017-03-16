@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Section;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,9 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        view()->composer('layouts.hnavigation', function ($view) {
-            $view->with('sections', Section::with('documents')->get());
-        });
+        View::composer(
+            'layouts.hnavigation', 'App\Http\ViewComposers\CparComposer@compose',
+            'layouts.cpar-answer-nav', 'App\Http\ViewComposers\CparComposer@compose'
+        );
+
+        Schema::defaultStringLength(191);
     }
 
     /**

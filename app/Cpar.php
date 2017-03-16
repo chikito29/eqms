@@ -5,8 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cpar extends Model
-{
+class Cpar extends Model {
     use SoftDeletes;
 
     protected $guarded = [''];
@@ -17,5 +16,17 @@ class Cpar extends Model
 
     public function documentVersion() {
         return $this->hasOne(DocumentVersion::class);
+    }
+
+    public function cparClosed() {
+        return $this->hasOne(CparClosed::class);
+    }
+
+    public function cparReviewed() {
+        return $this->hasOne(CparReviewed::class);
+    }
+
+    public function cparAnswered() {
+        return $this->hasOne(CparAnswered::class);
     }
 }

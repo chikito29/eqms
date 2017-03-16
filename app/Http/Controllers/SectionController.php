@@ -13,7 +13,8 @@ class SectionController extends Controller
 
     public function index()
     {
-        return view('sections.index');
+        $sections = Section::all();
+        return view('sections.index', compact('sections'));
     }
 
     public function store(Request $request)
