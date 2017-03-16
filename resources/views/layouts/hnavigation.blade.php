@@ -4,7 +4,11 @@
     </div>
     <ul>
         <li class="@yield('nav-home')">
-            <a href="{{ route('pages.home') }}">Home</a>
+            @if(request('user.role') == 'super-admin')
+                <a href="{{ route('pages.dashboard') }}">Dashboard</a>
+            @else
+                <a href="{{ route('pages.home') }}">Home</a>
+            @endif
         </li>
         <li class="xn-openable @yield('nav-document')">
             <a href="#">Documents</a>
@@ -36,20 +40,11 @@
             </ul>
         </li>
         <li class="xn-openable @yield('nav-audit-findings')">
-            <a href="#">Audit Findings &nbsp;
-                @if(session('answered'))
-                    <span class="label label-info"><span class="fa fa-bell"></span></span> &nbsp;
-                @endif
-            </a>
+            <a href="#">Audit Findings</a>
             <ul>
                 <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Audit Findings</a></li>
-                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil"></span> CPAR </a></li>
-                <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR
-                    @if(session('answered'))
-                        <span class="fa fa-star fa-spin pull-right"></span>
-                    @endif
-                    </a>
-                </li>
+                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil"></span> CPAR</a></li>
+                <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li>
             </ul>
         </li>
     </ul>
