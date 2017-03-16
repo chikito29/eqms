@@ -6,8 +6,10 @@
 
 @section('page-content')
 <div class="page-content-wrap">
+
     <div class="x-content" >
         <div class="x-content-inner" style="margin-top:-20px;">
+
             <div class="row">
                 <div class="col-md-12">
 
@@ -43,7 +45,7 @@
                                             </a>
                                             <span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
                                         </td>
-                                        <td><a href="#">{{ $revisionRequest->reference_document->title }}</a></td>
+                                        <td><a href="{{ route('documents.show', $revisionRequest->reference_document->id) }}" target="_blank">{{ $revisionRequest->reference_document->title }}</a></td>
                                         @if($revisionRequest->status == 'New')
                                         <td><span class="label label-info" style="color: white;">{{ $revisionRequest->status }}</span></td>
                                         @elseif($revisionRequest->status == 'Processing')
@@ -74,22 +76,22 @@
                                             <td></td>
                                         @endif
 
-                                        <td><button class="btn btn-info btn-rounded btn-condensed btn-sm" onclick="location.href = '{{ route('revision-requests.show', $revisionRequest->id) }}';">View</button></td>
+                                        <td>
+                                            <a href="{{ route('revision-requests.show', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-eye"></span> View</button>
+                                            @if($revisionRequest->section_b)
+                                            @if($revisionRequest->section_b->recommendation_status == 'For Approval')
+                                            <a href="{{ route('revision-requests.print', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm" target="_blank" style="margin-left: 4px;"><span class="fa fa-print"></span> Print</a>
+                                            @endif
+                                            @endif
+                                        </td>
+
                                     </tr>
                                 @endforeach
                             </table>
                         </div>
                     </div>
 
-                    <ul class="pagination pagination-sm push-up-20">
-                        <li class="disabled"><a href="#">Previous</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">Next</a></li>
-                    </ul>
+                    {{ $revisionRequests->links() }}
 
                 </div>
             </div>

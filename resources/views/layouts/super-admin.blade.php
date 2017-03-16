@@ -28,7 +28,12 @@
                         </div>
                         <ul>
                             <li class="@yield('nav-home')">
-                                <a href="{{ route('pages.home') }}">Home</a>
+                                @if(request('user.role') == 'super-admin')
+                                    <a href="{{ route('pages.dashboard') }}">Dashboard</a>
+                                @else
+                                    <a href="{{ route('pages.home') }}">Home</a>
+                                @endif
+
                             </li>
                             <li class="xn-openable @yield('nav-document')">
                                 <a href="#">Documents</a>
