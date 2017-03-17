@@ -154,7 +154,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-12 col-xs-5">
-                                            <button class="btn btn-primary btn-rounded pull-right" onclick="$('#attention-modal-trigger').click()">Submit</button>
+                                            <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="$('#attention-modal-trigger').click()" >Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -230,7 +230,7 @@
             </div>
             <div class="mb-footer">
                 <div class="pull-right">
-                    <a onclick="submitCpar()" class="btn btn-success btn-lg">Yes</a>
+                    <button onclick="submitCpar()" class="btn btn-success btn-lg">Yes</button>
                     <button class="btn btn-default btn-lg mb-control-close">No</button>
                 </div>
             </div>

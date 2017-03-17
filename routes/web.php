@@ -18,6 +18,7 @@ Route::get('home', 'PageController@home')->name('pages.home')->middleware('na.au
 Route::get('dashboard', 'PageController@dashboard')->name('pages.dashboard')->middleWare('na.authenticate');
 Route::get('action-summary/{cpar}', 'PageController@actionSummary')->name('action-summary');
 Route::get('answer-cpar/{cpar}', 'CparController@answerCpar')->name('answer-cpar');
+Route::get('review/{cpar}', 'CparController@review')->name('review');
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,3 +27,4 @@ Route::get('/', function () {
 // Individual POST Requests
 Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
 Route::get('cpar-on-review', 'CparController@onReview')->name('on-review');
+Route::post('cpars/review/{cpar}', 'CparController@saveReview')->name('review-cpar');

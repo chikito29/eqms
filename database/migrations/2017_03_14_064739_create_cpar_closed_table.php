@@ -12,7 +12,6 @@ class CreateCparClosedTable extends Migration {
      */
     public function up() {
         Schema::create('cpar_closed', function (Blueprint $table) {
-            $table->increments('id');
             $table->integer('cpar_id');
             $table->boolean('status')->default(0);
             $table->string('closed_by')->nullable();

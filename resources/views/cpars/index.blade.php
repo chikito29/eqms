@@ -14,7 +14,7 @@
                     <div class="col-md-12">
                         <div class="x-block">
                             <div class="x-block-head">
-                                <h3>New Section</h3>
+                                <h3>CPAR List</h3>
                             </div>
                             <table class="table table-striped" id="table-application">
                                     <thead>
@@ -45,7 +45,7 @@
                                             <td width="360px">
                                                 <button class="btn btn-default btn-rounded btn-sm" onclick="location.href='{{ route('cpars.show', $cpar->id) }}';"><span class="fa fa-share"> view</span></button>
                                                 <button class="btn btn-default btn-rounded btn-sm" onclick="location.href='{{ route('cpars.edit', $cpar->id) }}';" @if($cpar->cparAnswered->status == 1) disabled="disabled" @endif><span class="fa fa-pencil"> edit</span></button>
-                                                <button class="btn btn-info btn-rounded btn-sm"><span class="fa fa-legal"> review</span></button>
+                                                <button class="btn btn-info btn-rounded btn-sm" onclick="location.href='{{ route('review', $cpar->id) }}';" @if($cpar->cparAnswered->status <> 1) disabled="disabled" @endif><span class="fa fa-legal"> review</span></button>
                                                 <button class="btn btn-primary btn-rounded btn-sm" onclick="close_cpar({{ $cpar->id }})"><span class="fa fa-times"> close</span></button>
                                             </td>
                                             <form method="POST" action="{{ route('cpars.destroy', $cpar->id) }}" accept-charset="UTF-8" id="form-delete{{ $cpar->id }}">
@@ -94,7 +94,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Confirm Action</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal-body">
                     CPAR is not yet <span class="text text-info">REVIEWED</span>, are you sure you want it to be <span class="text text-danger">CLOSED</span>?
                 </div>
                 <div class="modal-footer">
@@ -109,7 +109,9 @@
 @section('scripts')
     <script>
         function close_cpar(cpar){
-            $('#confirm-modal').modal('toggle');
+            @if($cpar->cparReviewed->status == 0) $('#confirm-modal').modal('toggle');
+            @elseif($cpar->cparReviewed->status == 1) $('#modal-body').empty().append("Are you sure you want to <span class=\"text text-warning\">CLOSE</span>");
+            @endif
         }
 
         function edit_document(row){

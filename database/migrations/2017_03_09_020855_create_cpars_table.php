@@ -19,7 +19,7 @@ class CreateCparsTable extends Migration
             $table->integer('cpar_answered_id')->nullable();
             $table->integer('cpar_reviewed_id')->nullable();
             $table->integer('cpar_closed_id')->nullable();
-            $table->string('tags');
+            $table->text('tags');
             $table->string('cpar_number')->unique();
             $table->string('raised_by');
             $table->string('department');
@@ -35,6 +35,7 @@ class CreateCparsTable extends Migration
             $table->dateTime('proposed_date')->nullable();
             $table->dateTime('date_completed')->nullable();
             $table->string('department_head');
+            $table->longText('cpar-acceptance');
             $table->string('date_confirmed_by')->nullable();
             $table->dateTime('date_accepted')->nullable();
             $table->dateTime('date_verified')->nullable();

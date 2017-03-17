@@ -17,30 +17,21 @@ class CparController extends Controller {
 
     function __construct(Cpar $cpars) {
         $this->cpars = $cpars->latest();
+        $this->middleware('na.authenticate');
     }
 
     public function index() {
         return view('cpars.index')->with('cpars', $this->cpars->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create() {
         $sections = Section::with('documents')->get();
 
         return view('cpars.create', compact('sections'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store() {
+        //TODO: extract this validation to the model
         $document = Document::find(request('reference'));
 
         $this->validate(request(), [
@@ -78,7 +69,8 @@ class CparController extends Controller {
             'department_head'    => request('department-head')
         ]);
 
-        if (request('attachments')) {
+        //TODO: put this method in verifying section
+        /*if (request('attachments')) {
             $files = request('attachments');
             foreach ($files as $file) {
                 $path = $file->store('attachments', 'public');
@@ -88,7 +80,7 @@ class CparController extends Controller {
                 $attachment->uploaded_by = request('user.first_name') . ' ' . request('user.last_name');
                 $attachment->save();
             }
-        }
+        }*/
 
         $cparAnswered = CparAnswered::create([
             'cpar_id' => $cpar->id
@@ -116,12 +108,6 @@ class CparController extends Controller {
         return redirect('cpars');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Cpar $cpar
-     * @return \Illuminate\Http\Response
-     */
     public function show(Cpar $cpar) {
         $sections = Section::with('documents')->get();
         $documentBody = $this->getDocument($cpar);
@@ -129,39 +115,64 @@ class CparController extends Controller {
         return view('cpars.show', compact('cpar', 'sections', 'documentBody'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Cpar $cpar
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Cpar $cpar) {
-        //
+        $sections = Section::with('documents')->get();
+
+        return view('cpars.edit', compact('cpar', 'sections'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Cpar $cpar
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Cpar $cpar) {
-        //
+        $document = Document::find(request('reference'));
+
+        $this->validate(request(), [
+            'cpar-number'        => 'required',
+            'raised-by'          => 'required',
+            'tags'               => 'required',
+            'details'            => 'required',
+            'person-responsible' => 'required',
+            'root-cause'         => 'required',
+        ]);
+
+        if (request('severity') == 'Observation') {
+            $severity = '<span class="label label-info">' . request('severity') . '</span>';
+        }
+        elseif (request('severity') == 'Minor') {
+            $severity = '<span class="label label-warning">' . request('severity') . '</span>';
+        }
+        else {
+            $severity = '<span class="label label-danger">' . request('severity') . '</span>';
+        }
+
+        $cpar->cpar_number = request('cpar-number');
+        $cpar->raised_by = request('raised-by');
+        $cpar->department = request('department');
+        $cpar->severity = $severity;
+        $cpar->document_id = request('reference');
+        $cpar->tags = request('tags');
+        $cpar->source = request('source');
+        $cpar->other_source = request('other-source');
+        $cpar->details = request('details');
+        $cpar->person_reporting = request('person-reporting');
+        $cpar->person_responsible = request('person-responsible');
+        $cpar->root_cause = request('root-cause');
+        $cpar->department_head = request('department-head');
+        $cpar->save();
+
+        DocumentVersion::create([
+            'cpar_id'        => $cpar->id,
+            'control_number' => "adadasd",
+            'document'       => $document->body
+        ]);
+
+        return redirect()->route('cpars.show', ['cpar' => $cpar->id]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Cpar $cpar
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Cpar $cpar) {
         //
     }
 
     public function answerCpar(Cpar $cpar) {
-        if($cpar->cparReviewed->on_review == 1){
+        if ($cpar->cparReviewed->on_review == 1) {
             return view('cpars.cpar-on-review');
         }
 
@@ -172,14 +183,14 @@ class CparController extends Controller {
     }
 
     public function getDocument($cpar) {
-
         $documentTags = explode(',', $cpar->tags);
         $documentBody = $cpar->documentVersion->document;
+        $stripDoc = str_replace('&nbsp;', '', $documentBody);
         foreach ($documentTags as $tag) {
-            $documentBody = str_replace(preg_replace('!\s+!', ' ', $tag), '<span style="background-color: yellow;">' . $tag . '</span>', str_replace('&nbsp;', '', $documentBody));
+            $stripDoc = str_replace(preg_replace('!\s+!', ' ', $tag), '<span style="background-color: yellow;">' . $tag . '</span>', $stripDoc);
         }
 
-        return $documentBody;
+        return $stripDoc;
     }
 
     public function holidays($cpar, $year) {
@@ -229,8 +240,11 @@ class CparController extends Controller {
         $cpar->correction = request('correction');
         $cpar->cp_action = request('cp-action');
         $cpar->proposed_date = request('proposed-date');
-        $cpar->cparAnswered->status = 1;
         $cpar->save();
+
+        $cparAnswered = CparAnswered::find($cpar->id);
+        $cparAnswered->status = 1;
+        $cparAnswered->save();
 
         $cpar->date_accepted = $cpar->cparAnswered->created_at;
         $cpar->save();
@@ -240,5 +254,33 @@ class CparController extends Controller {
 
     public function onReview() {
         return view('cpars.cpar-on-review');
+    }
+
+    public function review(Cpar $cpar) {
+        $sections = Section::with('documents')->get();
+
+        return view('cpars.review', compact('cpar', 'sections'));
+    }
+
+    public function saveReview(Cpar $cpar) {
+        $cparReviewed = CparReviewed::find($cpar->id);
+        $cparReviewed->on_review = 1;
+        $cparReviewed->reviewed_by = request('user.first_name') . ' ' . request('user.last_name');
+        $cparReviewed->save();
+
+        $this->validate(request(), [
+            'cpar-acceptance'   => 'required',
+            'name'              => 'required',
+            'verification-date' => 'required',
+            'result'            => 'required',
+        ]);
+
+        $cpar->cpar_acceptance = request('cpar-acceptance');
+        $cpar->date_verified = request('verification-date');
+        $cpar->verified_by = request('verified-by');
+        $cpar->result = request('result');
+        $cpar->save();
+
+        return view('cpars.index');
     }
 }

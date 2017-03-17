@@ -14,28 +14,28 @@
         <div class="row">
             <div class="col-md-9">
 
-                <form enctype="multipart/form-data" class="form-horizontal" action="/cpars" method="POST" role="form">
+                <form enctype="multipart/form-data" class="form-horizontal" action="/cpars/review/{{ $cpar->id }}" method="POST" role="form">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">CPAR Number</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="cpar-number"/>
+                                    <input type="text" class="form-control" name="cpar-number" value="{{ $cpar->cpar_number }}" disabled="disabled"/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Raised By</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="raised-by"/>
+                                    <input type="text" class="form-control" name="raised-by" value="{{ $cpar->raised_by }}" disabled="disabled"/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select name="department" class="form-control">
+                                    <select name="department" class="form-control"  id="department" disabled="disabled">
                                         <option>Bacolod</option>
                                         <option>Cebu</option>
                                         <option>Davao</option>
@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Severity Of Findings</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="severity">
+                                    <select class="form-control" name="severity" disabled="disabled">
                                         <option>Observation</option>
                                         <option>Minor</option>
                                         <option>Major</option>
@@ -59,7 +59,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="reference" id="reference" onchange="showLink()">
+                                    <select class="form-control" name="reference" id="reference" onchange="showLink()" disabled="disabled">
                                         @foreach($sections as $section)
                                             @foreach($section->documents as $document)
                                                 <option id="{{ $document->id }}" value="{{ $document->id }}">{{ $document->title }}</option>
@@ -67,13 +67,13 @@
                                         @endforeach
                                     </select> <br>
                                     <h6><span id="span-reference">External Link Will Show Here</span></h6>
-                                    <input type="text" class="tagsinput" name="tags"/>
+                                    <input type="text" class="tagsinput" name="tags" value="{{ $cpar->tags }}" disabled="disabled"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Source Of Non-Comformity</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="source">
+                                    <select class="form-control" name="source" disabled="disabled">
                                         <option>External/Internal</option>
                                         <option>Operational Performance</option>
                                         <option>Customer Feedback</option>
@@ -85,47 +85,47 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Others: (Please specify)</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="3" name="other-source"></textarea>
+                                    <textarea class="form-control" rows="3" name="other-source" disabled="disabled">{{ $cpar->other_source }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Details</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="5" name="details"></textarea>
+                                    <textarea class="form-control" rows="5" name="details" disabled="disabled">{{ $cpar->details }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-reporting"/>
+                                    <input type="text" class="form-control" name="person-reporting" value="{{ $cpar->person_reporting }}" disabled="disabled"/>
                                     <span class="help-block">Person Reporting To Non-Conformity</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-responsible"/>
+                                    <input type="text" class="form-control" name="person-responsible" value="{{ $cpar->person_responsible }}" disabled="disabled"/>
                                     <span class="help-block">Person Responsible For Taking The CPAR</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Correction</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="correction" disabled="disabled"></textarea>
+                                    <textarea class="form-control" rows="4" name="correction" disabled="disabled" disabled="disabled">{{ $cpar->correction }}</textarea>
                                     <span class="help-block">Action To Eliminate The Detected Non-Conformity</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Root Cause Analysis</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="root-cause"></textarea>
+                                    <textarea class="form-control" rows="4" name="root-cause" disabled="disabled">{{ $cpar->root_cause }}</textarea>
                                     <span class="help-block">What Failed In The System To Allow This Non-Conformance To Occur?</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Corrective/Preventive Action</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="cp-action" disabled="disabled"></textarea>
+                                    <textarea class="form-control" rows="4" name="cp-action" disabled="disabled">{{ $cpar->cp_action }}</textarea>
                                     <span class="help-block">Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence</span>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="department-head"/>
+                                    <input type="text" class="form-control" name="department-head" value="{{ $cpar->department_head }}" disabled="disabled"/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -165,48 +165,53 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <textarea class="form-control" rows="4" name="cpar-acceptance" disabled="disabled"></textarea>
+                                    <textarea class="form-control" rows="4" name="cpar-acceptance"></textarea>
                                     <span class="help-block">Comments If Any</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Date CPAR Accepted</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-accepted" readonly/>
+                                    <input type="text" class="form-control" name="date-accepted" value="{{ $cpar->date_accepted }}" readonly/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-confirmed-by" readonly/>
+                                    <input type="text" class="form-control" name="name"/>
                                     <span class="help-block">QMR / AUDITOR / CEO</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Verification Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="verification-date" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verified By</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="verified-by" disabled="disabled"/>
+                                    <input type="text" class="form-control datepicker" name="verification-date"/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Result Of Verification</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="5" name="result" disabled="disabled"></textarea>
+                                    <textarea class="form-control" rows="5" name="result"></textarea>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Attachments</label>
+                                <div class="col-md-9 col-xs-7">
+                                    <li class="list-unstyled">
+                                        @if($cpar->attachments->count() > 0)
+                                            <ul>asdasdasd</ul>
+                                        @else
+                                            No Attachment Avaible For This CPAR
+                                        @endif
+                                    </li>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-12 col-xs-5">
-                                    <button class="btn btn-primary btn-rounded pull-right">Submit</button>
+                                    <button class="btn btn-primary btn-rounded pull-right">Save Changes</button>
                                 </div>
                             </div>
                         </div>
@@ -305,5 +310,9 @@
                 + " in new tab"
                 + "</a>");
         }
+
+        $(function() {
+            $('#department').val('{{ $cpar->department }}');
+        });
     </script>
 @stop
