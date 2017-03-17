@@ -19,10 +19,11 @@ class DocumentController extends Controller {
     }
 
     public function create() {
-        return view('documents.create');
+        $sections = Section::all();
+        return view('documents.create', compact('sections'));
     }
 
-    public function store(Request $request) { 
+    public function store(Request $request) {
         Validator::make($request->all(), ['section-id' => 'required', 'title' => 'required|max:255', 'body' => 'required'])->validate();
         $document = new Document();
 		$document->section_id = request('section-id');

@@ -281,6 +281,6 @@ class CparController extends Controller {
         $cpar->result = request('result');
         $cpar->save();
 
-        return view('cpars.index');
+        return redirect()->route('cpars.index');
     }
 }
