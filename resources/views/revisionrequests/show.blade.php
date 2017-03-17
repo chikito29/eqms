@@ -107,7 +107,7 @@
                                 @if( ! $revisionRequest->section_b)
                                 <select class="form-control select" name="recommendation_status">
                                     <option>For Approval</option>
-                                    <option>Denied</option>
+                                    <option>For Disapproval</option>
                                 </select>
                                 @else
                                     @if($revisionRequest->section_b->recommendation_status == 'For Approval')

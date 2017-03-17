@@ -83,7 +83,7 @@ class RevisionRequestController extends Controller
             $sectionB->save();
 
             if ($request->input('recommendation_status') == 'Denied') {
-                $revisionRequest->status = 'Done';
+                $revisionRequest->status = 'Denied';
             } else {
                 $revisionRequest->status = 'Processing';
             }
@@ -98,7 +98,7 @@ class RevisionRequestController extends Controller
             $sectionC->approved = $request->input('approved');
             $sectionC->save();
 
-            $revisionRequest->status = $request->input('approved') ? 'Processing' : 'Done';
+            $revisionRequest->status = $request->input('approved') ? 'Processing' : 'Approved';
             $revisionRequest->save();
 
             if ($request->hasFile('attachments')) {
@@ -123,7 +123,7 @@ class RevisionRequestController extends Controller
             $sectionD->action_taken = $request->input('action_taken');
             $sectionD->others = $request->input('others');
             $sectionD->save();
-            $revisionRequest->status = 'Done';
+            $revisionRequest->status = 'Approved';
             $revisionRequest->save();
         }
         return redirect()->route('revision-requests.show', $revisionRequest->id);
