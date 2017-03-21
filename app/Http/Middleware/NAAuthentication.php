@@ -26,7 +26,7 @@ class NAAuthentication
             }catch (RequestException $e) {
 
                 // Check if the API Authentication Fails
-                if($e->getResponse()->getStatusCode() == 401) {
+                if ($e->getResponse()->getStatusCode() == 401) {
                     return redirect('login');
                 }
             }

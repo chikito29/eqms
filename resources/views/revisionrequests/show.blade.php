@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Revision Request No.</label>
                             <div class="col-md-9 col-xs-7">
-                                <label class="control-label">NCPI-QMR-2001-24</label>
+                                <label class="control-label">{{ $revisionRequest->revision_request_number }}</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -49,7 +49,6 @@
                                         <li><a href="#">{{ $reference_document_tags }}</a></li>
                                     @endforeach
                                 </ul>
-
                             </div>
                         </div>
                         <div class="form-group">
@@ -136,7 +135,7 @@
                                 @if( ! $revisionRequest->section_b)
                                     <button class="btn btn-primary btn-rounded pull-right">Submit</button>
                                 @else
-                                    @if($revisionRequest->section_b->recommendation_status == 'For Approval')
+                                    @if($revisionRequest->section_b->recommendation_status == 'For Approval' && ( ! $revisionRequest->section_c))
                                     <a href="{{ route('revision-requests.print', $revisionRequest->id) }}" class="btn btn-info btn-rounded pull-right" target="_blank"><span class="fa fa-print"></span> Print</a>
                                     @endif
                                 @endif
@@ -241,20 +240,18 @@
                             <label class="col-md-3 col-xs-7 control-label">Action Taken</label>
                             <div class="col-md-9 col-xs-5">
                                 @if( ! $revisionRequest->section_d)
-                                <select class="form-control select" name="action_taken">
-                                    <option value="Document Revised">Document Revised</option>
-                                    <option value="Updated">Updated</option>
-                                    <option value="Distributed to Holders">Distributed to Holders</option>
-                                    <option value="Distributed to Holders">Others</option>
+                                <select multiple class="form-control select" name="action_taken[]">
+                                    <option>Document Revised</option>
+                                    <option>Updated</option>
+                                    <option>Distributed to Holders</option>
+                                    <option>Others</option>
                                 </select>
                                 @else
-                                    @if($revisionRequest->section_d->action_taken != 'Others')
-                                    <label class="control-label">{{ $revisionRequest->section_d->action_taken }}</label>
-                                    @else
-                                    <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
-                                        {{ $revisionRequest->section_d->others }}
-                                    </div>
-                                    @endif
+                                <ul class="list-tags">
+                                    @foreach(explode(',', $revisionRequest->section_d->action_taken ) as $action_taken)
+                                        <li><a href="#">{{ $action_taken }}</a></li>
+                                    @endforeach
+                                </ul>
                                 @endif
                             </div>
                         </div>
@@ -263,6 +260,15 @@
                             <label class="col-md-3 col-xs-5 control-label">If others, please specify</label>
                             <div class="col-md-9 col-xs-7">
                                 <textarea class="form-control" rows="5" name="others"></textarea>
+                            </div>
+                        </div>
+                        @else
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-5 control-label">Others</label>
+                            <div class="col-md-9 col-xs-7">
+                                <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
+                                    {{ $revisionRequest->section_d->others }}
+                                </div>
                             </div>
                         </div>
                         @endif

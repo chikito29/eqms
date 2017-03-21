@@ -8,9 +8,6 @@ use GuzzleHttp\Client;
 class NAController extends Controller
 {
     public function login() {
-        if(session()->has('na_access_token')) {
-            return redirect('home');
-        }
         $query = http_build_query([
     		'client_id' => 21,
     		'redirect_uri' => 'http://eqms.newsimapps.dev/callback',

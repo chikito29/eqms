@@ -30,6 +30,7 @@
                             <table class="table x-table">
                                 <tr>
                                     <th>AUTHOR</th>
+                                    <th>REVISION REQUEST NO.</th>
                                     <th>REFERENCE DOCUMENT</th>
                                     <th>STATUS</th>
                                     <th>QMR</th>
@@ -45,13 +46,14 @@
                                             </a>
                                             <span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
                                         </td>
+                                        <td><p><b>{{ $revisionRequest->revision_request_number }}</b></p></td>
                                         <td><a href="{{ route('documents.show', $revisionRequest->reference_document->id) }}" target="_blank">{{ $revisionRequest->reference_document->title }}</a></td>
                                         @if($revisionRequest->status == 'New')
                                         <td><span class="label label-info" style="color: white;">{{ $revisionRequest->status }}</span></td>
                                         @elseif($revisionRequest->status == 'Processing')
                                         <td><span class="label label-warning" style="color: white;">{{ $revisionRequest->status }}</span></td>
-                                        @elseif($revisionRequest->status == 'Done')
-                                        <td><span class="label label-default" style="color: white;">{{ $revisionRequest->status }}</span></td>
+                                        @elseif($revisionRequest->status == 'Approved')
+                                        <td><span class="label label-success" style="color: white;">{{ $revisionRequest->status }}</span></td>
                                         @else
                                         <td><span class="label label-danger" style="color: white;">{{ $revisionRequest->status }}</span></td>
                                         @endif
@@ -78,10 +80,10 @@
 
                                         <td>
                                             <a href="{{ route('revision-requests.show', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-eye"></span> View</button>
-                                            @if($revisionRequest->section_b)
-                                            @if($revisionRequest->section_b->recommendation_status == 'For Approval')
+                                            @if($revisionRequest->revision_request_number)
                                             <a href="{{ route('revision-requests.print', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm" target="_blank" style="margin-left: 4px;"><span class="fa fa-print"></span> Print</a>
-                                            @endif
+                                            @elseif($revisionRequest->section_d)
+                                            <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="showModal({{ $revisionRequest->id }}); return false;" style="margin-left: 4px;"><span class="fa fa-plus" style="color: rgb(180, 70, 69)"></span> Revision Request No.</a>
                                             @endif
                                         </td>
 
@@ -98,4 +100,46 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('modals')
+<div class="modal fade" id="modal_change_password" tabindex="-1" role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="smallModalHead">Add Revision Request Number</h4>
+            </div>
+            <div class="modal-body">
+                <p>Enter the revision request number to the document. You may only print Revision Request which revision request number has been supplied.</p>
+            </div>
+            <form id="form_add_revision_request_number" class="form-horizontal" action="index.html" method="post">
+                {{ csrf_field() }}
+                {{ method_field('put') }}
+                <div class="modal-body form-horizontal form-group-separated">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Request Number</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="revision_request_number">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script type="text/javascript">
+    function showModal(id) {
+        $("#form_add_revision_request_number").attr('action', "/revision-requests/" + id);
+        $("#modal_change_password").modal();
+    }
+</script>
 @endsection

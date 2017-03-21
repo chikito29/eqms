@@ -82,7 +82,7 @@ class RevisionRequestController extends Controller
             $sectionB->recommendation_reason = $request->input('recommendation_reason');
             $sectionB->save();
 
-            if ($request->input('recommendation_status') == 'Denied') {
+            if ($request->input('recommendation_status') == 'For Disapproval') {
                 $revisionRequest->status = 'Denied';
             } else {
                 $revisionRequest->status = 'Processing';
@@ -98,7 +98,7 @@ class RevisionRequestController extends Controller
             $sectionC->approved = $request->input('approved');
             $sectionC->save();
 
-            $revisionRequest->status = $request->input('approved') ? 'Processing' : 'Approved';
+            $revisionRequest->status = $request->input('approved') ? 'Approved' : 'Denied';
             $revisionRequest->save();
 
             if ($request->hasFile('attachments')) {
@@ -120,11 +120,17 @@ class RevisionRequestController extends Controller
             $sectionD->revision_request_id = $id;
             $sectionD->user_id = $request->input('user.id');
             $sectionD->user_name =  $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-            $sectionD->action_taken = $request->input('action_taken');
+            $sectionD->action_taken = implode(',', $request->input('action_taken'));
             $sectionD->others = $request->input('others');
             $sectionD->save();
             $revisionRequest->status = 'Approved';
             $revisionRequest->save();
+
+        } else {
+            $revisionRequest->revision_request_number = $request->input('revision_request_number');
+            $revisionRequest->save();
+            return redirect()->route('revision-requests.index');
+
         }
         return redirect()->route('revision-requests.show', $revisionRequest->id);
     }
