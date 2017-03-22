@@ -10,7 +10,9 @@ use App\RevisionRequestSectionD;
 use App\Section;
 use App\Document;
 use App\Attachment;
+use App\Mail\NewRevisionRequest;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 
 class RevisionRequestController extends Controller
 {
@@ -57,6 +59,9 @@ class RevisionRequestController extends Controller
                 $attachment->save();
             }
         }
+
+        Mail::to('mobile@newsim.ph')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
+
         session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
         return redirect()->route('revision-requests.index');
     }

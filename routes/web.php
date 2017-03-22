@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewRevisionRequest;
+
 // NAControllers
 Route::get('login', 'NAController@login');
 Route::get('callback', 'NAController@callback');

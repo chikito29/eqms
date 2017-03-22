@@ -40,44 +40,23 @@
                                 @foreach($revisionRequests as $revisionRequest)
                                     <tr>
                                         <td>
-                                            <a href="#" class="x-user">
-                                                <img src="{{ url('img/no-profile-image.png') }}">
-                                                <span>{{ $revisionRequest->user_name }}</span>
-                                            </a>
-                                            <span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
+                                            <a href="#" class="x-user"><img src="{{ url('img/no-profile-image.png') }}"><span>{{ $revisionRequest->user_name }}</span></a><span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
                                         </td>
                                         <td><p><b>{{ $revisionRequest->revision_request_number }}</b></p></td>
                                         <td><a href="{{ route('documents.show', $revisionRequest->reference_document->id) }}" target="_blank">{{ $revisionRequest->reference_document->title }}</a></td>
-                                        @if($revisionRequest->status == 'New')
-                                        <td><span class="label label-info" style="color: white;">{{ $revisionRequest->status }}</span></td>
-                                        @elseif($revisionRequest->status == 'Processing')
-                                        <td><span class="label label-warning" style="color: white;">{{ $revisionRequest->status }}</span></td>
-                                        @elseif($revisionRequest->status == 'Approved')
-                                        <td><span class="label label-success" style="color: white;">{{ $revisionRequest->status }}</span></td>
-                                        @else
-                                        <td><span class="label label-danger" style="color: white;">{{ $revisionRequest->status }}</span></td>
-                                        @endif
-
-                                        @if($revisionRequest->section_b)
-                                            @if($revisionRequest->section_b->recommendation_status == 'For Approval')
-                                                <td><span class="label label-success" style="color: white;">{{ $revisionRequest->section_b->recommendation_status }}</span></td>
-                                            @else
-                                                <td><span class="label label-danger" style="color: white;">{{ $revisionRequest->section_b->recommendation_status }}</span></td>
+                                        <td>
+                                            @component('components.label-revision-request-status') {{ $revisionRequest->status }} @endcomponent
+                                        </td>
+                                        <td>
+                                            @if($revisionRequest->section_b)
+                                                @component('components.label-revision-request-qmr') {{ $revisionRequest->section_b->recommendation_status }} @endcomponent
                                             @endif
-                                        @else
-                                            <td></td>
-                                        @endif
-
-                                        @if($revisionRequest->section_c)
-                                            @if($revisionRequest->section_c->approved)
-                                                <td><span class="label label-success" style="color: white;">Approved</span></td>
-                                            @else
-                                                <td><span class="label label-danger" style="color: white;">Denied</span></td>
+                                        </td>
+                                        <td>
+                                            @if($revisionRequest->section_c)
+                                                @component('components.label-revision-request-ceo') {{ $revisionRequest->section_c->approved }} @endcomponent
                                             @endif
-                                        @else
-                                            <td></td>
-                                        @endif
-
+                                        </td>
                                         <td>
                                             <a href="{{ route('revision-requests.show', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-eye"></span> View</button>
                                             @if($revisionRequest->revision_request_number)
@@ -86,7 +65,6 @@
                                             <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="showModal({{ $revisionRequest->id }}); return false;" style="margin-left: 4px;"><span class="fa fa-plus" style="color: rgb(180, 70, 69)"></span> Revision Request No.</a>
                                             @endif
                                         </td>
-
                                     </tr>
                                 @endforeach
                             </table>
