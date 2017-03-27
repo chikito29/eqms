@@ -20,7 +20,7 @@ class NAAuthentication
         if ($request->session()->has('na_access_token')) {
             $http = new Client();
             try{
-                $userDetailsResponse = $http->get('http://na.dlbajana.xyz/api/user', [
+                $userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
             		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json']
             	]);
             }catch (RequestException $e) {

@@ -46,7 +46,7 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-12 control-label">Section / Page / Process</label>
                             <div class="col-md-10 col-xs-12">
-                                <input type="text" class="tagsinput" name="reference_document_tags"/>
+                                <input type="text" class="tagsinput" name="reference_document_tags" data-placeholder="add section"/>
                                 <span class="help-block">Tag the section(s) of the document you are trying to address. e.g. 4.2.3.2</span>
                             </div>
                         </div>

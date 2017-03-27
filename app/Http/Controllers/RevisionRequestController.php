@@ -60,7 +60,7 @@ class RevisionRequestController extends Controller
             }
         }
 
-        Mail::to('mobile@newsim.ph')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
+        Mail::to('chikito029@gmail.com')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
 
         session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
         return redirect()->route('revision-requests.index');

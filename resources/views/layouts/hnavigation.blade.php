@@ -4,10 +4,10 @@
     </div>
     <ul>
         <li class="@yield('nav-home')">
-            @if(request('user.role') == 'super-admin')
-                <a href="{{ route('pages.dashboard') }}">Dashboard</a>
-            @else
+            @if(request('user.role') == 'default')
                 <a href="{{ route('pages.home') }}">Home</a>
+            @else
+                <a href="{{ route('pages.dashboard') }}">Dashboard</a>
             @endif
         </li>
         <li class="xn-openable @yield('nav-document')">
@@ -31,6 +31,7 @@
                 <li><a href="#"><span class="fa fa-folder"></span> Revision Logs</a></li>
             </ul>
         </li>
+        @if(request('user.role') != 'default')
         <li class="xn-openable @yield('nav-actions')">
             <a href="#">Actions</a>
             <ul>
@@ -47,6 +48,7 @@
                 <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li>
             </ul>
         </li>
+        @endif
     </ul>
 
     <div class="x-features">

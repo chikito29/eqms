@@ -9,22 +9,22 @@ class NAController extends Controller
 {
     public function login() {
         $query = http_build_query([
-    		'client_id' => 21,
-    		'redirect_uri' => 'http://eqms.newsimapps.dev/callback',
-    		'response_type' => 'code',
+    		'client_id' => env('NA_CLIENT_ID', 0),
+    		'redirect_uri' => env('NA_CLIENT_REDIRECT', 'http://localhost/callback'),
+    		'response_type' => env('NA_CLIENT_RESPONSE_TYPE', 'code'),
     		'scope' => ''
     	]);
-    	return redirect('http://na.dlbajana.xyz/oauth/authorize?' . $query);
+    	return redirect(env('NA_OAUTH_AUTHORIZE_URL', 'authorize-url') . $query);
     }
 
     public function callback(Request $request) {
         $http = new Client();
-    	$tokenResponse = $http->post('http://na.dlbajana.xyz/oauth/token', [
+    	$tokenResponse = $http->post(env('NA_OAUTH_TOKEN_URL', 'token-url'), [
     		'form_params' => [
     			'grant_type' => 'authorization_code',
-    			'client_id' => 21,
-    			'client_secret' => 'mT4opoI2VueilZw1V22ifDvSH0c0SXn3U68fg1mS',
-    			'redirect_uri' => 'http://eqms.newsimapps.dev/callback',
+    			'client_id' => env('NA_CLIENT_ID', 0),
+    			'client_secret' => env('NA_CLIENT_SECRET', 'your-client-secret'),
+    			'redirect_uri' => env('NA_CLIENT_REDIRECT', 'http://localhost/callback'),
     			'code' => $request['code']
     		]
     	]);
@@ -32,7 +32,7 @@ class NAController extends Controller
     	$accessToken = json_decode((string) $tokenResponse->getBody(), true);
         session(['na_access_token' => $accessToken['access_token']]);
 
-    	$userDetailsResponse = $http->get('http://na.dlbajana.xyz/api/user', [
+    	$userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
     		'headers' => ['Authorization' => 'Bearer ' . $accessToken['access_token'], 'Accept' => 'application/json']
     	]);
 
