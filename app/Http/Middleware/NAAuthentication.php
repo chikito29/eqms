@@ -17,11 +17,12 @@ class NAAuthentication
      */
     public function handle($request, Closure $next)
     {
+        session(['intended' => $request->url()]);
         if ($request->session()->has('na_access_token')) {
             $http = new Client();
             try{
                 $userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
-            		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json']
+            		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => 2]
             	]);
             }catch (RequestException $e) {
 

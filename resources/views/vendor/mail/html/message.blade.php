@@ -7,7 +7,7 @@
     @endslot
 
     {{-- Body --}}
-    {{ $slot }}
+   {{ $slot }}
 
     {{-- Subcopy --}}
     @if (isset($subcopy))

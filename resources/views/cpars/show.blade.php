@@ -16,17 +16,16 @@
         <div class="row">
             <div class="col-md-9">
 
-                <form class="form-horizontal" role="form" id="form-cpar" action="/action-summary/{{ $cpar->id }}" method="GET" target="_blank">
+                <form class="form-horizontal" role="form" id="form-cpar" action="/action-summary/{{ $cpar->id }}" method="GET">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
-                        <div class="panel-body form-group-separated">
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">CPAR Number</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->cpar_number }}</label>
-                                    <span class="help-block"></span>
-                                </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-12 control-label">CPAR Number</label>
+                            <div class="col-md-9 col-xs-12">
+                                <label class="form-control">{{ $cpar->cpar_number}}</label>
                             </div>
+                        </div>
+                        <div class="panel-body form-group-separated">
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Raised By</label>
                                 <div class="col-md-9 col-xs-12">
@@ -91,21 +90,21 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Correction</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <label class="form-control" style="height: auto;">{{  $cpar->correction }}</label>
+                                    <label class="form-control" style="height: auto;">@if($cpar->correction <> NULL) {{  $cpar->correction }} @else &nbsp; @endif</label>
                                     <span class="help-block">Action To Eliminate The Detected Non-Conformity</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Root Cause Analysis</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <label class="form-control" style="height: auto;">{{  $cpar->root_cause }}</label>
+                                    <label class="form-control" style="height: auto;">@if($cpar->correction <> NULL) {{  $cpar->root_cause }} @else &nbsp; @endif</label>
                                     <span class="help-block">What Failed In The System To Allow This Non-Conformance To Occur?</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Corrective/Preventive Action</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <label class="form-control" style="height: auto;">{{ $cpar->cp_action }}</label>
+                                    <label class="form-control" style="height: auto;">@if($cpar->correction <> NULL) {{ $cpar->cp_action }} @else &nbsp; @endif</label>
                                     <span class="help-block">Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence</span>
                                 </div>
                             </div>
@@ -133,72 +132,69 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Date Confirmed By Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <label class="form-control" style="height: auto;">{{ $cpar->date_confirmed_by }}</label>
+                                    <label class="form-control" style="height: auto;">{{ $cpar->date_confirmed }} &nbsp; </label>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <h4><strong>To Be Filled By The QMR / Auditor</strong></h4>
+                            @if($cpar->cparAnswered->status == 1)
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <h4><strong>To Be Filled By The QMR / Auditor</strong></h4>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control" style="height: auto;">{{ $cpar->acceptance }}</label>
-                                    <span class="help-block">Comments If Any</span>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <label class="form-control" style="height: auto;">{{ $cpar->cpar_acceptance }} &nbsp;</label>
+                                        <span class="help-block">Comments If Any</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Date CPAR Accepted</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->date_accepted }}</label>
-                                    <span class="help-block"></span>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Date CPAR Accepted</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <label class="form-control">{{ $cpar->date_accepted }}</label>
+                                        <span class="help-block"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->date_confirmed_by }}</label>
-                                    <span class="help-block">QMR / AUDITOR / CEO</span>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Name</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <label class="form-control">{{ $cpar->verified_by }}</label>
+                                        <span class="help-block">QMR / AUDITOR / CEO</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verification Date</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->date_verified }}</label>
-                                    <span class="help-block"></span>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Verification Date</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <label class="form-control">{{ $cpar->date_verified }}</label>
+                                        <span class="help-block"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verified By</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control" style="height: auto;">{{ $cpar->verified_by }}</label>
-                                    <span class="help-block"></span>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-5 control-label">Result Of Verification</label>
+                                    <div class="col-md-9 col-xs-7">
+                                        <label class="form-control" style="height: auto;">{{ $cpar->result }} &nbsp;</label>
+                                        <span class="help-block"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Result Of Verification</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <label class="form-control" style="height: auto;">{{ $cpar->result }}</label>
-                                    <span class="help-block"></span>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-5 control-label">Attachments</label>
+                                    <div class="col-md-9 col-xs-7">
+                                        <li class="list-unstyled">
+                                            @if($cpar->attachments->count() > 0)
+                                                @foreach($cpar->attachments as $attachment)
+                                                    <ul>{{  $attachment->file_name }} added by {{ $attachment->uploaded_by }}</ul>
+                                                @endforeach
+                                            @else
+                                                No Attachment Avaible For This CPAR
+                                            @endif
+                                        </li>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Attachments</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <li class="list-unstyled">
-                                        @if($cpar->attachments->count() > 0)
-                                            <ul>asdasdasd</ul>
-                                        @else
-                                            No Attachment Avaible For This CPAR
-                                        @endif
-                                    </li>
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()" id="print-cpar">Print CPAR</button>
                                 </div>
-                            </div>
-                            <div class="panel-footer">
-                                <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()">Print CPAR</button>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </form>
@@ -256,6 +252,8 @@
 
     </div>
 @stop
+
+@yield('modals')
 
 @section('scripts')
     <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>

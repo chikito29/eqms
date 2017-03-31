@@ -1,10 +1,8 @@
-<?php use Carbon\Carbon; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- META SECTION -->
-    <title>eQMS | Answer CPAR</title>
+    <title>@yield('page-title')</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,8 +12,8 @@
 
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="{{ url('css/theme-default.css') }}"/>
-
-    <!-- EOF CSS INCLUDE -->
+@yield('style')
+<!-- EOF CSS INCLUDE -->
 </head>
 <body class="x-dashboard">
 <!-- START PAGE CONTAINER -->
@@ -25,38 +23,19 @@
         <!-- PAGE CONTENT WRAPPER -->
         <div class="page-content-wrap">
 
-            <div class="page-content-wrap">
+            <div class="row">
+                <div class="col-md-12">
 
-                <div class="row">
-                    <div class="col-md-12">
-
-                        @if($cpar->cparClosed->status == 1)
-                            <div class="error-container">
-                                <div class="error-text">CPAR form closed</div>
-                                <div class="error-subtext">The CPAR you are trying to view was already closed.</div>
-                                <div class="error-subtext">If you need a copy of the CPAR please contact the QMR for details.</div>
-                            </div>
-                        @elseif(Carbon::now()->startOfDay()->gt($dueDate->startOfDay()) && $cpar->cparAnswered->status != 1)
-                            <div class="error-container">
-                                <div class="error-text">CPAR form expired</div>
-                                <div class="error-subtext">You have failed to answer your cpar issued {{ $cpar->created_at->toFormattedDateString() }} <br>
-                                    to be answered last {{ $dueDate->toFormattedDateString() }}.</div>
-                                <div class="error-subtext">Your department head has also been notified regarding this issue.</div>
-                            </div>
-                         @else
-                            <div class="error-container">
-                                <div class="error-code">CPAR</div>
-                                <div class="error-text">is on review</div>
-                                <div class="error-subtext">Your CPAR is currently being reviewed by QMR.</div>
-                            </div>
-                        @endif
-
+                    <div class="error-container">
+                        <div class="error-code">404</div>
+                        <div class="error-text">page not found</div>
+                        <div class="error-subtext">Unfortunately we're having trouble loading the page you are looking for. Please wait a moment and try again or use action below.</div>
                     </div>
-                </div>
 
+                </div>
             </div>
 
-            <div class="footer x-content-footer" style="position: absolute; bottom: 0px;">
+            <div class="footer x-content-footer" style="bottom: 0px; position: absolute;">
                 Copyright © 2017 NEWSIM. All rights reserved
             </div>
 
@@ -67,6 +46,8 @@
 </div>
 <!-- END PAGE CONTAINER -->
 
+@yield('message-box')
+
 <!-- MESSAGE BOX-->
 <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
     <div class="mb-container">
@@ -74,11 +55,11 @@
             <div class="mb-title"><span class="fa fa-sign-out"></span> Log <strong>Out</strong> ?</div>
             <div class="mb-content">
                 <p>Are you sure you want to log out?</p>
-                <p>Press No if you want to continue work. Press Yes to logout current user.</p>
+                <p>Press No if you want to continue work. Press Yes to logout.</p>
             </div>
             <div class="mb-footer">
                 <div class="pull-right">
-                    <a href="pages-login.html" class="btn btn-success btn-lg">Yes</a>
+                    <a href="http://na.dlbajana.xyz/logout/{{ request('user.id') }}" class="btn btn-success btn-lg">Yes</a>
                     <button class="btn btn-default btn-lg mb-control-close">No</button>
                 </div>
             </div>
@@ -86,6 +67,8 @@
     </div>
 </div>
 <!-- END MESSAGE BOX-->
+
+@yield('modals')
 
 <!-- START PRELOADS -->
 <audio id="audio-alert" src="{{ url('audio/alert.mp3') }}" preload="auto"></audio>
@@ -102,6 +85,17 @@
 <!-- START THIS PAGE PLUGINS-->
 <script type="text/javascript" src="{{ url('js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/scrolltotop/scrolltopcontrol.js') }}"></script>
+<script type='text/javascript' src="{{ url('js/plugins/noty/jquery.noty.js') }}"></script>
+<script type='text/javascript' src="{{ url('js/plugins/noty/layouts/topRight.js') }}"></script>
+<script type='text/javascript' src="{{ url('js/plugins/noty/themes/default.js') }}"></script>
+@yield('scripts')
+<script type="text/javascript">
+    $(function(){
+        @if($notify = session('notify'))
+            noty({text: '{{ $notify['message'] }}', layout: 'topRight', type: '{{ $notify['type'] }}'});
+        @endif
+    });
+</script>
 <!-- END THIS PAGE PLUGINS-->
 
 <!-- START TEMPLATE -->

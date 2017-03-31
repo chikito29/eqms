@@ -17,6 +17,7 @@ class CreateCparReviewedTable extends Migration {
             $table->boolean('status')->default(0);
             $table->boolean('on_review')->default(0);
             $table->string('reviewed_by')->nullable();
+            $table->boolean('notified')->default(0);
             $table->timestamps();
         });
     }

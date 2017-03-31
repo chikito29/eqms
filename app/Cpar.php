@@ -10,6 +10,10 @@ class Cpar extends Model {
 
     protected $guarded = [''];
 
+    public function dueDate() {
+        return $this->hasOne(DueDate::class);
+    }
+
     public function attachments() {
         return $this->hasMany(Attachment::class);
     }
@@ -28,5 +32,9 @@ class Cpar extends Model {
 
     public function cparAnswered() {
         return $this->hasOne(CparAnswered::class);
+    }
+
+    public function responsiblePerson() {
+        return $this->hasOne(ResponsiblePerson::class);
     }
 }

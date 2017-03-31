@@ -2,13 +2,8 @@
 
     <style type="text/css">
 
-        span.name {
-            margin-left: 50px;
-            margin-right: 20px;
-        }
-
         span.box {
-            margin-right: 100px;
+            margin-left: 10px;
         }
 
         .footer div{
@@ -73,12 +68,12 @@
                 <td colspan="10" align="center">CORRECTIVE AND PREVENTIVE ACTION REPORT FORM</td>
             </tr>
             <tr>
-                <td colspan="7" align="center">RAISED BY</td>
-                <td colspan="3">CPAR#:</td>
+                <td colspan="6" align="center">RAISED BY</td>
+                <td colspan="4">CPAR#: {{ $cpar->cpar_number or '&nbsp;' }}</td>
             </tr>
             <tr>
                 <td>NAME</td>
-                <td>&nbsp;</td>
+                <td>{{ $cpar->person_reporting }}</td>
                 <td style="border-left-style: hidden;">&nbsp;</td>
                 <td style="border-left-style: hidden;">&nbsp;</td>
                 <td style="border-left-style: hidden;">&nbsp;</td>
@@ -90,88 +85,93 @@
             </tr>
             <tr>
                 <td>DEPARTMENT</td>
-                <td colspan="9">&nbsp;</td>
+                <td colspan="9">{{ $cpar->department }}</td>
+            </tr>
+            <tr>
+                <td>BRANCH</td>
+                <td colspan="9">{{ $cpar->branch }}</td>
             </tr>
             <tr>
                 <td colspan="10" align="center">SEVERITY OF FINDINGS (marked checked)</td>
             </tr>
             <tr>
                 <td colspan="10">
-                    <span class="name">MAJOR</span><span class="fa fa-check-square-o box"></span><span class="name">MINOR</span><span class="fa fa-check-square-o box"></span><span class="name">OBSERVATION</span><span class="fa fa-check-square-o"></span>
+                    <span style="margin-left: 100px">MAJOR</span><span class="@if(strip_tags($cpar->severity) == 'Major') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                    <span style="margin-left: 140px">MINOR</span><span class="@if(strip_tags($cpar->severity) == 'Minor') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                    <span style="margin-left: 140px">OBSERVATION</span><span class="@if(strip_tags($cpar->severity) == 'Observation') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
                 </td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">PROCEDURE /PROCESS / SCOPE / OTHER REFERENCES:</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                    Itaque hic ipse iam pridem est reiectus; Aliter enim nosmet ipsos nosse non possumus. Duo enim genera quae erant, fecit tria. Paria sunt igitur. An hoc usque quaque, aliter in vita? An hoc usque quaque, aliter in vita? Quae si potest singula consolando levare, universa quo modo sustinebit? Itaque in rebus minime obscuris non multus est apud eos disserendi labor.
-                    Atqui, inquam, Cato, si istud optinueris, traducas me ad te totum licebit. Nam Pyrrho, Aristo, Erillus iam diu abiecti. Diodorus, eius auditor, adiungit ad honestatem vacuitatem doloris. Haec et tu ita posuisti, et verba vestra sunt. Non quaero, quid dicat, sed quid convenienter possit rationi et sententiae suae dicere. Sed quid minus probandum quam esse aliquem beatum nec satis beatum?
-                </td>
+                <td colspan="10">{{ $cpar->other_source }}</td>
             </tr>
             <tr>
                 <td colspan="10" align="center">SOURCE OF NON-CONFORMITY (marked checked)</td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <span style="margin-left: 80px">EXTERNAL</span><span class="@if($cpar->source == 'External') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                    <span style="margin-left: 100px">INTERNAL</span><span class="@if($cpar->source == 'Internal') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                    <span style="margin-left: 80px">OPERATIONAL PERFORMANCE</span><span class="@if($cpar->source == 'Operational Performance') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                    <span style="margin-left: 150px">CUSTOMER FEEDBACK</span><span class="@if($cpar->source == 'Customer Feedback') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                    <span style="margin-left: 80px">CUSTOMER COMPLAIN</span><span class="@if($cpar->source == 'Customer Complain') fa fa-check-square-o @else fa fa-square-o @endif box"></span>
+                </td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">OTHERS: (Please specify)</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                    Itaque hic ipse iam pridem est reiectus; Aliter enim nosmet ipsos nosse non possumus. Duo enim genera quae erant, fecit tria. Paria sunt igitur. An hoc usque quaque, aliter in vita? An hoc usque quaque, aliter in vita? Quae si potest singula consolando levare, universa quo modo sustinebit? Itaque in rebus minime obscuris non multus est apud eos disserendi labor.
-                </td>
+                <td colspan="10">{{ $cpar->other_source }}</td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">DETAILS:</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                    Itaque hic ipse iam pridem est reiectus; Aliter enim nosmet ipsos nosse non possumus. Duo enim genera quae erant, fecit tria. Paria sunt igitur. An hoc usque quaque, aliter in vita? An hoc usque quaque, aliter in vita? Quae si potest singula consolando levare, universa quo modo sustinebit? Itaque in rebus minime obscuris non multus est apud eos disserendi labor.
-                </td>
+                <td colspan="10">{{ $cpar->details }}</td>
             </tr>
             <tr>
                 <td colspan="10">NAME: (PERSON REPORTING TO NON-CONFORMITY)</td>
             </tr>
             <tr>
-                <td colspan="10">&nbsp;</td>
+                <td colspan="10">{{ $cpar->person_reporting or '&nbsp;' }}</td>
             </tr>
             <tr>
                 <td colspan="10">NAME: (PERSON RESPONSIBLE FOR TAKING THE CPAR)</td>
             </tr>
             <tr>
-                <td colspan="10">&nbsp;</td>
+                <td colspan="10">{{ $cpar->person_responsible or '&nbsp;' }}</td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">CORRECTION (Action to eliminate detected non-conformity)</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                </td>
+                <td colspan="10">{{ $cpar->correction or '&nbsp;' }}</td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">ROOT CAUSE ANALYSIS (What failed in the system to allow this non conformance to occur?)</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                </td>
+                <td colspan="10">{{ $cpar->root_cause or '&nbsp;' }}</td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">CORRECTIVE/PREVENTIVE ACTION: (Specific details of corrective action taken to prevent recurrence/ occurrence)</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                </td>
+                <td colspan="10">{{ $cpar->cp_action or '&nbsp;' }}</td>
             </tr>
             <tr>
-                <td colspan="5">PROPOSED CORRECTIVE ACTION COMPLETE DATE:</td>
-                <td colspan="5">CORRECTIVE / PREVENTIVE ACTION COMPLETE DATE:</td>
+                <td colspan="5">PROPOSED CORRECTIVE ACTION COMPLETE DATE:<br>{{ Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}</td>
+                <td colspan="5">CORRECTIVE / PREVENTIVE ACTION COMPLETE DATE: {{ Carbon\Carbon::parse($cpar->date_completed)->toFormattedDateString() }}</td>
             </tr>
             <tr>
                 <td colspan="5">DEPARTMENT HEAD:</td>
                 <td colspan="5">DATE CONFIRMED BY DEPARTMENT HEAD:</td>
             </tr>
             <tr>
-                <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
-                <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
+                <td colspan="5" style="border-top-style: hidden;">{{ $cpar->department_head or '&nbsp;' }}</td>
+                <td colspan="5" style="border-top-style: hidden;">{{ \Carbon\Carbon::parse($cpar->date_confirmed)->toFormattedDateString() }}</td>
             </tr>
         </tbody>
     </table>
@@ -188,17 +188,14 @@
                 <td colspan="10">ACCEPTANCE OF CPAR (Comments if any)</td>
             </tr>
             <tr>
-                <td colspan="10">&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="10">&nbsp;</td>
+                <td colspan="10">{{ $cpar->cpar_acceptance or '&nbsp;'}}</td>
             </tr>
             <tr>
                 <td colspan="5">DATE CPAR ACCEPTED:</td>
                 <td colspan="5">NAME & SIGNATURE: (QMR/ AUDITOR / CEO)</td>
             </tr>
             <tr>
-                <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
+                <td colspan="5" style="border-top-style: hidden;">{{ Carbon\Carbon::parse($cpar->date_accepted)->toFormattedDateString() }}</td>
                 <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
             </tr>
             <tr>
@@ -206,16 +203,14 @@
                 <td colspan="5">VERIFIED BY:</td>
             </tr>
             <tr>
-                <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
-                <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
+                <td colspan="5" style="border-top-style: hidden;">{{ Carbon\Carbon::parse($cpar->date_verified)->toFormattedDateString() }}</td>
+                <td colspan="5" style="border-top-style: hidden;">{{ $cpar->verified_by or '&nbsp;'}}</td>
             </tr>
             <tr style="border-bottom-style: hidden;">
-                <td colspan="10">DETAILS:</td>
+                <td colspan="10">RESULT OF VERIFICATION:</td>
             </tr>
             <tr style="border-top-style: hidden;">
-                <td colspan="10">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Atque haec coniunctio confusioque virtutum tamen a philosophis ratione quadam distinguitur. Non autem hoc: igitur ne illud quidem. Nunc omni virtuti vitium contrario nomine opponitur. Duo Reges: constructio interrete. Proclivi currit oratio. Idemne, quod iucunde?
-                    Itaque hic ipse iam pridem est reiectus; Aliter enim nosmet ipsos nosse non possumus. Duo enim genera quae erant, fecit tria. Paria sunt igitur. An hoc usque quaque, aliter in vita? An hoc usque quaque, aliter in vita? Quae si potest singula consolando levare, universa quo modo sustinebit? Itaque in rebus minime obscuris non multus est apud eos disserendi labor.
-                </td>
+                <td colspan="10">{{ $cpar->result or '&nbsp;' }}</td>
             </tr>
             </tbody>
         </table>

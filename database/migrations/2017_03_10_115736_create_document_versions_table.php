@@ -16,7 +16,6 @@ class CreateDocumentVersionsTable extends Migration
         Schema::create('document_versions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('cpar_id');
-            $table->string('control_number');
             $table->longText('document');
             $table->timestamps();
         });

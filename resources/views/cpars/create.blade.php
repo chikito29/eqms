@@ -19,36 +19,43 @@
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">CPAR Number</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="cpar-number"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Raised By</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="raised-by"/>
+                                    <input type="text" class="hidden" value="{{ request('user.first_name'). ' ' .request('user.last_name') }}" name="raised-by"/>
+                                    <label class="form-control">{{ request('user.first_name'). ' ' .request('user.last_name') }}</label>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <select name="department" class="form-control">
+                                <div class="col-md-5 col-xs-16">
+                                    <select name="department" class="form-control select" id="department-select">
+                                        <option>Accounting</option>
+                                        <option>Human Resource</option>
+                                        <option>Information Technology</option>
+                                        <option>Internal Audit</option>
+                                        <option>Training</option>
+                                        <option>Research and Development</option>
+                                        <option>Quality Management Representative</option>
+                                    </select>
+                                    <span class="help-block" id="department-hint"></span>
+                                </div>
+                                <div class="col-md-4 col-xs-12 @if(session('branch')) has-error @endif">
+                                    <select name="branch" class="form-control select">
+                                        <option selected disabled>Branch</option>
                                         <option>Bacolod</option>
                                         <option>Cebu</option>
                                         <option>Davao</option>
                                         <option>Iloilo</option>
                                         <option>Makati</option>
                                     </select>
-                                    <span class="help-block"></span>
+                                    @if(session('branch')) <span class="text text-danger"><strong>{{ session()->pull('branch') }}</strong></span> @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Severity Of Findings</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="severity">
+                                    <select class="form-control select" name="severity">
                                         <option>Observation</option>
                                         <option>Minor</option>
                                         <option>Major</option>
@@ -59,22 +66,24 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="reference" id="reference" onchange="showLink()">
+                                    <select class="form-control select" name="reference" id="reference" onchange="showLink()" data-live-search="true">
                                         @foreach($sections as $section)
                                             @foreach($section->documents as $document)
                                                 <option id="{{ $document->id }}" value="{{ $document->id }}">{{ $document->title }}</option>
                                             @endforeach
                                         @endforeach
-                                    </select> <br>
+                                    </select> <br><br>
                                     <h6><span id="span-reference">External Link Will Show Here</span></h6>
-                                    <input type="text" class="tagsinput" name="tags"/>
+                                    <input type="text" class="tagsinput" name="tags"  value="{{ old('tags') }}"/>
+                                    @if($errors->first('tags')) @component('layouts.error') {{ $errors->first('tags') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Source Of Non-Comformity</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="source">
-                                        <option>External/Internal</option>
+                                    <select class="form-control select" name="source">
+                                        <option>External</option>
+                                        <option>Internal</option>
                                         <option>Operational Performance</option>
                                         <option>Customer Feedback</option>
                                         <option>Customer Complain</option>
@@ -82,30 +91,34 @@
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group @if($errors->first('other-source')) has-error @endif">
                                 <label class="col-md-3 col-xs-5 control-label">Others: (Please specify)</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="3" name="other-source"></textarea>
+                                    <textarea class="form-control" rows="3" name="other-source">{{ old('other-source') }}</textarea>
+                                    @if($errors->first('other-source')) @component('layouts.error') {{ $errors->first('other-source') }} @endcomponent @endif
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group @if($errors->first('details')) has-error @endif">
                                 <label class="col-md-3 col-xs-5 control-label">Details</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="5" name="details"></textarea>
+                                    <textarea class="form-control" rows="5" name="details">{{ old('details') }}</textarea>
+                                    @if($errors->first('details')) @component('layouts.error') {{ $errors->first('details') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-reporting"/>
+                                    <input type="text" class="hidden" value="{{ request('user.first_name'). ' ' .request('user.last_name') }}" name="person-reporting"/>
+                                    <label class="form-control">{{ request('user.first_name'). ' ' .request('user.last_name') }}</label>
                                     <span class="help-block">Person Reporting To Non-Conformity</span>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group @if($errors->first('person-responsible')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-responsible"/>
-                                    <span class="help-block">Person Responsible For Taking The CPAR</span>
+                                    <input type="text" class="form-control" name="person-responsible" value="{{ old('person-responsible') }}"/>
+                                    @if($errors->first('person-responsible')) @component('layouts.error') {{ $errors->first('person-responsible') }} @endcomponent
+                                    @else <span class="help-block">Person Responsible For Taking The CPAR</span> @endif
                                 </div>
                             </div>
                             <div class="form-group">
@@ -118,7 +131,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Root Cause Analysis</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="root-cause"></textarea>
+                                    <textarea class="form-control" rows="4" name="root-cause" disabled="disabled"></textarea>
                                     <span class="help-block">What Failed In The System To Allow This Non-Conformance To Occur?</span>
                                 </div>
                             </div>
@@ -129,11 +142,11 @@
                                     <span class="help-block">Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence</span>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group @if($errors->first('proposed-date')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Proposed Corrective Action Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="proposed-date" disabled="disabled"/>
-                                    <span class="help-block"></span>
+                                    <input type="text" class="form-control datepicker" name="proposed-date" value="{{ old('proposed-date') }}"/>
+                                    @if($errors->first('proposed-date')) @component('layouts.error') {{ $errors->first('proposed-date') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group">
@@ -143,64 +156,17 @@
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group @if($errors->first('department-head')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="department-head"/>
-                                    <span class="help-block"></span>
+                                    <input type="text" class="form-control" name="department-head" value="{{ old('department-head') }}"/>
+                                    @if($errors->first('department-head')) @component('layouts.error') {{ $errors->first('department-head') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Date Confirmed By Department Head</label>
                                 <div class="col-md-9 col-xs-12">
                                     <input type="text" class="form-control" name="date-confirmed-by" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <h4><strong>To Be Filled By The QMR / Auditor</strong></h4>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <textarea class="form-control" rows="4" name="cpar-acceptance" disabled="disabled"></textarea>
-                                    <span class="help-block">Comments If Any</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Date CPAR Accepted</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-accepted" readonly/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-confirmed-by" readonly/>
-                                    <span class="help-block">QMR / AUDITOR / CEO</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verification Date</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="verification-date" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verified By</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="verified-by" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Result Of Verification</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="5" name="result" disabled="disabled"></textarea>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -283,6 +249,9 @@
                 browseLabel: "Browse Document",
                 allowedFileExtensions : ['.jpg']
             });
+
+            /* Hidden placeholder */
+            $('select option[disabled]:first-child').css('display', 'none');
         });
 
         $('#summernote').summernote({
@@ -305,5 +274,9 @@
                 + " in new tab"
                 + "</a>");
         }
+
+        $('#department-select').on('change', function() {
+            $('#department-hint').empty().append("<span class=\"text text-info\">Do not forget to choose a branch too.</span>");
+        });
     </script>
 @stop

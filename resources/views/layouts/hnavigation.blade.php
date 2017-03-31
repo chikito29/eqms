@@ -44,8 +44,8 @@
             <a href="#">Audit Findings</a>
             <ul>
                 <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Audit Findings</a></li>
-                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil"></span> CPAR</a></li>
-                <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li>
+                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil"></span> Create CPAR</a></li>
+                @if(\App\Cpar::all()) <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li> @endif
             </ul>
         </li>
         @endif
