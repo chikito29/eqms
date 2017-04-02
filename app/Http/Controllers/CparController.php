@@ -81,7 +81,7 @@ class CparController extends Controller {
             'source'             => request('source'),
             'other_source'       => request('other-source'),
             'details'            => request('details'),
-            'person_reporting'   => request('person-reporting'),
+            'person_reporting'   => request('raised-by'),
             'person_responsible' => request('person-responsible'),
             'proposed_date'      => request('proposed-date'),
             'department_head'    => request('department-head')
@@ -146,47 +146,28 @@ class CparController extends Controller {
         return view('cpars.edit', compact('cpar', 'sections'));
     }
 
-    public function update(Cpar $cpar, $saveAs) {
-        if ($saveAs == 'draft') {
-            $this->save($cpar);
+    public function update(Cpar $cpar) {
+        $this->validate(request(), [
+            'tags'               => 'required',
+            'details'            => 'required',
+            'person-responsible' => 'required',
+        ]);
+
+        if (request('severity') == 'Observation') {
+            $severity = '<span class="label label-info">' . request('severity') . '</span>';
+        }
+        elseif (request('severity') == 'Minor') {
+            $severity = '<span class="label label-warning">' . request('severity') . '</span>';
         }
         else {
-            $this->validate(request(), [
-                'cpar-number'        => 'required',
-                'raised-by'          => 'required',
-                'tags'               => 'required',
-                'details'            => 'required',
-                'person-responsible' => 'required',
-                'root-cause'         => 'required',
-            ]);
-
-            $this->save($cpar);
-
-            if (request('severity') == 'Observation') {
-                $severity = '<span class="label label-info">' . request('severity') . '</span>';
-            }
-            elseif (request('severity') == 'Minor') {
-                $severity = '<span class="label label-warning">' . request('severity') . '</span>';
-            }
-            else {
-                $severity = '<span class="label label-danger">' . request('severity') . '</span>';
-            }
-
-            $cpar->person_reporting   = request('person-reporting');
-            $cpar->person_responsible = request('person-responsible');
-            $cpar->root_cause         = request('root-cause');
-            $cpar->date_confirmed = request('date-confirmed');
-            $cpar->severity       = $severity;
-            $cpar->save();
-
-            return redirect()->route('cpars.show', ['cpar' => $cpar->id]);
+            $severity = '<span class="label label-danger">' . request('severity') . '</span>';
         }
-    }
 
-    public function save(Cpar $cpar) {
-        $cpar->cpar_number        = request('cpar-number');
-        $cpar->raised_by          = request('raised-by');
+        $cpar->person_responsible = request('person-responsible');
+        $cpar->root_cause         = request('root-cause');
+        $cpar->severity           = $severity;
         $cpar->department         = request('department');
+        $cpar->proposed_date      = request('proposed-date');
         $cpar->severity           = request('severity');
         $cpar->document_id        = request('reference');
         $cpar->tags               = request('tags');
@@ -194,16 +175,18 @@ class CparController extends Controller {
         $cpar->other_source       = request('other-source');
         $cpar->details            = request('details');
         $cpar->department_head    = request('department-head');
-        $cpar->cpar_acceptance    = request('cpar-acceptance');
-        $cpar->date_accepted      = request('date-accepted');
-        $cpar->date_verified      = request('verification-date');
-        $cpar->verified_by        = request('verified-by');
-        $cpar->result             = request('result');
         $cpar->save();
+
+        return redirect()->route('cpars.show', ['cpar' => $cpar->id]);
     }
 
-    public function destroy(Cpar $cpar) {
-        //
+    public function close(Cpar $cpar) {
+        $cparClosed            = CparClosed::find($cpar->id);
+        $cparClosed->status    = 1;
+        $cparClosed->closed_by = request('user.first_name') . ' ' . request('user.last_name');
+        $cparClosed->save();
+
+        return back();
     }
 
     public function answerCpar(Cpar $cpar) {
@@ -425,10 +408,19 @@ class CparController extends Controller {
     }
 
     public function verify(Cpar $cpar) {
-        $sections     = Section::with('documents')->get();
-        $documentBody = $this->getDocument($cpar);
+        if ($cpar->cparClosed->status <> 1) {
+            $sections     = Section::with('documents')->get();
+            $documentBody = $this->getDocument($cpar);
 
-        return view('cpars.verify', compact('cpar', 'sections', 'documentBody'));
+            $cparReviewed            = CparReviewed::find($cpar->id);
+            $cparReviewed->on_review = 1;
+            $cparReviewed->save();
+
+            return view('cpars.verify', compact('cpar', 'sections', 'documentBody'));
+        }
+        else {
+            return route('cpars.cpar-on-review', $cpar->id);
+        }
     }
 
     public function finalize(Cpar $cpar) {
@@ -441,10 +433,7 @@ class CparController extends Controller {
         return redirect('cpars');
     }
 
-    public function saveAsDraft($id) {
-        $cpar = Cpar::find($id);
-        $this->update($cpar, 'draft');
+    public function saveAsDraft(Cpar $cpar) {
 
-        return back();
     }
 }

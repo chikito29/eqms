@@ -1,6 +1,6 @@
 @extends('layouts.super-admin')
 
-@section('page-title') Create CPAR | eQMS @stop
+@section('page-title') Edit CPAR | eQMS @stop
 
 @section('nav-audit-findings') active @stop
 
@@ -19,16 +19,9 @@
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">CPAR Number</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="cpar-number" value="{{ $cpar->cpar_number }}"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Raised By</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="raised-by" value="{{ $cpar->raised_by }}"/>
+                                    <label class="control-label">{{ $cpar->raised_by }}</label>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -48,7 +41,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Severity Of Findings</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="severity">
+                                    <select class="form-control" name="severity" id="severity">
                                         <option>Observation</option>
                                         <option>Minor</option>
                                         <option>Major</option>
@@ -62,19 +55,20 @@
                                     <select class="form-control" name="reference" id="reference" onchange="showLink()">
                                         @foreach($sections as $section)
                                             @foreach($section->documents as $document)
-                                                <option id="{{ $document->id }}" value="{{ $document->id }}">{{ $document->title }}</option>
+                                                <option value="{{ $document->id }}">{{ $document->title }}</option>
                                             @endforeach
                                         @endforeach
-                                    </select> <br>
-                                    <h6><span id="span-reference">External Link Will Show Here</span></h6>
+                                    </select> <br><br>
+                                    <h6><span id="span-reference"><a href="{{ route('documents.show', $cpar->id) }}">{{ route('documents.show', $cpar->id) }}</a></span></h6>
                                     <input type="text" class="tagsinput" name="tags" value="{{ $cpar->tags }}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Source Of Non-Comformity</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="source">
-                                        <option>External/Internal</option>
+                                    <select class="form-control" name="source" id="source">
+                                        <option>External</option>
+                                        <option>Internal</option>
                                         <option>Operational Performance</option>
                                         <option>Customer Feedback</option>
                                         <option>Customer Complain</option>
@@ -97,7 +91,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-reporting" value="{{ $cpar->person_reporting }}"/>
+                                    <label class="control-label">{{ $cpar->person_reporting }}</label>
                                     <span class="help-block">Person Reporting To Non-Conformity</span>
                                 </div>
                             </div>
@@ -109,37 +103,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Correction</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="correction" disabled="disabled"></textarea>
-                                    <span class="help-block">Action To Eliminate The Detected Non-Conformity</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Root Cause Analysis</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="root-cause">{{ $cpar->root_cause }}</textarea>
-                                    <span class="help-block">What Failed In The System To Allow This Non-Conformance To Occur?</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Corrective/Preventive Action</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="4" name="cp-action" disabled="disabled"></textarea>
-                                    <span class="help-block">Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Proposed Corrective Action Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="proposed-date" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Corrective/Preventive Complete Date</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="date-completed" disabled="disabled"/>
+                                    <input type="text" class="form-control datepicker" name="proposed-date" value="{{ $cpar->proposed_date }}"/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -147,60 +113,6 @@
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
                                     <input type="text" class="form-control" name="department-head" value="{{ $cpar->department_head }}"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Date Confirmed By Department Head</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-confirmed-by" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <h4><strong>To Be Filled By The QMR / Auditor</strong></h4>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <textarea class="form-control" rows="4" name="cpar-acceptance" disabled="disabled"></textarea>
-                                    <span class="help-block">Comments If Any</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Date CPAR Accepted</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-accepted" readonly/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="date-confirmed-by" readonly/>
-                                    <span class="help-block">QMR / AUDITOR / CEO</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verification Date</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="verification-date" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Verified By</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="verified-by" disabled="disabled"/>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Result Of Verification</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="5" name="result" disabled="disabled"></textarea>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
@@ -307,7 +219,16 @@
         }
 
         $(function() {
+            //populate select elements
             $('#department').val('{{ $cpar->department }}');
+            $('#department').selectpicker('refresh');
+            $('#severity').val('{{ $cpar->severity }}');
+            $('#severity').selectpicker('refresh');
+            id = '{{ \App\Document::find($cpar->id)->id }}';
+            $('#reference').val(id);
+            $('#reference').selectpicker('refresh');
+            $('#source').val('{{ $cpar->source }}');
+            $('#source').selectpicker('refresh');
         });
     </script>
 @stop

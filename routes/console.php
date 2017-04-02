@@ -1,5 +1,5 @@
 <?php
 
-Artisan::command('checkDueDates', function(){
-
+Artisan::command('routes', function(){
+    $this->call('php artisan route:list');
 });

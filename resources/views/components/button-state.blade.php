@@ -11,7 +11,7 @@
         <span class="fa fa-pencil"> {{ $slot }}</span>
     </button>
 @elseif($title == 'close')
-    <button type="button" class="btn btn-primary btn-rounded btn-sm" onclick="closeCpar()" @if($cpar->cparClosed->status == 1) disabled = "disabled" @endif>
+    <button type="button" class="btn btn-primary btn-rounded btn-sm" onclick="closeCpar({{  $cpar->id }})" @if($cpar->cparClosed->status == 1) disabled = "disabled" @endif>
         <span class="fa fa-times"> {{ $slot }}</span>
     </button>
 @endif

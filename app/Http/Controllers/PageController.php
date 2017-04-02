@@ -9,7 +9,7 @@ use App\RevisionRequest;
 
 class PageController extends Controller {
     public function home() {
-        $revisionLogs = RevisionLog::all();
+        $revisionLogs     = RevisionLog::all();
         $revisionRequests = RevisionRequest::with('reference_document')->get();
 
         return view('pages.home', compact('revisionLogs', 'revisionRequests'));
@@ -17,7 +17,7 @@ class PageController extends Controller {
 
     public function dashboard() {
         $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
-        $chartData = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
+        $chartData        = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
 
         return view('pages.dashboard', compact('chartData', 'revisionRequests'));
     }
@@ -28,14 +28,20 @@ class PageController extends Controller {
 
     public function answerCparLogin($id) {
         $cpar = Cpar::find($id);
-
-        if ($cpar <> NULL) {
-            return view('pages.answer-cpar-login', compact('cpar'));
+        if ($cpar->cparReviewed->on_review <> 1) {
+            if ($cpar <> NULL) {
+                return view('pages.answer-cpar-login', compact('cpar'));
+            }
+            else {
+                return redirect('page-not-found');
+            }
+        }
+        elseif ($cpar->cparReviewed->on_review <> 1 && $cpar->cparClosed->status <> 1) {
+            return view('cpars.cpar-on-review');
         }
         else {
-            return redirect('page-not-found');
+            return view('errors.page-not-found');
         }
-
     }
 
     public function answerCparLoginPost(Cpar $cpar) {
@@ -44,7 +50,7 @@ class PageController extends Controller {
         ]);
 
         if (request('code') == $cpar->responsiblePerson->code) {
-            $responsiblePerson = ResponsiblePerson::find($cpar->id);
+            $responsiblePerson                = ResponsiblePerson::find($cpar->id);
             $responsiblePerson->authenticated = 1;
             $responsiblePerson->save();
 

@@ -25,34 +25,22 @@
                                     @if($errors->first('cpar-number')) @component('layouts.error') {{ $errors->first('cpar-number') }} @endcomponent @endif
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Raised By</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->raised_by }}</label>
-                                    <input type="text" class="hidden" name="raised-by" value="{{ $cpar->raised_by }}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Department</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->department }}</label>
-                                    <input type="text" class="hidden" name="department" value="{{ $cpar->department }}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Branch</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->branch }}</label>
-                                    <input type="text" class="hidden" name="branch" value="{{ $cpar->branch }}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Severity Of Findings</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ strip_tags(str_replace('&nbsp;', '', $cpar->severity)) }}</label>
-                                    <input type="text" class="hidden" name="severity" value="{{ $cpar->severity }}">
-                                </div>
-                            </div>
+                            @component('components.show-single-line')
+                                @slot('label') Raised By @endslot
+                                {{ $cpar->raised_by }}
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Department @endslot
+                                {{ $cpar->department }}
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Branch @endslot
+                                {{ $cpar->branch }}
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Severity Of Findings @endslot
+                                {{ strip_tags(str_replace('&nbsp;', '', $cpar->severity)) }}
+                            @endcomponent
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                 <div class="col-md-9 col-xs-12">
@@ -61,80 +49,48 @@
                                     <input type="text" class="hidden" name="tags" value="{{ $cpar->tags }}">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Source Of Non-Comformity</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->source }}</label>
-                                    <input type="text" class="hidden" name="source" value="{{ $cpar->source }}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Others: (Please specify)</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
-                                        {{ $cpar->other_source }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Details</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
-                                        {{ $cpar->details }}
-                                    </div>
-                                    <input type="text" class="hidden" name="details" value="{{ $cpar->details }}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->person_reporting }}</label>
-                                    <input type="text" class="hidden" name="person-reporting" value="{{ $cpar->person_reporting }}">
-                                    <span class="help-block">Person Reporting To Non-Conformity</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->person_responsible }}</label>
-                                    <input type="text" class="hidden" name="person-responsible" value="{{ $cpar->person_responsible }}">
-                                    <span class="help-block">Person Responsible For Taking The CPAR</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Correction</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
-                                        {{ $cpar->correction }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Root Cause Analysis</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
-                                        {{ $cpar->root_cause }}
-                                    </div>
-                                    <span class="help-block">What Failed In The System To Allow This Non-Conformance To Occur?</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Corrective/Preventive Action</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
-                                        {{ $cpar->cp_action }}
-                                    </div>
-                                    <span class="help-block">Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Proposed Corrective Action Complete Date</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->proposed_date }}</label>
-                                    <input type="text" class="hidden" name="proposed-date" value="{{ $cpar->proposed_date }}">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
+                            @component('components.show-single-line')
+                                @slot('label') Source Of Non-Conformity @endslot
+                                {{ $cpar->source }}
+                            @endcomponent
+                            @if($cpar->other_source)
+                                @component('components.show-multi-line')
+                                    @slot('label') Others: (Please specify) @endslot
+                                    {{ $cpar->other_source }}
+                                @endcomponent
+                            @endif
+                            @component('components.show-multi-line')
+                                @slot('label') Details @endslot
+                                {{ $cpar->details }}
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Name @endslot
+                                {{ $cpar->person_reporting }}
+                                @slot('help') Person Reporting To Non-Conformity @endslot
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Name @endslot
+                                {{ $cpar->person_responsible }}
+                                @slot('help') Person Responsible For Taking The CPAR @endslot
+                            @endcomponent
+                            @component('components.show-multi-line')
+                                @slot('label') Correction @endslot
+                                {{ $cpar->correction }}
+                            @endcomponent
+                            @component('components.show-multi-line')
+                                @slot('label') Root Cause Analysis @endslot
+                                {{ $cpar->root_cause }}
+                                @slot('help') What Failed In The System To Allow This Non-Conformance To Occur? @endslot
+                            @endcomponent
+                            @component('components.show-multi-line')
+                                @slot('label') Corrective/Preventive Action @endslot
+                                {{ $cpar->cp_action }}
+                                @slot('help') Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence @endslot
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Proposed Corrective Action Complete Date @endslot
+                                {{ Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}
+                            @endcomponent
                             <div class="form-group @if($errors->first('date-completed')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Corrective/Preventive Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
@@ -142,19 +98,14 @@
                                     @if($errors->first('date-completed')) @component('layouts.error') {{ $errors->first('date_completed') }} @endcomponent @endif
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Department Head</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->department_head }}</label>
-                                    <input type="text" class="hidden" name="department-head" value="{{ $cpar->department_head }}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Date Confirmed By Department Head</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="form-control">{{ $cpar->date_confirmed }}</label>
-                                </div>
-                            </div>
+                            @component('components.show-single-line')
+                                @slot('label') Department Head @endslot
+                                {{ $cpar->department_head }}
+                            @endcomponent
+                            @component('components.show-single-line')
+                                @slot('label') Date Confirmed By Department Head @endslot
+                                {{ $cpar->date_confirmed }}
+                            @endcomponent
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <h4><strong>To Be Filled By The QMR / Auditor</strong></h4>

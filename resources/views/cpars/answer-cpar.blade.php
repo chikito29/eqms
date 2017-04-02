@@ -38,43 +38,38 @@
                             {{ csrf_field() }}
                             <div class="panel panel-default">
                                 <div class="panel-body form-group-separated">
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Raised By</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->raised_by }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Department</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->department }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Severity Of Findings</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ strip_tags(str_replace('&nbsp;', '', $cpar->severity)) }}</label>
-                                        </div>
-                                    </div>
+                                    @component('components.show-single-line')
+                                        @slot('label') Raised By @endslot
+                                        {{ $cpar->raised_by }}
+                                    @endcomponent
+                                    @component('components.show-single-line')
+                                        @slot('label') Department @endslot
+                                        {{ $cpar->department }}
+                                    @endcomponent
+                                    @component('components.show-single-line')
+                                        @slot('label') Branch @endslot
+                                        {{ $cpar->branch }}
+                                    @endcomponent
+                                    @component('components.show-single-line')
+                                        @slot('label') Severity Of Findings @endslot
+                                        {{ strip_tags(str_replace('&nbsp;', '', $cpar->severity)) }}
+                                    @endcomponent
                                     <div class="form-group">
                                         <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                         <div class="col-md-9 col-xs-12">
                                             <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $documentBody !!}</textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Source Of Non-Comformity</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->source }}</label>
-                                        </div>
-                                    </div>
+                                    @component('components.show-single-line')
+                                        @slot('label') Source Of Non-Comformity @endslot
+                                        {{ $cpar->source }}
+                                    @endcomponent
                                     <div class="form-group">
                                         <label class="col-md-3 col-xs-5 control-label">Others: (Please specify)</label>
                                         <div class="col-md-9 col-xs-12">
                                             <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
                                                 {!! $cpar->other_source !!}
                                             </div>
-                                            <span class="help-block"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -85,20 +80,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->person_reporting }}</label>
-                                            <span class="help-block">Person Reporting To Non-Conformity</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->person_responsible }}</label>
-                                            <span class="help-block">Person Responsible For Taking The CPAR</span>
-                                        </div>
-                                    </div>
+                                    @component('components.show-single-line')
+                                        @slot('label') Name @endslot
+                                        {{ $cpar->person_reporting }}
+                                        @slot('help') Person Reporting To Non-Conformity @endslot
+                                    @endcomponent
                                     <div class="form-group @if($errors->first('correction')) has-error @endif">
                                         <label class="col-md-3 col-xs-5 control-label">Correction</label>
                                         <div class="col-md-9 col-xs-7">
@@ -126,30 +112,14 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="form-group @if($errors->first('proposed-date')) has-error @endif">
-                                        <label class="col-md-3 col-xs-12 control-label">Proposed Corrective Action Complete Date</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->proposed_date }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Corrective/Preventive Complete Date</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <input type="text" class="form-control datepicker" disabled="disabled" value="{{ $cpar->date_completed }}"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Department Head</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <label class="form-control">{{ $cpar->department_head }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Date Confirmed By Department Head</label>
-                                        <div class="col-md-9 col-xs-12">
-                                            <input type="text" class="form-control" disabled="disabled" value="{{ $cpar->date_confirmed_by }}"/>
-                                        </div>
-                                    </div>
+                                    @component('components.show-single-line')
+                                        @slot('label') Proposed Corrective Action Complete Date @endslot
+                                        {{ \Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}
+                                    @endcomponent
+                                    @component('components.show-single-line')
+                                        @slot('label') Department Head @endslot
+                                        {{ $cpar->department_head }}
+                                    @endcomponent
                                     <div class="form-group @if(request('user.first_name') <> $cpar->person_responsible) hidden @endif">
                                         <label class="col-md-3 col-xs-5 control-label">Attachment</label>
                                         <div class="col-md-9 col-xs-7">

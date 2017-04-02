@@ -17,13 +17,14 @@ Route::get('revision-requests/{revision_request}/print', 'RevisionRequestControl
 Route::get('dashboard', 'PageController@dashboard')->name('pages.dashboard')->middleWare('na.authenticate');
 Route::get('action-summary/{cpar}/{date?}', 'PageController@actionSummary')->name('action-summary');
 Route::get('answer-cpar/login/{cpar}', 'PageController@answerCparLogin')->name('answer-cpar-login');
+Route::get('cpars/finalize-verification/{cpar}', 'CparController@finalize')->name('cpars.finalize');
 Route::get('home', 'PageController@home')->name('pages.home')->middleware('na.authenticate');
 Route::get('page-not-found', 'PageController@pageNotFound')->name('page-not-found');
 Route::get('answer-cpar/{cpar}', 'CparController@answerCpar')->name('answer-cpar');
 Route::get('cpar-closed', 'CparController@cparClosed')->name('cpars.cpar-closed');
 Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('on-review');
 Route::get('cpars/verify/{cpar}', 'CparController@verify')->name('cpars.verify');
-Route::get('cpars/finalize-verification/{cpar}', 'CparController@finalize')->name('cpars.finalize');
+Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
 Route::get('review/{cpar}', 'CparController@review')->name('review');
 
 Route::get('/', function () {

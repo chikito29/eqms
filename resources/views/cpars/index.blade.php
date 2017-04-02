@@ -43,7 +43,7 @@
                                                 @component('components.button-state', compact('cpar')) @slot('title') review @endslot review @endcomponent
                                                 @component('components.button-state', compact('cpar')) @slot('title') close @endslot close @endcomponent
                                             </td>
-                                            <form method="POST" action="{{ route('cpars.destroy', $cpar->id) }}" accept-charset="UTF-8" id="form-delete{{ $cpar->id }}">
+                                            <form method="get" action="{{ route('cpars.close', $cpar->id) }}" accept-charset="UTF-8" id="{{ $cpar->id }}">
                                                 {{ csrf_field() }}
                                                 {{ method_field('delete') }}
                                             </form>
@@ -69,7 +69,7 @@
                     <h4 class="modal-title" id="modal-title">Close CPAR</h4>
                 </div>
                 <div class="modal-body" id="modal-body">
-                    CPAR is not yet <span class="text text-info">REVIEWED</span>, are you sure you want it to be <span class="text text-danger">CLOSED</span>?
+                    Are you sure you want to <span class="text text-danger">close</span> CPAR?
                 </div>
                 <div class="modal-footer" id="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -88,16 +88,10 @@
             confirmModalBody = $('#confirm-modal').html();
         });
 
-        function closeCpar(){
-            @if($cpar->cparReviewed->status == 0)
-                $('#confirm-modal').empty().append(confirmModalBody);
-                $('#modal-yes').attr('onclick', 'close()');
-                $('#confirm-modal').modal('toggle');
-            @elseif($cpar->cparReviewed->status == 1)
-                $('#modal-title').empty().append('Close CPAR?');
-                $('#modal-body').empty().append("Are you sure you want to <span class=\"text text-warning\">CLOSE</span>");
-                $('#confirm-modal').modal('toggle');
-            @endif
+        function closeCpar(id){
+            var cparId = id;
+            $('#confirm-modal').modal('toggle');
+            $('#modal-yes').attr('onclick', '$("'+ "#" + cparId + '").submit();');
         }
 
         function checkButton(date, url){

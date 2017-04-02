@@ -22,13 +22,13 @@ class CreateCparsTable extends Migration
             $table->text('tags');
             $table->text('branch');
             $table->string('cpar_number')->nullable()->unique();
-            $table->string('raised_by');
+            $table->string('raised_by')->nullable();
             $table->string('department');
             $table->string('severity');
             $table->string('source');
             $table->longText('other_source')->nullable();
             $table->longText('details');
-            $table->string('person_reporting');
+            $table->string('person_reporting')->nullable();
             $table->string('person_responsible');
             $table->longText('correction')->nullable();
             $table->longText('root_cause')->nullable();
