@@ -38,6 +38,7 @@
                 <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Document</a></li>
                 <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-pencil"></span> Revision Request</a></li>
                 <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
+                <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-clock-o"></span> Access Requests</a></li>
             </ul>
         </li>
         <li class="xn-openable @yield('nav-audit-findings')">
