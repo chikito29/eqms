@@ -47,7 +47,7 @@ class CparController extends Controller {
             'details'            => 'required',
             'person-responsible' => 'required',
             'proposed-date'      => 'required',
-            'department-head'    => 'required',
+            'chief'    => 'required',
         ]);
 
         if (request('branch') == '') {
@@ -83,7 +83,7 @@ class CparController extends Controller {
             'person_reporting'   => request('raised-by'),
             'person_responsible' => request('person-responsible'),
             'proposed_date'      => request('proposed-date'),
-            'department_head'    => request('department-head')
+            'chief'    => request('chief')
         ]);
 
         //TODO: put this method in verifying section
@@ -174,7 +174,7 @@ class CparController extends Controller {
         $cpar->source             = request('source');
         $cpar->other_source       = request('other-source');
         $cpar->details            = request('details');
-        $cpar->department_head    = request('department-head');
+        $cpar->chief    = request('chief');
         $cpar->save();
 
         return redirect()->route('cpars.show', ['cpar' => $cpar->id]);

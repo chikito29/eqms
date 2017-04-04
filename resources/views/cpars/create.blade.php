@@ -18,7 +18,7 @@
                     {{ csrf_field() }}
                     {{--Hidden inputs--}}
                     <input type="text" class="hidden" value="{{ request('user.id') }}" name="raised-by"/>
-                    <input type="text" class="hidden" name="department-head" value="Temporary"/>
+                    <input type="text" class="hidden" name="chief" value="Temporary"/>
                     <input type="text" class="hidden" name="link" id="link"/>
                     {{--End Hidden inputs--}}
                     <div class="panel panel-default">
@@ -129,7 +129,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control select" name="department-head" id="department-head" data-live-search="true"></select>
+                                    <select class="form-control select" name="chief" id="chief" data-live-search="true"></select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -238,11 +238,11 @@
 
             chiefOptions = "";
             @foreach($result as $employee)
-                @if($employee->department_head == 1)
+                @if($employee->chief == 1)
                     chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
                 @endif
             @endforeach
-        $('#department-head').empty().append(chiefOptions);
+        $('#chief').empty().append(chiefOptions);
         });
 
         $('#summernote').summernote({

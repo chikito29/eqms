@@ -35,7 +35,7 @@ class CreateCparsTable extends Migration
             $table->longText('cp_action')->nullable();
             $table->date('proposed_date');
             $table->date('date_completed')->nullable();
-            $table->string('department_head');
+            $table->string('chief');
             $table->longText('cpar_acceptance')->nullable();
             $table->date('date_confirmed')->nullable();
             $table->date('date_accepted')->nullable();
