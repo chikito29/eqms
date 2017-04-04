@@ -27,7 +27,11 @@
                             </div>
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
-                                {{ $cpar->raised_by }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->raised_by)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Department @endslot
@@ -65,12 +69,20 @@
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                {{ $cpar->person_reporting }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->person_reporting)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                                 @slot('help') Person Reporting To Non-Conformity @endslot
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                {{ $cpar->person_responsible }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->person_responsible)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                                 @slot('help') Person Responsible For Taking The CPAR @endslot
                             @endcomponent
                             @component('components.show-multi-line')
@@ -100,7 +112,11 @@
                             </div>
                             @component('components.show-single-line')
                                 @slot('label') Department Head @endslot
-                                {{ $cpar->department_head }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->department_head)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Date Confirmed By Department Head @endslot
@@ -130,7 +146,13 @@
                             <div class="form-group @if($errors->first('verified-by')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="verified-by" value="{{ $cpar->verified_by }}"/>
+                                    <input type="text" class="form-control" name="verified-by"
+                                       @foreach($result as $employee)
+                                           @if($employee->id == $cpar->verified_by)
+                                                value="{{ $employee->first_name }} {{ $employee->last_name }}"
+                                           @endif
+                                       @endforeach
+                                    />
                                     @if($errors->first('verified-by')) @component('layouts.error') {{ $errors->first('verified-by') }} @endcomponent
                                     @else<span class="help-block">QMR / AUDITOR / CEO</span>
                                     @endif

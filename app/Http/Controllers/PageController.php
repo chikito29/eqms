@@ -8,6 +8,10 @@ use App\RevisionLog;
 use App\RevisionRequest;
 
 class PageController extends Controller {
+    public function __construct() {
+        $this->middleware('na.authenticate')->except('pageNotFound');
+    }
+
     public function home() {
         $revisionLogs     = RevisionLog::all();
         $revisionRequests = RevisionRequest::with('reference_document')->get();
@@ -49,15 +53,19 @@ class PageController extends Controller {
             'code' => 'required'
         ]);
 
-        if (request('code') == $cpar->responsiblePerson->code) {
-            $responsiblePerson                = ResponsiblePerson::find($cpar->id);
-            $responsiblePerson->authenticated = 1;
-            $responsiblePerson->save();
-
-            return redirect()->route('answer-cpar', $cpar->id);
+        if ($cpar->responsiblePerson->trashed()) {
+            return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'It seems like you already been answered and/or closed this CPAR, if you want an access to it, please contact QMR.']);
         }
-        else {
-            return back()->withErrors(['code' => 'Provided code did not match any of our existing data. Please try again.']);
+        elseif ($cpar->person_responsible <> request('user.id')) {
+            return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'Accessing CPAR not intended to you is prohibited.']);
+        }
+        elseif ($cpar->person_responsible == request('user.id')) {
+            if (request('code') <> $cpar->responsiblePerson->code) {
+                return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'Accessing CPAR not intended to you is prohibited.']);
+            }
+            else {
+                return redirect("answer-cpar/$cpar->id");
+            }
         }
     }
 

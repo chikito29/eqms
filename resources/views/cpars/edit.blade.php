@@ -18,30 +18,44 @@
                     {{ csrf_field() }} {{ method_field('PUT') }}
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Raised By</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <label class="control-label">{{ $cpar->raised_by }}</label>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
+                            @component('components.show-single-line')
+                                @slot('label') Raised By @endslot
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->raised_by)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
+                            @endcomponent
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select name="department" class="form-control"  id="department">
+                                    <select name="department" class="form-control select"  id="department-select">
+                                        <option>Accounting</option>
+                                        <option>Human Resource</option>
+                                        <option>Information Technology</option>
+                                        <option>Internal Audit</option>
+                                        <option>Training</option>
+                                        <option>Research and Development</option>
+                                        <option>Quality Management Representative</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Branch</label>
+                                <div class="col-md-9 col-xs-12">
+                                    <select name="branch" class="form-control select"  id="branch-select">
                                         <option>Bacolod</option>
                                         <option>Cebu</option>
                                         <option>Davao</option>
                                         <option>Iloilo</option>
                                         <option>Makati</option>
                                     </select>
-                                    <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Severity Of Findings</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="severity" id="severity">
+                                    <select class="form-control select" name="severity" id="severity-select">
                                         <option>Observation</option>
                                         <option>Minor</option>
                                         <option>Major</option>
@@ -52,7 +66,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="reference" id="reference" onchange="showLink()">
+                                    <select class="form-control select" name="reference" id="reference-select" onchange="showLink()" data-live-search="true">
                                         @foreach($sections as $section)
                                             @foreach($section->documents as $document)
                                                 <option value="{{ $document->id }}">{{ $document->title }}</option>
@@ -66,7 +80,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Source Of Non-Comformity</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control" name="source" id="source">
+                                    <select class="form-control select" name="source" id="source-select">
                                         <option>External</option>
                                         <option>Internal</option>
                                         <option>Operational Performance</option>
@@ -88,18 +102,21 @@
                                     <textarea class="form-control" rows="5" name="details">{{ $cpar->details }}</textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            @component('components.show-single-line')
+                                @slot('label') Name @endslot
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->raised_by)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
+                                @slot('help') Person Reporting To Non-Conformity @endslot
+                            @endcomponent
+                            <div class="form-group @if($errors->first('person-responsible')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <label class="control-label">{{ $cpar->person_reporting }}</label>
-                                    <span class="help-block">Person Reporting To Non-Conformity</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-responsible" value="{{ $cpar->person_responsible }}"/>
-                                    <span class="help-block">Person Responsible For Taking The CPAR</span>
+                                    <select class="form-control select" name="person-responsible" id="person-responsible" data-live-search="true"></select>
+                                    @if($errors->first('person-responsible')) @component('layouts.error') {{ $errors->first('person-responsible') }} @endcomponent
+                                    @else <span class="help-block">Person Responsible For Taking The CPAR</span> @endif
                                 </div>
                             </div>
                             <div class="form-group">
@@ -112,8 +129,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="department-head" value="{{ $cpar->department_head }}"/>
-                                    <span class="help-block"></span>
+                                    <select class="form-control select" name="department-head" id="department-head" data-live-search="true"></select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -195,6 +211,34 @@
                 browseLabel: "Browse Document",
                 allowedFileExtensions : ['.jpg']
             });
+
+            //populate select elements
+            $('#department-select').val('{{ $cpar->department }}');
+            $('#department-select').selectpicker('refresh');
+            $('#branch-select').val('{{ $cpar->branch }}');
+            $('#branch-select').selectpicker('refresh');
+            $('#severity-select').val('{{ strip_tags(str_replace('&nbsp;', '', $cpar->severity)) }}');
+            $('#severity-select').selectpicker('refresh');
+            $('#reference-select').val("{{ $cpar->document_id }}");
+            $('#reference-select').selectpicker('refresh');
+            $('#source-select').val('{{ $cpar->source }}');
+            $('#source-select').selectpicker('refresh');
+
+            employeeOptions = "";
+            @foreach($result as $employee)
+                @if(request('user.id') == $employee->id) @continue
+                    @else employeeOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
+                @endif
+            @endforeach
+            $('#person-responsible').empty().append(employeeOptions);
+
+            chiefOptions = "";
+            @foreach($result as $employee)
+                @if($employee->department_head == 1)
+                    chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
+                @endif
+            @endforeach
+            $('#department-head').empty().append(chiefOptions);
         });
 
         $('#summernote').summernote({
@@ -217,18 +261,5 @@
                 + " in new tab"
                 + "</a>");
         }
-
-        $(function() {
-            //populate select elements
-            $('#department').val('{{ $cpar->department }}');
-            $('#department').selectpicker('refresh');
-            $('#severity').val('{{ $cpar->severity }}');
-            $('#severity').selectpicker('refresh');
-            id = '{{ \App\Document::find($cpar->id)->id }}';
-            $('#reference').val(id);
-            $('#reference').selectpicker('refresh');
-            $('#source').val('{{ $cpar->source }}');
-            $('#source').selectpicker('refresh');
-        });
     </script>
 @stop

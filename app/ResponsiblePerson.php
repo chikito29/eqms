@@ -9,7 +9,7 @@ class ResponsiblePerson extends Model {
     use SoftDeletes;
 
     protected $table = 'responsible_persons';
-    protected $fillable = ['cpar_id', 'code'];
+    protected $fillable = ['cpar_id', 'code', 'user_id'];
     protected $dates = ['deleted_at'];
 
     public function cpar() {

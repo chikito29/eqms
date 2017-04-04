@@ -17,7 +17,7 @@
                 <form enctype="multipart/form-data" class="form-horizontal" action="/cpars" method="POST" role="form">
                     {{ csrf_field() }}
                     {{--Hidden inputs--}}
-                    <input type="text" class="hidden" value="{{ request('user.first_name'). ' ' .request('user.last_name') }}" name="raised-by"/>
+                    <input type="text" class="hidden" value="{{ request('user.id') }}" name="raised-by"/>
                     <input type="text" class="hidden" name="department-head" value="Temporary"/>
                     <input type="text" class="hidden" name="link" id="link"/>
                     {{--End Hidden inputs--}}
@@ -114,7 +114,7 @@
                             <div class="form-group @if($errors->first('person-responsible')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="person-responsible"/>
+                                    <select class="form-control select" name="person-responsible" id="person-responsible" data-live-search="true"></select>
                                     @if($errors->first('person-responsible')) @component('layouts.error') {{ $errors->first('person-responsible') }} @endcomponent
                                     @else <span class="help-block">Person Responsible For Taking The CPAR</span> @endif
                                 </div>
@@ -129,7 +129,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="department-head"/>
+                                    <select class="form-control select" name="department-head" id="department-head" data-live-search="true"></select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -227,6 +227,22 @@
             $('#source-select').val('{{ old('source') }}');
             $('#source-select').selectpicker('refresh');
             $('#span-reference').html('{!! old('link') !!}');
+
+            employeeOptions = "";
+            @foreach($result as $employee)
+                @if(request('user.id') == $employee->id) @continue
+                @else employeeOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
+                @endif
+            @endforeach
+            $('#person-responsible').empty().append(employeeOptions);
+
+            chiefOptions = "";
+            @foreach($result as $employee)
+                @if($employee->department_head == 1)
+                    chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
+                @endif
+            @endforeach
+        $('#department-head').empty().append(chiefOptions);
         });
 
         $('#summernote').summernote({
@@ -263,19 +279,5 @@
         $('#department-select').on('change', function() {
             $('#department-hint').empty().append("<span class=\"text text-info\">Do not forget to choose a branch too.</span>");
         });
-    </script>
-    <script>
-        var globalTimeout = null;
-        $('#id').keyup(function() {
-            if (globalTimeout != null) {
-                clearTimeout(globalTimeout);
-            }
-            globalTimeout = setTimeout(function() {
-                globalTimeout = null;
-
-                //ajax code
-
-            }, 200);
-        };
     </script>
 @stop

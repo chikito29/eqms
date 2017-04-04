@@ -23,12 +23,16 @@
                             @if($cpar->cpar_number)
                                 @component('components.show-single-line')
                                     @slot('label') CPAR Number @endslot
-                                    {{ $cpar->number }}
+                                    {{ $cpar->cpar_number }}
                                 @endcomponent
                             @endif
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
-                                {{ $cpar->raised_by }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->raised_by)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Department @endslot
@@ -62,12 +66,20 @@
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                {{ $cpar->person_reporting }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->raised_by)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                                 @slot('help') Person Reporting To Non-Conformity @endslot
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                {{ $cpar->person_responsible }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->person_responsible)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
                                 @slot('help') Person Responsible For Taking The CPAR @endslot
                             @endcomponent
                             @if($cpar->correction)
@@ -103,7 +115,12 @@
                             @endif
                             @component('components.show-single-line')
                                 @slot('label') Department Head @endslot
-                                {{ $cpar->department_head }}
+                                @foreach($result as $employee)
+                                    @if($employee->id == $cpar->department_head)
+                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                    @endif
+                                @endforeach
+                                @slot('help') Person Responsible For Taking The CPAR @endslot
                             @endcomponent
                             @if($cpar->date_confirmed)
                                 @component('components.show-single-line')
@@ -131,7 +148,11 @@
                                 @if($cpar->verified_by)
                                     @component('components.show-single-line')
                                         @slot('label') Name @endslot
-                                        {{ $cpar->verified_by }}
+                                        @foreach($result as $employee)
+                                            @if($employee->id == $cpar->verified_by)
+                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                            @endif
+                                        @endforeach
                                         @slot('help') QMR / AUDITOR / CEO @endslot
                                     @endcomponent
                                 @endif
@@ -161,9 +182,11 @@
                                         </li>
                                     </div>
                                 </div>
-                                <div class="panel-footer">
-                                    <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()" id="print-cpar">Print CPAR</button>
-                                </div>
+                                @if(request('user.role') == 'admin')
+                                    <div class="panel-footer">
+                                        <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()" id="print-cpar">Print CPAR</button>
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     </div>

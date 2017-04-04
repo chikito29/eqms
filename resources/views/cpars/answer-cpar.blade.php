@@ -40,7 +40,11 @@
                                 <div class="panel-body form-group-separated">
                                     @component('components.show-single-line')
                                         @slot('label') Raised By @endslot
-                                        {{ $cpar->raised_by }}
+                                        @foreach($result as $employee)
+                                            @if($employee->id == $cpar->raised_by)
+                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                            @endif
+                                        @endforeach
                                     @endcomponent
                                     @component('components.show-single-line')
                                         @slot('label') Department @endslot
@@ -82,8 +86,21 @@
                                     </div>
                                     @component('components.show-single-line')
                                         @slot('label') Name @endslot
-                                        {{ $cpar->person_reporting }}
+                                        @foreach($result as $employee)
+                                            @if($employee->id == $cpar->person_reporting)
+                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                            @endif
+                                        @endforeach
                                         @slot('help') Person Reporting To Non-Conformity @endslot
+                                    @endcomponent
+                                    @component('components.show-single-line')
+                                        @slot('label') Name @endslot
+                                        @foreach($result as $employee)
+                                            @if($employee->id == $cpar->person_responsible)
+                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                            @endif
+                                        @endforeach
+                                        @slot('help') Person Responsible For Taking The CPAR @endslot
                                     @endcomponent
                                     <div class="form-group @if($errors->first('correction')) has-error @endif">
                                         <label class="col-md-3 col-xs-5 control-label">Correction</label>
@@ -118,7 +135,11 @@
                                     @endcomponent
                                     @component('components.show-single-line')
                                         @slot('label') Department Head @endslot
-                                        {{ $cpar->department_head }}
+                                        @foreach($result as $employee)
+                                            @if($employee->id == $cpar->department_head)
+                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                            @endif
+                                        @endforeach
                                     @endcomponent
                                     <div class="form-group @if(request('user.first_name') <> $cpar->person_responsible) hidden @endif">
                                         <label class="col-md-3 col-xs-5 control-label">Attachment</label>

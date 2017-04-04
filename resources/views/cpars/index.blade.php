@@ -31,7 +31,13 @@
                                     @foreach($cpars as $cpar)
                                         <tr>
                                             <td>{{ $cpar->cpar_number }}</td>
-                                            <td>{{ $cpar->raised_by }}</td>
+                                            <td>
+                                                @foreach($result as $employee)
+                                                    @if($employee->id == $cpar->raised_by)
+                                                        {{ $employee->first_name }} {{ $employee->last_name }}
+                                                    @endif
+                                                @endforeach
+                                            </td>
                                             <td>{!! $cpar->severity !!}</td>
                                             <td>{{ $cpar->created_at->toDayDateTimeString() }}</td>
                                             <td>

@@ -83,7 +83,7 @@
         @yield('scripts')
         <script type="text/javascript">
             $(function(){
-                @if($notify = session('notify'))
+                @if($notify = session()->pull('notify'))
                     noty({text: '{{ $notify['message'] }}', layout: 'topRight', type: '{{ $notify['type'] }}'});
                 @endif
             });

@@ -30,14 +30,8 @@ class NAController extends Controller
     	]);
 
     	$accessToken = json_decode((string) $tokenResponse->getBody(), true);
-        session(['na_access_token' => $accessToken['access_token']]);
+       session(['na_access_token' => $accessToken['access_token']]);
 
-    	$userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
-    		'headers' => ['Authorization' => 'Bearer ' . $accessToken['access_token'], 'Accept' => 'application/json'],
-            'query' => ['client_id' => 2]
-    	]);
-
-    	// return $userDetailsResponse->getBody();
         return redirect(session()->pull('intended'));
     }
 }

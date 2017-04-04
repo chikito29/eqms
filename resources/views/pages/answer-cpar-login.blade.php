@@ -21,7 +21,13 @@
 
     <div class="login-box animated fadeInDown">
         <div class="login-body">
-            <div class="login-title"><strong>Welcome</strong> guest!
+            <div class="login-title"><strong>Welcome</strong>
+                @foreach($result as $employee)
+                    @if($employee->id == $cpar->person_responsible)
+                        {{ $employee->first_name }} {{ $employee->last_name }}
+                        @break
+                    @endif
+                @endforeach!
                 <br>Start answering your CPAR by entering
                 <br>the code given by your department head.</div>
             <form action="{{ route('answer-cpar-login-post', $cpar->id) }}" class="form-horizontal" method="post">

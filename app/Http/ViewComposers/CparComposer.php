@@ -34,10 +34,10 @@ class CparComposer {
     public function compose(View $view) {
         $count = 0;
         foreach ($this->cpars->get() as $cpar) {
-            if ($cpar->cparClosed->status <> 1 && $cpar->cparAnswered->status == 1 &&  $cpar->cparReviewed->status == 0) $count++;
+            if ($cpar->cparClosed->status <> 1 && $cpar->cparAnswered->status == 1 && $cpar->cparReviewed->status == 0) $count++;
         }
 
-        if  ($count > 0) session(['answered' => $count]);
+        if ($count > 0) session(['answered' => $count]);
         else session()->forget('answered');
 
         $view->with([
@@ -45,4 +45,5 @@ class CparComposer {
         ]);
     }
 }
+
 

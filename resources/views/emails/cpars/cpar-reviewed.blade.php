@@ -1,5 +1,11 @@
 @component('mail::message')
-# {{ $cpar->person_responsible }} CPAR has been reviewed
+#
+@foreach($result as $employee)
+    @if($employee->id == $cpar->person_responsible)
+        {{ $employee->first_name }} {{ $employee->last_name }}'s
+    @endif
+@endforeach
+CPAR has been reviewed
 
 This is in regards with the CPAR issued to the above person.<br>
 The QMR has reviewed the CPAR and came up with an appropriate action.<br>

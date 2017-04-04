@@ -22,7 +22,7 @@ class NAAuthentication
             $http = new Client();
             try{
                 $userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
-            		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => 2]
+            		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
             	]);
             }catch (RequestException $e) {
 

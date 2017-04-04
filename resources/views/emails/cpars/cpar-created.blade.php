@@ -1,13 +1,24 @@
 @component('mail::message')
 # CPAR has been issued
 
-You are receiving this because an employee under the department {{ $cpar->department }} received a CPAR raised by {{ $cpar->raised_by }},
+You are receiving this because an employee under the department {{ $cpar->department }} received a CPAR raised by
+@foreach($result as $employee)
+    @if($employee->id == $cpar->raised_by)
+        {{ $employee->first_name }} {{ $employee->last_name }}
+    @endif
+@endforeach,
 created this {{ $cpar->created_at->format('l jS \\of F Y') }}.
 
-Please inform {{ $cpar->person_responsible }} to answer the CPAR on or before
+Please inform
+@foreach($result as $employee)
+    @if($employee->id == $cpar->person_responsible)
+        {{ $employee->first_name }} {{ $employee->last_name }}
+    @endif
+@endforeach
+to answer the CPAR on or before
 {{ \App\Http\Controllers\CparController::holiday($cpar,2017,\Carbon\Carbon::parse($cpar->proposed_date),\Carbon\Carbon::parse($cpar->proposed_date)->diffInDays($cpar->created_at))->toDateString() }}.
 
-He/she may access the said CPAR using this code: {{ $cpar->responsiblePerson->code }}
+He/she may access the said CPAR using this code: <strong>{{ $cpar->responsiblePerson->code }}</strong>
 
 Person responsible may answer the CPAR here: {{ route('answer-cpar-login', $cpar->id) }}
 

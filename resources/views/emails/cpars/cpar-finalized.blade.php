@@ -1,7 +1,13 @@
 @component('mail::message')
 # CPAR has been answered and finalized by department head {{ $cpar->department_head }}
 
-The CPAR that has been issued to {{ $cpar->person_responsible }} {{ $cpar->created_at->diffForHumans() }} has been answered
+The CPAR that has been issued to
+@foreach($result as $employee)
+    @if($employee->id == $cpar->person_responsible)
+        {{ $employee->first_name }} {{ $employee->last_name }}
+    @endif
+@endforeach
+{{ $cpar->created_at->diffForHumans() }} has been answered
 and finalized and now ready to be reviewed.
 
 @component('mail::button', ['url' => route('cpars.verify', $cpar->id)])

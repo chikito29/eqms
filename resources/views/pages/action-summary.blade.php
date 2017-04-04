@@ -32,15 +32,18 @@
             body { margin: 0px; }
 
             .header{
-                display:block;
+                display: block;
                 position: fixed;
+                padding-top: 10px;
+                height: 100px;
+                margin: auto;
             }
 
             .footer{
                 display:block;
                 position: fixed;
                 width:100%;
-                bottom: 0px;
+                bottom: 0;
             }
         }
 
@@ -48,16 +51,16 @@
 
     </style>
 
-<div class="header" style="margin:auto; height:50px; ">
-    <img style="width:25%; display: inline;" src="http://eqms.newsimapps.dev/img/newsim_logo.jpg" />
+    <div class="header">
+        <img style="width:35%; float:left;" src="{{ url('img/newsim_logo.jpg') }}"/>
 
-    <div style="float:right; width:75%;">
-        <span style="font-size:14pt; font-family:Arial; font-weight:bold;">NEW SIMULATOR CENTER OF THE PHILIPPINES, INC.</span><br/>
-        <span style="font-size:9pt; font-family:Arial; font-style:italic;">The Preferred Training and Assessment Center</span>
+        <div style="float:right; width:65%; padding-top:5px;">
+            <span style="font-size:14pt; font-family:Arial; font-weight:bold;">NEW SIMULATOR CENTER OF THE PHILIPPINES, INC.</span><br/>
+            <span style="font-size:9pt; font-family:Arial; font-style:italic;">The Preferred Training and Assessment Center</span>
+        </div>
+
+        <img style="width:100%; height:10%; margin-top: 5px;" src="{{ url('img/newsim_line_bar.png') }}" />
     </div>
-
-    <img style="width:100%; height:20%;" src="http://eqms.newsimapps.dev/img/linebar.jpg" />
-</div>
 
 
 <div style="display: block; width:90%; margin: auto; padding-top: 50px;">
@@ -178,7 +181,6 @@
 </div>
 
     <div style="display: block; width:90%; margin: auto; padding-top: 50px; page-break-before: always;">
-        <span>&nbsp;</span>
         <table class="tbl-info" style="width:100%; border-collapse:collapse;">
             <tbody>
             <tr>
@@ -216,13 +218,11 @@
         </table>
     </div>
 
-    <div class="footer" style="height:100px;" style="page-break-after:always;">
-        <img style="width:100%; height:10%;" src="http://eqms.newsimapps.dev/img/linebar.jpg" />
-
+    <div class="footer" style="height:100px;">
+        <img style="width:100%; height:10%;" src="{{ url('img/newsim_line_bar.png') }}"/>
         <div style="width:2.5%; float:left;">&nbsp;</div>
-
         <div style="width:80%; float:left;">
-            <div style="width:100%;">
+            <div style="width:100%; margin-top:7px;">
                 <div style="width:21%; float:left;">
                     <b>NEWSIM EDISON</b><br/>
                     5F 2053 Bldg. Edison St.<br/>
@@ -254,7 +254,7 @@
 
             <br/><br/><br/><br/>
 
-            <div style="width:100%; margin-top:3px;">
+            <div style="width:100%; margin-top:7px;">
                 <div style="width:21%; float:left;">
                     <b>NEWSIM MARCONI</b><br/>
                     2323 NEWSIM Bldg. Marconi St.<br/>
@@ -287,20 +287,12 @@
                 </div>
             </div>
         </div>
-
         <div style="width:15%; float:right;">
             <br/><br/>
-            <img style="width:60%;"  src="http://eqms.newsimapps.dev/img/footer_logos.png" />
+            <img style="width:60%;"  src="{{ url('img/footer_logos.png') }}" />
         </div>
-        <!--img style="width:100%; height:10%;" src="<--?php echo base_url();?>/assets/images/footer2014.jpg" /-->
     </div>
-
-    <script type="text/javascript" src="http://newsimapps.com/newsimtms/files/js/plugins/jquery/jquery.min.js"></script>
-    <script>
-        var course = $('#course_cat_value').val();
-        $('#course_cat').html(course);
-    </script>
-
+    <script type="text/javascript" src="{{ url('js/plugins/jquery/jquery.min.js') }}"></script>
     <script type="text/javascript">
-        window.onload = function() { window.print(); }
+        $(function(){window.print();});
     </script>

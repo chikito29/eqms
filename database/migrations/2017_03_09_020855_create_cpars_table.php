@@ -22,14 +22,14 @@ class CreateCparsTable extends Migration
             $table->text('tags');
             $table->text('branch');
             $table->string('cpar_number')->nullable()->unique();
-            $table->string('raised_by')->nullable();
+            $table->integer('raised_by')->nullable();
             $table->string('department');
             $table->string('severity');
             $table->string('source');
             $table->longText('other_source')->nullable();
             $table->longText('details');
-            $table->string('person_reporting')->nullable();
-            $table->string('person_responsible');
+            $table->integer('person_reporting')->nullable();
+            $table->integer('person_responsible');
             $table->longText('correction')->nullable();
             $table->longText('root_cause')->nullable();
             $table->longText('cp_action')->nullable();
@@ -40,7 +40,7 @@ class CreateCparsTable extends Migration
             $table->date('date_confirmed')->nullable();
             $table->date('date_accepted')->nullable();
             $table->date('date_verified')->nullable();
-            $table->string('verified_by')->nullable();
+            $table->integer('verified_by')->nullable();
             $table->longText('result')->nullable();
             $table->timestamps();
             $table->softDeletes();

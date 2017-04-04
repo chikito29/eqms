@@ -1,7 +1,13 @@
 @component('mail::message')
 # CPAR has been answered
 
-The CPAR that has been issued to {{ $cpar->person_responsible }} {{ $cpar->created_at->diffForHumans() }} has been answered
+The CPAR that has been issued to
+@foreach($result as $employee)
+    @if($employee->id == $cpar->person_responsible)
+        {{ $employee->first_name }} {{ $employee->last_name }}
+    @endif
+@endforeach
+{{ $cpar->created_at->diffForHumans() }} has been answered
 and needs to be validated before the QMR's review process to take place.
 
 @component('mail::button', ['url' => route('cpars.verify', $cpar->id)])

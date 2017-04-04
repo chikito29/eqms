@@ -16,7 +16,6 @@ use App\CparClosed;
 use App\CparAnswered;
 use App\CparReviewed;
 use App\DocumentVersion;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class CparController extends Controller {
@@ -125,6 +124,7 @@ class CparController extends Controller {
 
         ResponsiblePerson::create([
             'cpar_id' => $cpar->id,
+            'user_id' => $cpar->person_responsible,
             'code'    => $code
         ]);
 
@@ -190,30 +190,22 @@ class CparController extends Controller {
     }
 
     public function answerCpar(Cpar $cpar) {
-        if ($cpar->responsiblePerson->trashed()) {
-            return redirect('cpar-answer-login')->withErrors(['code' => 'It seems like you already answer this CPAR, if you want an access to it, please contact QMR.']);
-        }
-        elseif ($cpar->responsiblePerson->authenticated == 1) {
-            $due                = Carbon::parse($cpar->proposed_date);
-            $due                = $due->diffInDays($cpar->created_at);
-            $this->businessDays = $due + 1;
+        $due                = Carbon::parse($cpar->proposed_date);
+        $due                = $due->diffInDays($cpar->created_at);
+        $this->businessDays = $due + 1;
 
-            if ($cpar->cparReviewed->on_review == 1) {
-                return redirect("cpar-on-review/$cpar->id");
-            }
-            elseif ($cpar->cparClosed->status == 1) {
-                return redirect("cpar-on-review/$cpar->id");
-            }
-
-            $documentBody = $this->getDocument($cpar);
-            $dueDate      = $this->holidays($cpar, 2017);
-            $due          = $this->businessDays;
-
-            return view('cpars.answer-cpar', compact('cpar', 'documentBody', 'dueDate', 'due'));
+        if ($cpar->cparClosed->status == 1) {
+            return redirect("cpar-on-review/$cpar->id")->withErrors(['code' => 'CPAR is already closed.']);
         }
-        else {
-            return redirect("answer-cpar/login/$cpar->id");
+        elseif ($cpar->cparReviewed->on_review == 1) {
+            return redirect("cpar-on-review/$cpar->id")->withErrors(['code' => 'CPAR is already on review.']);
         }
+
+        $documentBody = $this->getDocument($cpar);
+        $dueDate      = $this->holidays($cpar, 2017);
+        $due          = $this->businessDays;
+
+        return view('cpars.answer-cpar', compact('cpar', 'documentBody', 'dueDate', 'due'));
     }
 
     public function getDocument($cpar) {
@@ -366,7 +358,7 @@ class CparController extends Controller {
 
     public function saveReview(Cpar $cpar) {
         $this->validate(request(), [
-            'cpar-number'       => 'required',
+            'cpar-number'       => 'required|unique:cpars,cpar_number',
             'date-completed'    => 'required',
             'cpar-acceptance'   => 'required',
             'date-accepted'     => 'required',
@@ -398,7 +390,6 @@ class CparController extends Controller {
         $cpar->date_completed  = request('date-completed');
         $cpar->verified_by     = request('verified-by');
         $cpar->result          = request('result');
-        $cpar->cp_action       = request('cp-action');
         $cpar->save();
 
         //notify department head
@@ -434,6 +425,18 @@ class CparController extends Controller {
     }
 
     public function saveAsDraft(Cpar $cpar) {
+        //save cpar
+        $cpar->cpar_acceptance = request('cpar-acceptance');
+        $cpar->cpar_number     = request('cpar-number');
+        $cpar->date_verified   = request('verification-date');
+        $cpar->date_accepted   = request('date-accepted');
+        $cpar->date_completed  = request('date-completed');
+        $cpar->verified_by     = request('verified-by');
+        $cpar->result          = request('result');
+        $cpar->save();
 
+        session()->flash('notify', ['message' => 'CPAR draft has been saved.', 'type' => 'success']);
+
+        return back();
     }
 }
