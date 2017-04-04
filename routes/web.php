@@ -9,6 +9,8 @@ Route::resource('revision-requests', 'RevisionRequestController');
 Route::resource('documents', 'DocumentController');
 Route::resource('sections', 'SectionController');
 Route::resource('cpars', 'CparController');
+Route::resource('revision-requests', 'RevisionRequestController');
+Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit']]);
 
 // For printing revision-requests
 Route::get('revision-requests/{revision_request}/print', 'RevisionRequestController@printRevisionRequest')->name('revision-requests.print');
@@ -26,6 +28,9 @@ Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('on-review'
 Route::get('cpars/verify/{cpar}', 'CparController@verify')->name('cpars.verify');
 Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
 Route::get('review/{cpar}', 'CparController@review')->name('review');
+
+Route::get('unauthorize', function () {return view('errors.unauthorize');});
+Route::get('pending', function () {return view('accessrequests.pending');});
 
 Route::get('/', function () {
     return view('welcome');

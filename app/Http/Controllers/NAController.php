@@ -30,8 +30,7 @@ class NAController extends Controller
     	]);
 
     	$accessToken = json_decode((string) $tokenResponse->getBody(), true);
-       session(['na_access_token' => $accessToken['access_token']]);
-
+        session(['na_access_token' => $accessToken['access_token']]);
         return redirect(session()->pull('intended'));
     }
 }
