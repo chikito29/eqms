@@ -1,6 +1,6 @@
 @extends('layouts.super-admin')
 
-@section('page-title')New Revision Request |eQMS @endsection
+@section('page-title')New Revision Request | eQMS @endsection
 
 @section('nav-actions') active @endsection
 

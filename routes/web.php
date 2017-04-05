@@ -42,3 +42,4 @@ Route::post('cpars/save-as-draft/{cpar}', 'CparController@saveAsDraft')->name('c
 Route::post('cpars/verify/{cpar}', 'CparController@postVerify')->name('cpars.verify.post');
 Route::post('cpars/review/{cpar}', 'CparController@saveReview')->name('review-cpar');
 Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
+Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');

@@ -1,7 +1,7 @@
 @extends('layouts/super-admin')
 
 @section('page-title')
-    Home | eQMS
+    Sections | eQMS
 @endsection
 
 @section('nav-actions') active @endsection
@@ -9,7 +9,7 @@
 @section('page-content')
     <div class="page-content-wrap" style="margin-top: -25px;">
         <div class="x-content" >
-            <div class="x-content-inner" style="margin-top:-20px;">
+            <div class="x-content-inner" style="margin-top:-20px; height: 90vh;">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x-block">

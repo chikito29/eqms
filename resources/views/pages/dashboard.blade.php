@@ -243,34 +243,6 @@
                                             Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <div class="head">
-                                            <div class="pull-left"><span class="status status-medium"></span> Priority: Medium</div>
-                                            <div class="pull-left">Project: Landing page for Themeforest</div>
-                                            <div class="pull-right"><span class="fa fa-clock-o"></span> added 7 hours ago</div>
-                                        </div>
-                                        <div class="title">
-                                            <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                            <h4>NEW ATLANT DASHBOARD</h4>
-                                        </div>
-                                        <div class="content">
-                                            Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="head">
-                                            <div class="pull-left"><span class="status status-low"></span> Priority: Medium</div>
-                                            <div class="pull-left">Project: Shop for Themeforest</div>
-                                            <div class="pull-right"><span class="fa fa-clock-o"></span> added 8 hours ago</div>
-                                        </div>
-                                        <div class="title">
-                                            <label class="check"><input type="checkbox" class="icheckbox"></label>
-                                            <h4>OS-COMMERCE SHOP TEMPLATE</h4>
-                                        </div>
-                                        <div class="content">
-                                            Donec porta suscipit odio et luctus. Mauris vel velit dignissim, lobortis mauris non, ultricies sapien
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="x-todo-footer">
                                     <div class="pull-right">

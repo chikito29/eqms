@@ -8,7 +8,7 @@
     <div class="row" style="margin-bottom: 30px;">
 
         <div class="col-md-9">
-            <div class="x-content">
+            <div class="x-content" style="min-height: 90vh;">
 
                 <div class="x-content-title" style="margin-bottom:60px;">
                     <h1 class="text-warning">{{ $document->title }}</h1>

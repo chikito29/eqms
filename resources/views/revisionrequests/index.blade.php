@@ -1,6 +1,6 @@
 @extends('layouts.super-admin')
 
-@section('page-title')Revision Request |eQMS @endsection
+@section('page-title')Revision Request | eQMS @endsection
 
 @section('nav-actions') active @endsection
 
@@ -8,7 +8,7 @@
 <div class="page-content-wrap">
 
     <div class="x-content" >
-        <div class="x-content-inner" style="margin-top:-20px;">
+        <div class="x-content-inner" style="margin-top:-45px; height: 90vh;">
 
             <div class="row">
                 <div class="col-md-12">

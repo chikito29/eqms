@@ -1,14 +1,14 @@
 @extends('layouts.super-admin')
 
-@section('page-title')Access Requests |eQMS @endsection
+@section('page-title')Access Requests | eQMS @endsection
 
 @section('nav-actions') active @endsection
 
 @section('page-content')
 <div class="page-content-wrap">
 
-    <div class="x-content" >
-        <div class="x-content-inner" style="margin-top:-20px;">
+    <div class="x-content">
+        <div class="x-content-inner" style="margin-top:-45px; height: 90vh;">
 
             <div class="row">
                 <div class="col-md-12">
@@ -22,7 +22,7 @@
                             <table class="table x-table">
                                 <tr>
                                     <th>USER</th>
-                                    <th>REASON FOR ACCESS</th>
+                                    <th>PURPOSE</th>
                                     <th>DATE</th>
                                     <th>STATUS</th>
                                     <th>ACTION</th>
@@ -39,16 +39,26 @@
                                         {{ $accessRequest->created_at->toDayDateTimeString() }}
                                     </td>
                                     <td width="10%">
+                                        @if($accessRequest->status == 'Pending')
                                         <span class="label label-info" style="color: white;">{{ $accessRequest->status }}</span>
+                                        @elseif($accessRequest->status == 'Denied')
+                                            <span class="label label-danger" style="color: white;">{{ $accessRequest->status }}</span>
+                                        @elseif($accessRequest->status == 'Revoked')
+                                            <span class="label label-warning" style="color: white;">{{ $accessRequest->status }}</span>
+                                        @else
+                                        <span class="label label-success" style="color: white;">{{ $accessRequest->status }}</span>
+                                        @endif
                                     </td>
                                     <td width="10%">
+                                        @if($accessRequest->status == 'Pending')
                                         <a href="#" class="btn btn-success btn-rounded btn-condensed btn-sm" onclick="showModal({{ $accessRequest->id }}); return false;" ><span class="fa fa-check" style="color:rgb(149,183,93)"></span></button>
                                         <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="deny_request({{ $accessRequest->id }})" style="margin-left: 4px;"><span class="fa fa-times" style="color:rgb(182,70,69)"></span></button>
+                                        @else
+                                        <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="revoke_access({{ $accessRequest->id }})" style="margin-left: 4px;">Revoke</button>
+                                        @endif
                                     </td>
-                                    <form method="POST" action="{{ route('access-requests.destroy', $accessRequest->id) }}" accept-charset="UTF-8" id="form-delete{{ $accessRequest->id }}">
-                                        {{ csrf_field() }}
-                                        {{ method_field('delete') }}
-                                    </form>
+                                    <form method="POST" action="{{ route('access-requests.destroy', $accessRequest->id) }}" accept-charset="UTF-8" id="form-delete{{ $accessRequest->id }}">{{ csrf_field() }}{{ method_field('delete') }}</form>
+                                    <form method="POST" action="{{ route('access-requests.revoke', $accessRequest->id) }}" accept-charset="UTF-8" id="form-revoke{{ $accessRequest->id }}">{{ csrf_field() }}</form>
                                 </tr>
                                 @endforeach
                             </table>
@@ -130,15 +140,40 @@
         $("#modal_change_password").modal();
     }
 
-    function deny_request(row){
-        var box = $('#mb-deny-request');
-        box.addClass("open");
-        box.find(".mb-control-yes").on("click",
-            function(){
-                box.removeClass("open");
-                document.getElementById('form-delete' + row).submit();
-            }
-        );
+    function deny_request(id) {
+        noty({
+            text: 'Are you sure you want to deny his request?',
+            layout: 'topRight',
+            buttons: [
+                {addClass: 'btn btn-success btn-clean', text: 'Yes', onClick: function($noty) {
+                    $noty.close();
+                    document.getElementById('form-delete' + id).submit();
+                    }
+                },
+                {addClass: 'btn btn-danger btn-clean', text: 'No', onClick: function($noty) {
+                    $noty.close();
+                    }
+                }
+            ]
+        })
+    }
+
+    function revoke_access(id){
+        noty({
+            text: 'Are you sure you want to revoke his access?',
+            layout: 'topRight',
+            buttons: [
+                {addClass: 'btn btn-success btn-clean', text: 'Yes', onClick: function($noty) {
+                    $noty.close();
+                    document.getElementById('form-revoke' + id).submit();
+                    }
+                },
+                {addClass: 'btn btn-danger btn-clean', text: 'No', onClick: function($noty) {
+                    $noty.close();
+                    }
+                }
+            ]
+        })
     }
 </script>
 @endsection
