@@ -1,4 +1,4 @@
-@extends('layouts.super-admin')
+@extends('layouts.main')
 
 @section('page-title')
     Home | Cpar Index
@@ -58,9 +58,9 @@
                                                 @else
                                                     @component('components.button-state', compact('cpar')) @slot('title') review @endslot review @endcomponent
                                                 @endif
-                                                <form method="GET" id="{{ $cpar->id }}"><input type="text" class="form-control hidden" name="cpar-number" required></form>
                                                 @component('components.button-state', compact('cpar')) @slot('title') close @endslot close @endcomponent
                                             </td>
+                                            <form method="GET" id="{{ $cpar->id }}"><input type="text" class="form-control hidden" name="cpar-number" required></form>
                                             <form method="get" action="{{ route('cpars.close', $cpar->id) }}" accept-charset="UTF-8" id="{{ $cpar->id }}">
                                                 {{ csrf_field() }}
                                                 {{ method_field('delete') }}

@@ -5,12 +5,13 @@ Route::get('callback', 'NAController@callback');
 Route::get('login', 'NAController@login');
 
 // Resource Controllers
+Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit']]);
+Route::resource('revision-requests', 'RevisionRequestController');
 Route::resource('revision-requests', 'RevisionRequestController');
 Route::resource('documents', 'DocumentController');
 Route::resource('sections', 'SectionController');
+Route::resource('settings', 'SettingController');
 Route::resource('cpars', 'CparController');
-Route::resource('revision-requests', 'RevisionRequestController');
-Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit']]);
 
 // For printing revision-requests
 Route::get('revision-requests/{revision_request}/print', 'RevisionRequestController@printRevisionRequest')->name('revision-requests.print');

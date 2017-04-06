@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider {
             'cpars.index', 'cpars.show', 'cpars.edit', 'cpars.answer-cpar',
             'pages.answer-cpar-login', 'cpars.review', 'pages.action-summary', 'cpars.create',
             'emails.cpars.cpar-created', 'emails.cpars.cpar-answered', 'emails.cpars.cpar-finalized',
-            'emails.cpars.cpar-reviewed', 'emails.cpars.expired'
+            'emails.cpars.cpar-reviewed', 'emails.cpars.expired', 'settings.create'
         ], function ($view) {
             $client = new Client();
             $result = $client->get('http://na.dlbajana.xyz/api/users', [

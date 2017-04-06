@@ -150,7 +150,7 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="col-md-12 col-xs-5">
-                                            <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="$('#attention-modal-trigger').click()" >Submit</button>
+                                            <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="$('#modal-id').modal('toggle')">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -211,10 +211,10 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
+        </div>
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<a class="btn btn-primary hidden" data-toggle="modal" href="#modal-id" id="attention-modal-trigger">Trigger modal</a>
 <div class="modal fade" id="modal-id">
     <div class="modal-dialog">
         <div class="modal-content">

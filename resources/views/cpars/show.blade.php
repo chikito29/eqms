@@ -1,4 +1,4 @@
-@extends('layouts.super-admin')
+@extends('layouts.main')
 
 @section('page-title')
     Home | Cpar Show
@@ -182,11 +182,11 @@
                                     </div>
                                 </div>
                                 @yield('verify-button')
-                                @if(request('user.role') == 'admin')
-                                    <div class="panel-footer">
-                                        <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()">Print CPAR</button>
-                                    </div>
-                                @endif
+                            @endif
+                            @if(request('user.type') == 'admin')
+                                <div class="panel-footer">
+                                    <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()">Print CPAR</button>
+                                </div>
                             @endif
                         </div>
                     </div>

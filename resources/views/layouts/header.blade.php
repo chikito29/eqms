@@ -49,6 +49,15 @@
                 @if(\App\Cpar::all()) <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li> @endif
             </ul>
         </li>
+            @if(request('user.type') == 'super-admin')
+                <li class="xn-openable @yield('nav-settings')">
+                    <a href="#">Settings</a>
+                    <ul>
+                        <li><a href="{{ route('settings.index') }}"><span class="fa fa-users"></span> Manage Users</a></li>
+                        <li><a href="{{ route('settings.create') }}"><span class="fa fa-plus"></span> Add User</a></li>
+                    </ul>
+                </li>
+            @endif
         @endif
     </ul>
 
