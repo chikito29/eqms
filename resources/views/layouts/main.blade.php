@@ -23,7 +23,7 @@
                 <!-- PAGE CONTENT WRAPPER -->
                 <div class="page-content-wrap">
 
-                    @include('layouts.hnavigation')
+                    @include('layouts.header')
 
                     @yield('page-content')
 
@@ -51,7 +51,7 @@
                     </div>
                     <div class="mb-footer">
                         <div class="pull-right">
-                            <a href="http://na.dlbajana.xyz/logout/{{ request('user.id') }}" class="btn btn-success btn-lg">Yes</a>
+                            <a href="{{ env('NA_URL') . 'logout/' . request('user.id') }}" class="btn btn-success btn-lg">Yes</a>
                             <button class="btn btn-default btn-lg mb-control-close">No</button>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
         @yield('scripts')
         <script type="text/javascript">
             $(function(){
-                @if($notify = session('notify'))
+                @if($notify = session()->pull('notify'))
                     noty({text: '{{ $notify['message'] }}', layout: 'topRight', type: '{{ $notify['type'] }}'});
                 @endif
             });

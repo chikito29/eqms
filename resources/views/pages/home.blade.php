@@ -1,4 +1,4 @@
-@extends('layouts.super-admin')
+@extends('layouts.main')
 
 @section('page-title')
     Home | eQMS

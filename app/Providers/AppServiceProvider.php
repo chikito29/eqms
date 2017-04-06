@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer(
-            'layouts.hnavigation', 'App\Http\ViewComposers\CparComposer@compose',
+            'layouts.header', 'App\Http\ViewComposers\CparComposer@compose',
             'layouts.cpar-answer-nav', 'App\Http\ViewComposers\CparComposer@compose'
         );
 

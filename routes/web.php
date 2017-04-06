@@ -30,7 +30,7 @@ Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
 Route::get('review/{cpar}', 'CparController@review')->name('review');
 
 Route::get('unauthorize', function () {return view('errors.unauthorize');});
-Route::get('pending', function () {return view('accessrequests.pending');});
+Route::get('pending', function () {return view('pages.access-pending');});
 
 Route::get('/', function () {
     return view('welcome');
