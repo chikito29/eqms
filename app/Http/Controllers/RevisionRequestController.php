@@ -11,8 +11,12 @@ use App\Section;
 use App\Document;
 use App\Attachment;
 use App\Mail\NewRevisionRequest;
+use App\Mail\DeniedRevisionRequest;
+use App\Mail\OnProcessRevisionRequest;
+use App\Mail\ApprovedRevisionRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use GuzzleHttp\Client;
 
 class RevisionRequestController extends Controller
 {
@@ -60,7 +64,7 @@ class RevisionRequestController extends Controller
             }
         }
 
-        Mail::to('chikito029@gmail.com')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
+        Mail::to('qmr@newsim.ph')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
 
         session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
         return redirect()->route('revision-requests.index');
@@ -77,6 +81,15 @@ class RevisionRequestController extends Controller
 
     public function update(Request $request, $id) {
         $revisionRequest = RevisionRequest::with('section_b', 'section_c', 'section_d')->find($id);
+        $http = new Client();
+        try{
+            $userDetailsResponse = $http->get(env('NA_URL', 'your-user-url') . '/api/users/' . $revisionRequest->user_id, [
+                'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+            ]);
+        }catch (RequestException $e) {
+            // Check if the API Authentication Fails
+        }
+        $userInfo = json_decode((string) $userDetailsResponse->getBody(), true);
 
         if ( ! $revisionRequest->section_b) {
             $sectionB = new RevisionRequestSectionB();
@@ -94,6 +107,11 @@ class RevisionRequestController extends Controller
             }
             $revisionRequest->save();
 
+            if ($request->input('recommendation_status') == 'For Disapproval') {
+                Mail::to($userInfo['email'])->send(new DeniedRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
+            } else {
+                Mail::to($userInfo['email'])->send(new OnProcessRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
+            }
         } else if ( ! $revisionRequest->section_c) {
             $sectionC = new RevisionRequestSectionC();
             $sectionC->revision_request_id = $id;
@@ -105,6 +123,12 @@ class RevisionRequestController extends Controller
 
             $revisionRequest->status = $request->input('approved') ? 'Approved' : 'Denied';
             $revisionRequest->save();
+
+            if ($request->input('approved')) {
+                Mail::to($userInfo['email'])->send(new ApprovedRevisionRequest(RevisionRequest::with('reference_document', 'section_b', 'section_c')->find($id)));
+            } else {
+
+            }
 
             if ($request->hasFile('attachments')) {
                 $files = $request->file('attachments');
