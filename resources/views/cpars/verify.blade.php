@@ -1,5 +1,15 @@
 @extends('cpars.show')
 
+@section('page-title')
+    Home | Finalize CPAR
+@endsection
+
+@section('verify-button')
+<div class="panel-footer">
+    <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="finalizeCpar()" id="print-cpar">Finalize CPAR</button>
+</div>
+@stop
+
 @section('modals')
     <a class="btn btn-primary hidden" data-toggle="modal" href="#verify-cpar" id="verify-cpar-modal-trigger">Trigger modal</a>
     <div class="modal fade" id="verify-cpar">
@@ -24,12 +34,7 @@
 
 @section('scripts')
     <script>
-        $(function() {
-            $('#print-cpar').attr('onclick', 'verifyCpar()');
-            $('#print-cpar').html('Verify CPAR');
-        });
-
-        function verifyCpar() {
+        function finalizeCpar() {
             $('#verify-cpar-modal-trigger').click();
         }
 

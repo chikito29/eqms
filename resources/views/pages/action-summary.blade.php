@@ -76,7 +76,14 @@
             </tr>
             <tr>
                 <td>NAME</td>
-                <td>{{ $cpar->person_reporting }}</td>
+                <td>
+                    @foreach($result as $employee)
+                        @if($employee->id == $cpar->raised_by)
+                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            @break
+                        @endif
+                    @endforeach
+                </td>
                 <td style="border-left-style: hidden;">&nbsp;</td>
                 <td style="border-left-style: hidden;">&nbsp;</td>
                 <td style="border-left-style: hidden;">&nbsp;</td>
@@ -138,13 +145,27 @@
                 <td colspan="10">NAME: (PERSON REPORTING TO NON-CONFORMITY)</td>
             </tr>
             <tr>
-                <td colspan="10">{{ $cpar->person_reporting or '&nbsp;' }}</td>
+                <td colspan="10">
+                    @foreach($result as $employee)
+                        @if($employee->id == $cpar->person_reporting)
+                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            @break
+                        @endif
+                    @endforeach
+                </td>
             </tr>
             <tr>
                 <td colspan="10">NAME: (PERSON RESPONSIBLE FOR TAKING THE CPAR)</td>
             </tr>
             <tr>
-                <td colspan="10">{{ $cpar->person_responsible or '&nbsp;' }}</td>
+                <td colspan="10">
+                    @foreach($result as $employee)
+                        @if($employee->id == $cpar->person_responsible)
+                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            @break
+                        @endif
+                    @endforeach
+                </td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">CORRECTION (Action to eliminate detected non-conformity)</td>
@@ -173,14 +194,21 @@
                 <td colspan="5">DATE CONFIRMED BY DEPARTMENT HEAD:</td>
             </tr>
             <tr>
-                <td colspan="5" style="border-top-style: hidden;">{{ $cpar->department_head or '&nbsp;' }}</td>
+                <td colspan="5" style="border-top-style: hidden;">
+                    @foreach($result as $employee)
+                        @if($employee->id == $cpar->chief)
+                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            @break
+                        @endif
+                    @endforeach
+                </td>
                 <td colspan="5" style="border-top-style: hidden;">{{ \Carbon\Carbon::parse($cpar->date_confirmed)->toFormattedDateString() }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 
-    <div style="display: block; width:90%; margin: auto; padding-top: 50px; page-break-before: always;">
+    <div style="display: block; width:90%; margin: auto; padding-top: 70px; page-break-before: always;">
         <table class="tbl-info" style="width:100%; border-collapse:collapse;">
             <tbody>
             <tr>
@@ -206,7 +234,14 @@
             </tr>
             <tr>
                 <td colspan="5" style="border-top-style: hidden;">{{ Carbon\Carbon::parse($cpar->date_verified)->toFormattedDateString() }}</td>
-                <td colspan="5" style="border-top-style: hidden;">{{ $cpar->verified_by or '&nbsp;'}}</td>
+                <td colspan="5" style="border-top-style: hidden;">
+                    @foreach($result as $employee)
+                        @if($employee->id == $cpar->verified_by)
+                            {{ $employee->first_name }} {{ $employee->last_name }}
+                            @break
+                        @endif
+                    @endforeach
+                </td>
             </tr>
             <tr style="border-bottom-style: hidden;">
                 <td colspan="10">RESULT OF VERIFICATION:</td>

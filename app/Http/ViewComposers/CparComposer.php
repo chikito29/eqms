@@ -3,6 +3,8 @@
 namespace App\Http\ViewComposers;
 
 use App\Section;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use App\Cpar as CparRepositories;
 

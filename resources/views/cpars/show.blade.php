@@ -116,11 +116,10 @@
                             @component('components.show-single-line')
                                 @slot('label') Department Head @endslot
                                 @foreach($result as $employee)
-                                    @if($employee->id == $cpar->department_head)
+                                    @if($employee->id == $cpar->chief)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
                                 @endforeach
-                                @slot('help') Person Responsible For Taking The CPAR @endslot
                             @endcomponent
                             @if($cpar->date_confirmed)
                                 @component('components.show-single-line')
@@ -182,9 +181,10 @@
                                         </li>
                                     </div>
                                 </div>
+                                @yield('verify-button')
                                 @if(request('user.role') == 'admin')
                                     <div class="panel-footer">
-                                        <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()" id="print-cpar">Print CPAR</button>
+                                        <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()">Print CPAR</button>
                                     </div>
                                 @endif
                             @endif

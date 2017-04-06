@@ -136,7 +136,7 @@
                                     @component('components.show-single-line')
                                         @slot('label') Department Head @endslot
                                         @foreach($result as $employee)
-                                            @if($employee->id == $cpar->department_head)
+                                            @if($employee->id == $cpar->chief)
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
                                             @endif
                                         @endforeach
@@ -211,7 +211,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-        </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
@@ -221,12 +220,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><strong>Send this CPAR for Review</strong>?</h4>
+                <h4 class="modal-title"><strong>Send this CPAR for Verification</strong>?</h4>
             </div>
             <div class="modal-body">
-                <p>Clicking <em>Yes</em> will send this CPAR on QMR for review.</p>
-                <p>By this time, you cannot view or change this CPAR, unless asked to do so.</p>
-                <p>Please confirm your action.</p>
+                <p>Clicking <em>Yes</em> will send this CPAR to your department-head for verification.</p>
+                <p>He/she may/may not ask you to change this CPAR.</p>
+                <p>After verification, you will not be able to make further changes to this document.</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">No</button>
