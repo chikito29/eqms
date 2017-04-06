@@ -18,13 +18,6 @@
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
-                            <div class="form-group @if($errors->first('cpar-number')) has-error @endif">
-                                <label class="col-md-3 col-xs-12 control-label">CPAR Number</label>
-                                <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="cpar-number" value="{{ old('cpar-number') }}"/>
-                                    @if($errors->first('cpar-number')) @component('layouts.error') {{ $errors->first('cpar-number') }} @endcomponent @endif
-                                </div>
-                            </div>
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
                                 @foreach($result as $employee)
@@ -173,13 +166,20 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Attachments</label>
+                                <label class="col-md-3 col-xs-5 control-label">Add Attachment/s</label>
+                                <div class="col-md-9 col-xs-7">
+                                    <input type="file" multiple id="file-simple" name="attachments[]"/>
+                                    <span class="help-block">Attach document / scanned document if needed.</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Attachment/s</label>
                                 <div class="col-md-9 col-xs-7">
                                     <li class="list-unstyled">
                                         @if($cpar->attachments->count() > 0)
-                                            <ul>asdasdasd</ul>
+                                            <ul>$cpar->attachments->file_name</ul>
                                         @else
-                                            No Attachment Avaible For This CPAR
+                                            No Attachment Available From Person Responsible
                                         @endif
                                     </li>
                                 </div>
@@ -287,6 +287,12 @@
         }
 
         function saveAsDraft() {
+            $('#confirmation-modal-trigger').click();
+            $('#confirmation-modal-body').html('Attachments will not be saved when saving CPAR as draft.');
+            $('#confirmation-modal-okay-button').attr('onclick', 'save()');
+        }
+
+        function save(){
             $('#review-form').attr('action', '{{ route('cpars.save-as-draft', $cpar->id) }}');
             $('#review-form').submit();
         }

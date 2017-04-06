@@ -8,6 +8,9 @@
 
 @section('page-content')
     <div class="page-content-wrap" style="margin-top: -25px;">
+        @if(session('attention'))
+            @include('layouts.attention')
+        @endif
         <div class="x-content" >
             <div class="x-content-inner" style="margin-top:-20px;">
                 <div class="row">
@@ -43,10 +46,19 @@
                                             <td>
                                                 @include('components.status', compact('cpar'))
                                             </td>
-                                            <td width="360px">
+                                            <td>
                                                 @component('components.button-state', compact('cpar')) @slot('title') view @endslot view @endcomponent
                                                 @component('components.button-state', compact('cpar')) @slot('title') edit @endslot edit @endcomponent
-                                                @component('components.button-state', compact('cpar')) @slot('title') review @endslot review @endcomponent
+                                                @if($cpar->cparReviewed->status == 1 && $cpar->cpar_number == null)
+                                                    @component('components.button-state', compact('cpar')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
+                                                @elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)
+                                                    @component('components.button-state', compact('cpar')) @slot('title') Print Reviewed CPAR @endslot Print Reviewed CPAR @endcomponent
+                                                @elseif($cpar->cparReviewed->status == 0 && $cpar->cpar_number == null)
+                                                    @component('components.button-state', compact('cpar')) @slot('title') Print Closed CPAR @endslot Print Closed CPAR @endcomponent
+                                                @else
+                                                    @component('components.button-state', compact('cpar')) @slot('title') review @endslot review @endcomponent
+                                                @endif
+                                                <form method="GET" id="{{ $cpar->id }}"><input type="text" class="form-control hidden" name="cpar-number" required></form>
                                                 @component('components.button-state', compact('cpar')) @slot('title') close @endslot close @endcomponent
                                             </td>
                                             <form method="get" action="{{ route('cpars.close', $cpar->id) }}" accept-charset="UTF-8" id="{{ $cpar->id }}">
@@ -86,9 +98,31 @@
     </div><!-- /.modal -->
 @endsection
 
+@section('modals')
+    <div class="modal fade" id="cpar-number-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create CPAR Number</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" name="cpar-number-input" required>
+                    <span class="help text text-info">Enter the CPAR control number here.</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCparNumber()" id="savebtn-modal">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+@stop
+
 @section('scripts')
     <script>
         var confirmModalBody;
+        cparId = '';
 
         $(function(){
             confirmModalBody = $('#confirm-modal').html();
@@ -110,6 +144,17 @@
             }
             else
                 window.location.href= url;
+        }
+
+        function openCparNumberModal(id) {
+            cparId = id;
+            $('#cpar-number-modal').modal('toggle');
+        }
+
+        function saveCparNumber() {
+            $('#' + cparId).attr('action', '/cpars/create-cpar-number/' + cparId);
+            $('input:text[name="cpar-number"]').val($('input:text[name="cpar-number-input"]').val());
+            $('#' + cparId).submit();
         }
     </script>
 @endsection

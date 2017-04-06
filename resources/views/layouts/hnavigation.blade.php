@@ -11,7 +11,7 @@
             @endif
         </li>
         <li class="xn-openable @yield('nav-document')">
-            <a href="#">Documents</a>
+            <a href="#">Procedures</a>
             <ul>
                 @foreach($sections as $section)
                     <li class="xn-openable">

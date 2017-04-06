@@ -10,7 +10,7 @@ The CPAR that has been issued to
 {{ $cpar->created_at->diffForHumans() }} has been answered
 and finalized and now ready to be reviewed.
 
-@component('mail::button', ['url' => route('cpars.verify', $cpar->id)])
+@component('mail::button', ['url' => route('cpars.review', $cpar->id)])
     Click here to review cpar
 @endcomponent
 

@@ -1,6 +1,9 @@
-@if($cpar->cparClosed->status == 1)
+@if($cpar->cparClosed->status == 1 && $cpar->cparReviewed->status <> 1)
     <span class="label label-primary">Closed {{ $cpar->cparClosed->created_at->diffForHumans() }}
         closed by {{ $cpar->cparClosed->closed_by }} {{ $cpar->cparClosed->remarks }}</span>
+@elseif($cpar->cparClosed->status == 1 && $cpar->cparReviewed->status == 1)
+    <span class="label label-warning">CPAR reviewed and closed {{ $cpar->cparClosed->created_at->diffForHumans() }}
+        by {{ $cpar->cparClosed->closed_by }}</span>
 @elseif($cpar->cparReviewed->on_review == 1)
     <span class="label label-warning">CPAR on review {{ $cpar->cparReviewed->updated_at->diffForHumans() }}</span>
 @elseif($cpar->cparAnswered->status == 1 && $cpar->cparReviewed->status == 1)

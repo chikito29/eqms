@@ -32,19 +32,16 @@ class PageController extends Controller {
 
     public function answerCparLogin($id) {
         $cpar = Cpar::find($id);
-        if ($cpar->cparReviewed->on_review <> 1) {
+        if ($cpar->cparClosed->status == 1) {
+            return redirect('page-not-found');
+        }
+        else {
             if ($cpar <> NULL) {
                 return view('pages.answer-cpar-login', compact('cpar'));
             }
             else {
                 return redirect('page-not-found');
             }
-        }
-        elseif ($cpar->cparReviewed->on_review <> 1 && $cpar->cparClosed->status <> 1) {
-            return view('cpars.cpar-on-review');
-        }
-        else {
-            return view('errors.page-not-found');
         }
     }
 
@@ -53,8 +50,8 @@ class PageController extends Controller {
             'code' => 'required'
         ]);
 
-        if ($cpar->responsiblePerson->trashed()) {
-            return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'It seems like you already been answered and/or closed this CPAR, if you want an access to it, please contact QMR.']);
+        if ($cpar->responsiblePerson == null) {
+            return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'It seems like you already responded to this cpar, if you want an access to it, please contact QMR.']);
         }
         elseif ($cpar->person_responsible <> request('user.id')) {
             return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'Accessing CPAR not intended to you is prohibited.']);

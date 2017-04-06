@@ -16,6 +16,7 @@ use App\CparClosed;
 use App\CparAnswered;
 use App\CparReviewed;
 use App\DocumentVersion;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
 
 class CparController extends Controller {
@@ -23,18 +24,40 @@ class CparController extends Controller {
     protected $businessDays;
 
     function __construct(Cpar $cpars) {
-        $this->cpars = $cpars->latest();
+        $this->cpars = $cpars->latest()->get();
         $this->middleware('na.authenticate');
     }
 
+    public function getEmployees() {
+        $client = new Client();
+        $result = $client->get('http://na.dlbajana.xyz/api/users', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . session('na_access_token')
+            ]
+        ]);
+
+        return $result = json_decode((string)$result->getBody());
+    }
+
+    public function getEmail($id) {
+        $result = $this->getEmployees();
+
+        foreach ($result as $employee) {
+            if ($employee->id == $id) {
+                return $employee->email;
+                break;
+            }
+        }
+    }
+
     public function index() {
-        return view('cpars.index')->with('cpars', $this->cpars->get());
+        return view('cpars.index', ['cpars' => $this->cpars, 'result' => $this->getEmployees()]);
     }
 
     public function create() {
         $sections = Section::with('documents')->get();
 
-        return view('cpars.create', compact('sections'));
+        return view('cpars.create', ['sections' => $sections, 'result' => $this->getEmployees()]);
     }
 
     public function store() {
@@ -47,7 +70,7 @@ class CparController extends Controller {
             'details'            => 'required',
             'person-responsible' => 'required',
             'proposed-date'      => 'required',
-            'chief'    => 'required',
+            'chief'              => 'required',
         ]);
 
         if (request('branch') == '') {
@@ -83,7 +106,7 @@ class CparController extends Controller {
             'person_reporting'   => request('raised-by'),
             'person_responsible' => request('person-responsible'),
             'proposed_date'      => request('proposed-date'),
-            'chief'    => request('chief')
+            'chief'              => request('chief')
         ]);
 
         //TODO: put this method in verifying section
@@ -128,7 +151,9 @@ class CparController extends Controller {
             'code'    => $code
         ]);
 
-        Mail::to('department-head@newsim.ph')->send(new CparCreated($cpar->id));
+        session()->flash('notify', ['message' => 'CPAR successfully created.', 'type' => 'success']);
+
+        Mail::to($this->getEmail($cpar->chief))->send(new CparCreated($cpar->id));
 
         return redirect('cpars');
     }
@@ -174,8 +199,10 @@ class CparController extends Controller {
         $cpar->source             = request('source');
         $cpar->other_source       = request('other-source');
         $cpar->details            = request('details');
-        $cpar->chief    = request('chief');
+        $cpar->chief              = request('chief');
         $cpar->save();
+
+        session()->flash('notify', ['message' => 'CPAR successfully updated.', 'type' => 'success']);
 
         return redirect()->route('cpars.show', ['cpar' => $cpar->id]);
     }
@@ -185,6 +212,8 @@ class CparController extends Controller {
         $cparClosed->status    = 1;
         $cparClosed->closed_by = request('user.first_name') . ' ' . request('user.last_name');
         $cparClosed->save();
+
+        session()->flash('notify', ['message' => 'CPAR has been closed.', 'type' => 'success']);
 
         return back();
     }
@@ -334,7 +363,7 @@ class CparController extends Controller {
         $cpar->date_accepted = $cpar->cparAnswered->created_at;
         $cpar->save();
 
-        Mail::to('department-head@newsim.ph')->send(new AnsweredCpar($cpar->id));
+        Mail::to($this->getEmail($cpar->chief))->send(new AnsweredCpar($cpar->id));
 
         return redirect("cpar-on-review/$cpar->id");
     }
@@ -358,7 +387,6 @@ class CparController extends Controller {
 
     public function saveReview(Cpar $cpar) {
         $this->validate(request(), [
-            'cpar-number'       => 'required|unique:cpars,cpar_number',
             'date-completed'    => 'required',
             'cpar-acceptance'   => 'required',
             'date-accepted'     => 'required',
@@ -367,24 +395,8 @@ class CparController extends Controller {
             'result'            => 'required',
         ]);
 
-        $cparReviewed = CparReviewed::find($cpar->id);
-        //update on review and reviewed by
-        $cparReviewed->status      = 1;
-        $cparReviewed->notified    = 1;
-        $cparReviewed->reviewed_by = request('user.first_name') . ' ' . request('user.last_name');
-        $cparReviewed->save();
-
-        $cparClosed = CparClosed::find($cpar->id);
-        //close reviewed cpar
-        $cparClosed->status    = 1;
-        $cparClosed->notified  = 1;
-        $cparClosed->closed_by = request('user.first_name') . ' ' . request('user.last_name');
-        $cparClosed->remarks   = "";
-        $cparClosed->save();
-
         //save cpar
         $cpar->cpar_acceptance = request('cpar-acceptance');
-        $cpar->cpar_number     = request('cpar-number');
         $cpar->date_verified   = request('verification-date');
         $cpar->date_accepted   = request('date-accepted');
         $cpar->date_completed  = request('date-completed');
@@ -392,31 +404,52 @@ class CparController extends Controller {
         $cpar->result          = request('result');
         $cpar->save();
 
-        //notify department head
-        Mail::to('department-head@newsim.ph')->send(new ReviewedCpar($cpar->id));
+        if (request()->hasFile('attachments')) {
+            $files = request()->file('attachments');
+            foreach ($files as $key => $file) {
+                $path                    = $file->store('attachments', 'public');
+                $attachment              = new Attachment();
+                $attachment->cpar_id     = $cpar->id;
+                $attachment->file_name   = 'attachment_' . ($key + 1);
+                $attachment->file_path   = 'storage/' . $path;
+                $attachment->section     = 'answer';
+                $attachment->uploaded_by = request('user.first_name') . ' ' . request('user.last_name');
+                $attachment->save();
+            }
+        }
+
+        session()->pull('attention', ['body' => '<strong>To finalize the CPAR that has been reviewed</strong>, the Document Controller needs to add its <strong>CPAR Number</strong>', 'color' => 'info']);
 
         return redirect()->route('cpars.index');
     }
 
     public function verify(Cpar $cpar) {
-        if ($cpar->cparClosed->status <> 1) {
-            $sections     = Section::with('documents')->get();
-            $documentBody = $this->getDocument($cpar);
+        if ($cpar->chief == request('user.id')) {
+            if ($cpar->cparClosed->status <> 1) {
+                $sections     = Section::with('documents')->get();
+                $documentBody = $this->getDocument($cpar);
 
-            $cparReviewed            = CparReviewed::find($cpar->id);
-            $cparReviewed->on_review = 1;
-            $cparReviewed->save();
+                $cparReviewed            = CparReviewed::find($cpar->id);
+                $cparReviewed->on_review = 1;
+                $cparReviewed->save();
 
-            return view('cpars.verify', compact('cpar', 'sections', 'documentBody'));
+                return view('cpars.verify', compact('cpar', 'sections', 'documentBody'));
+            }
+            else {
+                return route('cpars.cpar-on-review', $cpar->id);
+            }
         }
         else {
-            return route('cpars.cpar-on-review', $cpar->id);
+            return view('errors.page-not-found');
         }
     }
 
     public function finalize(Cpar $cpar) {
         $cpar->date_confirmed = Carbon::now();
         $cpar->save();
+
+        $responsiblePerson = ResponsiblePerson::where('user_id', $cpar->person_responsible);
+        $responsiblePerson->delete();
 
         //notify department head
         Mail::to('qmr@newsim.ph')->send(new CparFinalized($cpar->id));
@@ -436,6 +469,39 @@ class CparController extends Controller {
         $cpar->save();
 
         session()->flash('notify', ['message' => 'CPAR draft has been saved.', 'type' => 'success']);
+
+        return back();
+    }
+
+    public function createCparNumber($cpar) {
+        $updateCpar = Cpar::find($cpar);
+
+        $this->validate(request(), [
+            'cpar-number' => 'required|unique:cpars,cpar_number'
+        ]);
+
+        $updateCpar->cpar_number = request('cpar-number');
+        $updateCpar->save();
+
+        $cparReviewed = CparReviewed::find($cpar);
+        //update on review and reviewed by
+        $cparReviewed->status      = 1;
+        $cparReviewed->notified    = 1;
+        $cparReviewed->reviewed_by = request('user.first_name') . ' ' . request('user.last_name');
+        $cparReviewed->save();
+
+        $cparClosed = CparClosed::find($cpar);
+        //close reviewed cpar
+        $cparClosed->status    = 1;
+        $cparClosed->notified  = 1;
+        $cparClosed->closed_by = request('user.first_name') . ' ' . request('user.last_name');
+        $cparClosed->remarks   = "";
+        $cparClosed->save();
+
+        //notify department head
+        Mail::to($this->getEmail($cpar->chief))->send(new ReviewedCpar($cpar));
+
+        session()->flash('notify', ['message' => 'CPAR number successfully added.', 'type' => 'success']);
 
         return back();
     }

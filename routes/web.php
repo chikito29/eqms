@@ -16,8 +16,9 @@ Route::resource('access-requests', 'AccessRequestController', ['except' => ['cre
 Route::get('revision-requests/{revision_request}/print', 'RevisionRequestController@printRevisionRequest')->name('revision-requests.print');
 
 // Individual Get Requests
+Route::get('cpars/create-cpar-number/{cpar}', 'CparController@createCparNumber')->name('cpars.create-cpar-number');
 Route::get('dashboard', 'PageController@dashboard')->name('pages.dashboard')->middleWare('na.authenticate');
-Route::get('action-summary/{cpar}/{date?}', 'PageController@actionSummary')->name('action-summary');
+Route::get('action-summary/{cpar}', 'PageController@actionSummary')->name('action-summary');
 Route::get('answer-cpar/login/{cpar}', 'PageController@answerCparLogin')->name('answer-cpar-login');
 Route::get('cpars/finalize-verification/{cpar}', 'CparController@finalize')->name('cpars.finalize');
 Route::get('home', 'PageController@home')->name('pages.home')->middleware('na.authenticate');
@@ -26,15 +27,13 @@ Route::get('answer-cpar/{cpar}', 'CparController@answerCpar')->name('answer-cpar
 Route::get('cpar-closed', 'CparController@cparClosed')->name('cpars.cpar-closed');
 Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('on-review');
 Route::get('cpars/verify/{cpar}', 'CparController@verify')->name('cpars.verify');
+Route::get('cpars/review/{cpar}', 'CparController@review')->name('cpars.review');
 Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
-Route::get('review/{cpar}', 'CparController@review')->name('review');
 
-Route::get('unauthorize', function () {return view('errors.unauthorize');});
-Route::get('pending', function () {return view('accessrequests.pending');});
-
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route GET Closure
+Route::get('unauthorize', function () { return view('errors.unauthorize'); });
+Route::get('pending', function () { return view('accessrequests.pending'); });
+Route::get('/', function () { return view('welcome'); });
 
 // Individual POST Requests
 Route::post('answer-cpar/login/{cpar}', 'PageController@answerCparLoginPost')->name('answer-cpar-login-post');
