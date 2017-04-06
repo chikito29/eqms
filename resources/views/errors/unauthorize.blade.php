@@ -22,7 +22,7 @@
             <div class="error-actions">
                 <div class="row">
                     <div class="col-md-6">
-                        <button class="btn btn-info btn-block btn-lg" onClick="document.location.href = 'index.html';">Back to dashboard</button>
+                        <button class="btn btn-info btn-block btn-lg" onClick="document.location.href = '{{ url('/home') }}';">Back to home</button>
                     </div>
                     <div class="col-md-6">
                         <button class="btn btn-primary btn-block btn-lg" onClick="">Previous page</button>
