@@ -1,6 +1,6 @@
 @component('mail::message')
 #
-@foreach($result as $employee)
+@foreach($employees as $employee)
     @if($employee->id == $cpar->person_responsible)
         {{ $employee->first_name }} {{ $employee->last_name }}'s
     @endif

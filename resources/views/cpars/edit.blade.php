@@ -20,7 +20,7 @@
                         <div class="panel-body form-group-separated">
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->raised_by)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -104,7 +104,7 @@
                             </div>
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->raised_by)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -225,7 +225,7 @@
             $('#source-select').selectpicker('refresh');
 
             employeeOptions = "";
-            @foreach($result as $employee)
+            @foreach($employees as $employee)
                 @if(request('user.id') == $employee->id) @continue
                     @else employeeOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
                 @endif
@@ -233,7 +233,7 @@
             $('#person-responsible').empty().append(employeeOptions);
 
             chiefOptions = "";
-            @foreach($result as $employee)
+            @foreach($employees as $employee)
                 @if($employee->department_head == 1)
                     chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
                 @endif

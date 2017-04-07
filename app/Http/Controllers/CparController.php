@@ -7,7 +7,6 @@ use App\Mail\CparCreated;
 use App\Mail\CparFinalized;
 use App\Mail\CparReviewed as ReviewedCpar;
 use App\Mail\CparAnswered as AnsweredCpar;
-use App\NA;
 use App\ResponsiblePerson;
 use App\Section;
 use App\Document;
@@ -29,21 +28,17 @@ class CparController extends Controller {
         $this->middleware('na.authenticate');
     }
 
-    public function getEmployees() {
+    public function getEmail($id) {
         $client = new Client();
-        $result = $client->get('http://na.dlbajana.xyz/api/users', [
+        $employees = $client->get(env('NA_URL') . '/api/users', [
             'headers' => [
                 'Authorization' => 'Bearer ' . session('na_access_token')
             ]
         ]);
 
-        return $result = json_decode((string)$result->getBody());
-    }
+        return $employees = json_decode((string)$employees->getBody());
 
-    public function getEmail($id) {
-        $result = $this->getEmployees();
-
-        foreach ($result as $employee) {
+        foreach ($employees as $employee) {
             if ($employee->id == $id) {
                 return $employee->email;
                 break;
@@ -52,13 +47,13 @@ class CparController extends Controller {
     }
 
     public function index() {
-        return view('cpars.index', ['cpars' => $this->cpars, 'result' => $this->getEmployees()]);
+        return view('cpars.index', ['cpars' => $this->cpars]);
     }
 
     public function create() {
         $sections = Section::with('documents')->get();
 
-        return view('cpars.create', ['sections' => $sections, 'result' => $this->getEmployees()]);
+        return view('cpars.create', ['sections' => $sections]);
     }
 
     public function store() {

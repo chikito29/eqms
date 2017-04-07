@@ -77,7 +77,7 @@
             <tr>
                 <td>NAME</td>
                 <td>
-                    @foreach($result as $employee)
+                    @foreach($employees as $employee)
                         @if($employee->id == $cpar->raised_by)
                             {{ $employee->first_name }} {{ $employee->last_name }}
                             @break
@@ -146,7 +146,7 @@
             </tr>
             <tr>
                 <td colspan="10">
-                    @foreach($result as $employee)
+                    @foreach($employees as $employee)
                         @if($employee->id == $cpar->person_reporting)
                             {{ $employee->first_name }} {{ $employee->last_name }}
                             @break
@@ -159,7 +159,7 @@
             </tr>
             <tr>
                 <td colspan="10">
-                    @foreach($result as $employee)
+                    @foreach($employees as $employee)
                         @if($employee->id == $cpar->person_responsible)
                             {{ $employee->first_name }} {{ $employee->last_name }}
                             @break
@@ -195,7 +195,7 @@
             </tr>
             <tr>
                 <td colspan="5" style="border-top-style: hidden;">
-                    @foreach($result as $employee)
+                    @foreach($employees as $employee)
                         @if($employee->id == $cpar->chief)
                             {{ $employee->first_name }} {{ $employee->last_name }}
                             @break
@@ -235,7 +235,7 @@
             <tr>
                 <td colspan="5" style="border-top-style: hidden;">{{ Carbon\Carbon::parse($cpar->date_verified)->toFormattedDateString() }}</td>
                 <td colspan="5" style="border-top-style: hidden;">
-                    @foreach($result as $employee)
+                    @foreach($employees as $employee)
                         @if($employee->id == $cpar->verified_by)
                             {{ $employee->first_name }} {{ $employee->last_name }}
                             @break

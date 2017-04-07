@@ -1,5 +1,9 @@
 @extends('layouts.main')
 
+@section('page-title')
+  eQMS | Create User
+@stop
+
 @section('page-content')
 <div class="row">
         <div class="col-md-12">
@@ -78,4 +82,5 @@
         $('input:text[name="department"]').val(option.attr('department'));
     })
 </script>
+
 @stop

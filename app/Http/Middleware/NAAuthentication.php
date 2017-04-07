@@ -21,7 +21,7 @@ class NAAuthentication
         if ($request->session()->has('na_access_token')) {
             $http = new Client();
             try{
-                $userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
+                $userDetailsResponse = $http->get(env('NA_URL', 'your-user-url') .'/api/user' , [
             		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
             	]);
             }catch (RequestException $e) {

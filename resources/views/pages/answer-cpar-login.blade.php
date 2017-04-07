@@ -22,7 +22,7 @@
     <div class="login-box animated fadeInDown">
         <div class="login-body">
             <div class="login-title"><strong>Welcome</strong>
-                @foreach($result as $employee)
+                @foreach($employees as $employee)
                     @if($employee->id == $cpar->person_responsible)
                         {{ $employee->first_name }} {{ $employee->last_name }}
                         @break

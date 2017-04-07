@@ -229,7 +229,7 @@
             $('#span-reference').html('{!! old('link') !!}');
 
             employeeOptions = "";
-            @foreach($result as $employee)
+            @foreach($employees as $employee)
                 @if(request('user.id') == $employee->id) @continue
                 @else employeeOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
                 @endif
@@ -237,7 +237,7 @@
             $('#person-responsible').empty().append(employeeOptions);
 
             chiefOptions = "";
-            @foreach($result as $employee)
+            @foreach($employees as $employee)
                 @if($employee->chief == 1)
                     chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
                 @endif

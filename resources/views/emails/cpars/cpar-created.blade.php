@@ -2,7 +2,7 @@
 # CPAR has been issued
 
 You are receiving this because an employee under the department {{ $cpar->department }} received a CPAR raised by
-@foreach($result as $employee)
+@foreach($employees as $employee)
     @if($employee->id == $cpar->raised_by)
         {{ $employee->first_name }} {{ $employee->last_name }}
     @endif
@@ -10,7 +10,7 @@ You are receiving this because an employee under the department {{ $cpar->depart
 created this {{ $cpar->created_at->format('l jS \\of F Y') }}.
 
 Please inform
-@foreach($result as $employee)
+@foreach($employees as $employee)
     @if($employee->id == $cpar->person_responsible)
         {{ $employee->first_name }} {{ $employee->last_name }}
     @endif
