@@ -11,4 +11,5 @@ class AccessRequest extends Model
 
     protected $table = 'access_requests';
     protected $dates = ['deleted_at'];
+    protected $guarded = [];
 }

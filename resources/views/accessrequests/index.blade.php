@@ -85,7 +85,6 @@
             </div>
             <form id="form_add_revision_request_number" class="form-horizontal" action="index.html" method="post">
                 {{ csrf_field() }}
-                {{ method_field('put') }}
                 <div class="modal-body form-horizontal form-group-separated">
                     <div class="form-group">
                         <label class="col-md-3 control-label">Duration</label>
@@ -109,34 +108,11 @@
 </div>
 @endsection
 
-@section('message-box')
-    <!-- MESSAGE BOX-->
-    <div class="message-box animated fadeIn" data-sound="alert" id="mb-deny-request">
-        <div class="mb-container">
-            <div class="mb-middle">
-                <div class="mb-title"><span class="fa fa-times"></span> Deny <strong>Access</strong> ?</div>
-                <div class="mb-content">
-                    <p>Are you sure you want to remove this Section?</p>
-                    <p>Documents belong to this section will not be available</p>
-                    <p>Press Yes if you sure.</p>
-                </div>
-                <div class="mb-footer">
-                    <div class="pull-right">
-                        <button class="btn btn-success btn-lg mb-control-yes">Yes</button>
-                        <button class="btn btn-default btn-lg mb-control-close">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- END MESSAGE BOX-->
-@endsection
-
 @section('scripts')
 <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
 <script type="text/javascript">
     function showModal(id) {
-        $("#form_add_revision_request_number").attr('action', "/access-requests/" + id);
+        $("#form_add_revision_request_number").attr("action", "/access-requests/" + id + "/grant");
         $("#modal_change_password").modal();
     }
 
