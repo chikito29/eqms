@@ -1,5 +1,5 @@
 @component('mail::message')
-# Denied Revision Request
+# Revision Request Denied
 
 The Revision Request you submitted for <a href="{{ route('documents.show', $revisionRequest->reference_document->id) }}">{{ $revisionRequest->reference_document->title }}</a> was reviewed and has been denied by the QMR.
 

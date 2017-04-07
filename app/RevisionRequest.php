@@ -17,6 +17,7 @@ class RevisionRequest extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'revision_requests';
+    protected $guarded = [];
 
     public function reference_document() {
         return $this->belongsTo(Document::class, 'reference_document_id');

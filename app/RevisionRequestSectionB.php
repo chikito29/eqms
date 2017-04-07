@@ -12,6 +12,7 @@ class RevisionRequestSectionB extends Model
 
     protected $dates = ['deleted_at'];
     protected $table = 'revision_requests_section_b';
+    protected $guarded = [];
 
     public function revision_request() {
         return $this->belongsTo(RevisionRequest::class, 'revision_requests_id');

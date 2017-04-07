@@ -22,9 +22,7 @@ class AccessRequestController extends Controller
 
     public function store(Request $request)
     {
-        Validator::make($request->all(), [
-            'purpose' => 'required|max:4000'
-        ])->validate();
+        Validator::make($request->all(), ['purpose' => 'required|max:4000'])->validate();
 
         $accessRequest = new AccessRequest();
         $accessRequest->user_id = $request->user_id;

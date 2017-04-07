@@ -10,6 +10,7 @@ use App\RevisionRequestSectionD;
 use App\Section;
 use App\Document;
 use App\Attachment;
+use App\NA;
 use App\Mail\NewRevisionRequest;
 use App\Mail\DeniedRevisionRequest;
 use App\Mail\OnProcessRevisionRequest;
@@ -17,6 +18,7 @@ use App\Mail\ApprovedRevisionRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
+use App\Http\Requests\RevisionRequestForm;
 
 class RevisionRequestController extends Controller
 {
@@ -38,35 +40,8 @@ class RevisionRequestController extends Controller
         return view('revisionrequests.create', compact('documentTitles'));
     }
 
-    public function store(Request $request) {
-        Validator::make($request->all(), ['proposed_revision' => 'required', 'revision_reason' => 'required|max:600'])->validate();
-
-        $revisionRequest = new RevisionRequest();
-        $revisionRequest->user_id = $request->input('user.id');
-        $revisionRequest->user_name = $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-        $revisionRequest->reference_document_id = $request->input('reference_document_id');
-        $revisionRequest->reference_document_tags = $request->input('reference_document_tags');
-        $revisionRequest->proposed_revision = $request->input('proposed_revision');
-        $revisionRequest->revision_reason = $request->input('revision_reason');
-        $revisionRequest->save();
-
-        if ($request->hasFile('attachments')) {
-            $files = $request->file('attachments');
-            foreach($files as $key => $file) {
-                $path = $file->store('attachments', 'public');
-                $attachment = new Attachment();
-                $attachment->revision_request_id = $revisionRequest->id;
-                $attachment->file_name = 'attachment_' . ($key + 1);
-                $attachment->file_path = 'storage/' . $path;
-                $attachment->section = 'revision-request-a';
-                $attachment->uploaded_by = $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-                $attachment->save();
-            }
-        }
-
-        Mail::to('qmr@newsim.ph')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
-
-        session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
+    public function store(RevisionRequestForm $revisionRequestForm) {
+        $revisionRequestForm->persist();
         return redirect()->route('revision-requests.index');
     }
 
@@ -75,89 +50,72 @@ class RevisionRequestController extends Controller
         return view('revisionrequests.show', compact('revisionRequest'));
     }
 
-    public function edit($id) {
-
-    }
-
     public function update(Request $request, $id) {
         $revisionRequest = RevisionRequest::with('section_b', 'section_c', 'section_d')->find($id);
-        $http = new Client();
-        try{
-            $userDetailsResponse = $http->get(env('NA_URL', 'your-user-url') . '/api/users/' . $revisionRequest->user_id, [
-                'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
-            ]);
-        }catch (RequestException $e) {
-            // Check if the API Authentication Fails
-        }
-        $userInfo = json_decode((string) $userDetailsResponse->getBody(), true);
 
         if ( ! $revisionRequest->section_b) {
-            $sectionB = new RevisionRequestSectionB();
-            $sectionB->revision_request_id = $id;
-            $sectionB->user_id = $request->input('user.id');
-            $sectionB->user_name =  $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-            $sectionB->recommendation_status = $request->input('recommendation_status');
-            $sectionB->recommendation_reason = $request->input('recommendation_reason');
-            $sectionB->save();
+            RevisionRequestSectionB::create([
+                'revision_request_id' => $id,
+                'user_id' => $request->user['id'],
+                'user_name' => $request->user['first_name'] . ' ' . $request->user['last_name'],
+                'recommendation_status' => $request->recommendation_status,
+                'recommendation_reason' => $request->recommendation_reason
+            ]);
 
-            if ($request->input('recommendation_status') == 'For Disapproval') {
-                $revisionRequest->status = 'Denied';
+            if ($request->recommendation_status == 'For Disapproval') {
+                $revisionRequest->fill(['status' => 'Denied'])->save();
+                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                    ->send(new DeniedRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
             } else {
-                $revisionRequest->status = 'Processing';
+                $revisionRequest->fill(['status' => 'Processing'])->save();
+                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                    ->send(new OnProcessRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
             }
-            $revisionRequest->save();
 
-            if ($request->input('recommendation_status') == 'For Disapproval') {
-                Mail::to($userInfo['email'])->send(new DeniedRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
-            } else {
-                Mail::to($userInfo['email'])->send(new OnProcessRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
-            }
         } else if ( ! $revisionRequest->section_c) {
-            $sectionC = new RevisionRequestSectionC();
-            $sectionC->revision_request_id = $id;
-            $sectionC->user_id = $request->input('user.id');
-            $sectionC->user_name =  $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-            $sectionC->ceo_remarks = $request->input('ceo_remarks');
-            $sectionC->approved = $request->input('approved');
-            $sectionC->save();
+            RevisionRequestSectionC::create([
+                'revision_request_id' => $id,
+                'user_id' => $request->user['id'],
+                'user_name' => $request->user['first_name'] . ' ' . $request->user['last_name'],
+                'ceo_remarks' => $request->ceo_remarks,
+                'approved' => $request->approved
+            ]);
 
-            $revisionRequest->status = $request->input('approved') ? 'Approved' : 'Denied';
-            $revisionRequest->save();
-
-            if ($request->input('approved')) {
-                Mail::to($userInfo['email'])->send(new ApprovedRevisionRequest(RevisionRequest::with('reference_document', 'section_b', 'section_c')->find($id)));
-            } else {
-
-            }
-
-            if ($request->hasFile('attachments')) {
-                $files = $request->file('attachments');
+            if ($files = $request->file('attachments')) {
                 foreach($files as $key => $file) {
                     $path = $file->store('attachments', 'public');
-                    $attachment = new Attachment();
-                    $attachment->revision_request_id = $id;
-                    $attachment->file_name = 'signed_revision_request';
-                    $attachment->file_path = 'storage/' . $path;
-                    $attachment->section = 'revision-request-c';
-                    $attachment->uploaded_by = $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-                    $attachment->save();
+
+                    Attachment::create([
+                        'revision_request_id' => $id,
+                        'file_name' => 'attachment_' . ($key + 1),
+                        'file_path' => 'storage/' . $path,
+                        'section' => 'revision-request-c',
+                        'uploaded_by' => $revisionRequest->user['first_name'] . ' ' . $revisionRequest->user['last_name']
+                    ]);
                 }
             }
 
+            if ($request->approved) {
+                $revisionRequest->fill(['status' => 'Approved'])->save();
+                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                    ->send(new ApprovedRevisionRequest(RevisionRequest::with('reference_document', 'section_b', 'section_c')->find($id)));
+            } else {
+                $revisionRequest->fill(['status' => 'Denied'])->save();
+                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                    ->send(new DeniedRevisionRequest(RevisionRequest::with('reference_document', 'section_b', 'section_c')->find($id)));
+            }
+
         } else if ( ! $revisionRequest->section_d) {
-            $sectionD = new RevisionRequestSectionD();
-            $sectionD->revision_request_id = $id;
-            $sectionD->user_id = $request->input('user.id');
-            $sectionD->user_name =  $request->input('user.first_name') . ' ' . $request->input('user.last_name');
-            $sectionD->action_taken = implode(',', $request->input('action_taken'));
-            $sectionD->others = $request->input('others');
-            $sectionD->save();
-            $revisionRequest->status = 'Approved';
-            $revisionRequest->save();
+            RevisionRequestSectionD::create([
+                'revision_request_id' => $id,
+                'user_id' => $request->user['id'],
+                'user_name' => $request->user['first_name'] . ' ' . $request->user['last_name'],
+                'action_taken' => implode(',', $request->action_taken),
+                'others' => $request->others,
+            ]);
 
         } else {
-            $revisionRequest->revision_request_number = $request->input('revision_request_number');
-            $revisionRequest->save();
+            $revisionRequest->fill(['revision_request_number' => $request->revision_request_number])->save();
             return redirect()->route('revision-requests.index');
 
         }
