@@ -7,6 +7,7 @@ use App\Mail\CparCreated;
 use App\Mail\CparFinalized;
 use App\Mail\CparReviewed as ReviewedCpar;
 use App\Mail\CparAnswered as AnsweredCpar;
+use App\NA;
 use App\ResponsiblePerson;
 use App\Section;
 use App\Document;

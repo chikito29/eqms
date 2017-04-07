@@ -18,6 +18,9 @@ class CreateEqmsUsersTable extends Migration
             $table->integer('user_id')->unique();
             $table->string('added_by');
             $table->string('role');
+            $table->string('branch');
+            $table->string('department');
+            $table->string('fullname');
             $table->timestamps();
         });
     }

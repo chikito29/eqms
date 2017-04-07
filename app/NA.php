@@ -58,8 +58,9 @@ class NA extends Model
     public static function users() {
         $client = new Client();
         try{
-            $response = $client->get(env('NA_URL') . '/api/users', [
-                'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+            $response = $client->get(env('NA_URL') . '/api/users' , [
+                'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'],
+                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
             ]);
         }catch (RequestException $e) {
             if ($e->getResponse()->getStatusCode() == 401) {
