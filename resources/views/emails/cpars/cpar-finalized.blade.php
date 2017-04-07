@@ -2,7 +2,7 @@
 # CPAR has been answered and finalized by department head {{ $cpar->department_head }}
 
 The CPAR that has been issued to
-@foreach($result as $employee)
+@foreach($employees as $employee)
     @if($employee->id == $cpar->person_responsible)
         {{ $employee->first_name }} {{ $employee->last_name }}
     @endif

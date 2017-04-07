@@ -53,7 +53,7 @@
                 <li class="xn-openable @yield('nav-settings')">
                     <a href="#">Settings</a>
                     <ul>
-                        <li><a href="{{ route('settings.index') }}"><span class="fa fa-users"></span> All Users</a></li>
+                        <li><a href="{{ route('settings.index') }}"><span class="fa fa-users"></span> Administrators</a></li>
                         <li><a href="{{ route('settings.create') }}"><span class="fa fa-plus"></span> Add User</a></li>
                     </ul>
                 </li>

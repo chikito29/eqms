@@ -12,7 +12,7 @@
             @include('layouts.attention')
         @endif
         <div class="x-content" >
-            <div class="x-content-inner" style="margin-top:-20px;">
+            <div class="x-content-inner" style="margin-top:-20px; height: 90vh;">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x-block">

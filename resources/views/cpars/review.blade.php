@@ -20,7 +20,7 @@
                         <div class="panel-body form-group-separated">
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->raised_by)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -105,7 +105,7 @@
                             </div>
                             @component('components.show-single-line')
                                 @slot('label') Department Head @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->department_head)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -140,7 +140,7 @@
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
                                     <input type="text" class="form-control" name="verified-by"
-                                       @foreach($result as $employee)
+                                       @foreach($employees as $employee)
                                            @if($employee->id == $cpar->verified_by)
                                                 value="{{ $employee->first_name }} {{ $employee->last_name }}"
                                            @endif

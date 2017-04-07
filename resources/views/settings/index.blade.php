@@ -15,7 +15,8 @@
                     <div class="col-md-12">
                         <div class="x-block">
                             <div class="x-block-head">
-                                <h3>Users List</h3>
+                                <h3>Administrators List</h3>
+                                <button class="btn btn-success pull-right" onclick="addUser()"><span class="fa fa-user"></span>ADD</button>
                             </div>
                             <table class="table table-striped" id="table-application">
                                 <thead>
@@ -37,13 +38,9 @@
                                             <td>{{ $user->branch }}</td>
                                             <td>{{ $user->department }}</td>
                                             <td>
-                                                <form method="post" action="/settings/{{ $user->id }}" id="formDelete{{ $user->id }}">
-                                                    {{ csrf_field() }} {{ method_field('delete') }}
-                                                    <button type="button" onclick="confirm('{{ $user->id }}', 'delete')" class="btn btn-danger"><span class="fa fa-trash"></span>Delete</button>
-                                                </form>
-                                                <form method="get" action="/settings/{{ $user->id }}" id="formEdit{{ $user->id }}">
-                                                    {{ csrf_field() }}
-                                                    <button type="button" onclick="confirm('{{ $user->id }}', 'edit')" class="btn btn-danger"><span class="fa fa-trash"></span>Delete</button>
+                                                <form id="form{{ $user->id }}" class="indexForm">
+                                                    <button type="button" onclick="edit('{{ $user->id }}', '{{ $user->user_id }}')" class="btn btn-info"><span class="fa fa-edit"></span>Edit</button>
+                                                    <button type="button" onclick="confirmDelete('{{ $user->id }}')" class="btn btn-danger"><span class="fa fa-trash"></span>Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -77,28 +74,155 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div class="modal fade" id="add-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Administrator</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" method="POST" action="{{ route('settings.store') }}" id="user-form">
+                        {{ csrf_field() }}
+                        {{--user's fullname--}}
+                        <input type="text" class="hidden" name="fullname">
+                        <input type="text" class="hidden" name="department">
+                        <div class="panel-body">
+                            <p>Add new eQMS user.<br><strong>Note: eQMS can only have one admin at a time.</strong></p>
+                        </div>
+                        <div class="panel-body form-group-separated">
+
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Add As</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <select class="form-control select" name="role">
+                                            @if(\App\EqmsUser::where('role', 'Admin')->get()->count() == 0 )
+                                                <option value="Admin">Admin</option>
+                                            @endif
+                                            <option value="Document Controller">Document Controller</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Employee Name</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <select class="form-control select" data-live-search="true" name="employee-id">
+                                            <option style="display: none;" value="default">Select Employee</option>
+                                            @foreach($employees as $employee)
+                                                <option value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-12 control-label">Branch</label>
+                                    <div class="col-md-6 col-xs-12">
+                                        <label class="control-label" id="branch"></label>
+                                        <input type="text" class="form-control hidden" name="branch"/>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @stop
 
 @section('scripts')
+    {{--adding logic--}}
+    <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-datepicker.js')}}"></script>
+    <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-timepicker.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-colorpicker.js')}}"></script>
+    <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-file-input.js')}}"></script>
+    <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js')}}"></script>
+    <script type="text/javascript" src="{{ url('js/plugins/tagsinput/jquery.tagsinput.min.js')}}"></script>
+    <script>
+        $('select').on('change', function() {
+            var option = $(this).find('option:selected');
+            $('input:text[name="branch"]').val(option.attr('branch'));
+            $('#branch').html(option.attr('branch'));
+            $('input:text[name="fullname"]').val(option.html());
+            $('input:text[name="department"]').val(option.attr('department'));
+        })
+    </script>
+    {{--end adding logic--}}
+
+    {{--edit section--}}
+    <script>
+        $(function() {
+            userForm = $('form[name="user-form"]');
+        });
+
+        function edit(id, userId){
+            userForm.attr({
+                action: '/settings/' + id,
+                method: 'post'
+            });
+            userForm.prepend('{{ csrf_field() }}', '{{ method_field('patch') }}');
+
+            //populate selects
+            var selectRole = $('select[name="role"]');
+            var admin = '{{ $user->role }}';
+            if(admin == 'Admin'){
+                selectRole.prepend('<option value="Admin">Admin</option>');
+            }
+            selectRole.val(id);
+            selectRole.selectpicker('refresh');
+            var selectEmployee = $('select[name="employee-id"]');
+            selectEmployee.val(userId);
+            selectEmployee.selectpicker('refresh');
+            selectEmployee.trigger('change');
+
+            $('.modal-title').html('Edit Administrator');
+            $('#add-modal').modal('toggle');
+        }
+    </script>
+    {{--end edit section--}}
+
+    {{--edit and delete--}}
     <script>
         var userId;
+        var formBody;
+        var form;
+        var originalForm = $('.indexForm').html();
 
-        function confirm(id, action){
+        function confirmDelete(id){
             userId = id;
-            if(action == 'edit') {
-                $('button:text[name="modal-continue-btn"]').attr('onclick', 'editUser()');
-            } else {
-                $('button:text[name="modal-continue-btn"]').attr('onclick', 'deleteUser()');
-            }
+            form = $('#form' + id);
+            formBody = $('#form' + id).html();
+
+            form.attr({
+                action: '/settings/' + id,
+                method: 'post'
+            });
+            form.prepend('{{ method_field("delete") }}', '{{ csrf_field() }}');
+            $('.modal-body').html('Confirm <strong>deletion</strong> of user.');
+            $('button[name="modal-continue-btn"]').attr('onclick', 'deleteUser()');
+
             $('#confirmation-modal').modal('toggle');
         }
 
         function deleteUser(){
-            $('#formDelete' + userId).submit();
+            $('#form' + userId).submit();
         }
 
-        function editUser(){
-            $('#formEdit' + userId).submit();
+        function addUser(){
+            $('select[name="employee-id"]').val('default');
+            $('select[name="employee-id"]').selectpicker('refresh');
+            $('#branch').html("");
+            $('.modal-title').html('Add Administrator');
+            $('#add-modal').modal('toggle');
         }
     </script>
+    {{--end edit and delete--}}
 @stop

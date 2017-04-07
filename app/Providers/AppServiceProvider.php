@@ -26,17 +26,17 @@ class AppServiceProvider extends ServiceProvider {
             'cpars.index', 'cpars.show', 'cpars.edit', 'cpars.answer-cpar',
             'pages.answer-cpar-login', 'cpars.review', 'pages.action-summary', 'cpars.create',
             'emails.cpars.cpar-created', 'emails.cpars.cpar-answered', 'emails.cpars.cpar-finalized',
-            'emails.cpars.cpar-reviewed', 'emails.cpars.expired', 'settings.create'
+            'emails.cpars.cpar-reviewed', 'emails.cpars.expired', 'settings.create', 'settings.index'
         ], function ($view) {
             $client = new Client();
-            $result = $client->get('http://na.dlbajana.xyz/api/users', [
+            $employees = $client->get(env('NA_URL') . '/api/users', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . session('na_access_token')
                 ]
             ]);
-            $result = json_decode((string)$result->getBody());
+            $employees = json_decode((string)$employees->getBody());
 
-            $view->withResult($result);
+            $view->withEmployees($employees);
         });
 
 

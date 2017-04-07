@@ -66,7 +66,7 @@
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->raised_by)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -75,7 +75,7 @@
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->person_responsible)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -115,7 +115,7 @@
                             @endif
                             @component('components.show-single-line')
                                 @slot('label') Department Head @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->chief)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -147,7 +147,7 @@
                                 @if($cpar->verified_by)
                                     @component('components.show-single-line')
                                         @slot('label') Name @endslot
-                                        @foreach($result as $employee)
+                                        @foreach($employees as $employee)
                                             @if($employee->id == $cpar->verified_by)
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
                                             @endif

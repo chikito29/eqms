@@ -14,12 +14,12 @@ class NAController extends Controller
     		'response_type' => env('NA_CLIENT_RESPONSE_TYPE', 'code'),
     		'scope' => ''
     	]);
-    	return redirect(env('NA_OAUTH_AUTHORIZE_URL', 'authorize-url') . $query);
+    	return redirect(env('NA_URL', 'authorize-url') .'/oauth/authorize?'. $query);
     }
 
     public function callback(Request $request) {
         $http = new Client();
-    	$tokenResponse = $http->post(env('NA_OAUTH_TOKEN_URL', 'token-url'), [
+    	$tokenResponse = $http->post(env('NA_URL', 'token-url') .'/oauth/token'  , [
     		'form_params' => [
     			'grant_type' => 'authorization_code',
     			'client_id' => env('NA_CLIENT_ID', 0),

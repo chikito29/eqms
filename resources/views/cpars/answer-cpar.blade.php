@@ -40,7 +40,7 @@
                                 <div class="panel-body form-group-separated">
                                     @component('components.show-single-line')
                                         @slot('label') Raised By @endslot
-                                        @foreach($result as $employee)
+                                        @foreach($employees as $employee)
                                             @if($employee->id == $cpar->raised_by)
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
                                             @endif
@@ -86,7 +86,7 @@
                                     </div>
                                     @component('components.show-single-line')
                                         @slot('label') Name @endslot
-                                        @foreach($result as $employee)
+                                        @foreach($employees as $employee)
                                             @if($employee->id == $cpar->person_reporting)
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
                                             @endif
@@ -95,7 +95,7 @@
                                     @endcomponent
                                     @component('components.show-single-line')
                                         @slot('label') Name @endslot
-                                        @foreach($result as $employee)
+                                        @foreach($employees as $employee)
                                             @if($employee->id == $cpar->person_responsible)
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
                                             @endif
@@ -135,7 +135,7 @@
                                     @endcomponent
                                     @component('components.show-single-line')
                                         @slot('label') Department Head @endslot
-                                        @foreach($result as $employee)
+                                        @foreach($employees as $employee)
                                             @if($employee->id == $cpar->chief)
                                                 {{ $employee->first_name }} {{ $employee->last_name }}
                                             @endif
