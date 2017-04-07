@@ -39,7 +39,7 @@
                                             <td>{{ $user->department }}</td>
                                             <td>
                                                 <form id="form{{ $user->id }}" class="indexForm">
-                                                    <button type="button" onclick="edit('{{ $user->id }}', '{{ $user->user_id }}')" class="btn btn-info"><span class="fa fa-edit"></span>Edit</button>
+                                                    <button type="button" onclick="edit('{{ $user->id }}', '{{ $user->user_id }}', '{{ $user->role }}')" class="btn btn-info"><span class="fa fa-edit"></span>Edit</button>
                                                     <button type="button" onclick="confirmDelete('{{ $user->id }}')" class="btn btn-danger"><span class="fa fa-trash"></span>Delete</button>
                                                 </form>
                                             </td>
@@ -163,7 +163,7 @@
             userForm = $('form[name="user-form"]');
         });
 
-        function edit(id, userId){
+        function edit(id, userId, role){
             userForm.attr({
                 action: '/settings/' + id,
                 method: 'post'
@@ -172,11 +172,10 @@
 
             //populate selects
             var selectRole = $('select[name="role"]');
-            var admin = '{{ $user->role }}';
-            if(admin == 'Admin'){
+            if(role == 'Admin'){
                 selectRole.prepend('<option value="Admin">Admin</option>');
             }
-            selectRole.val(id);
+            selectRole.val(role);
             selectRole.selectpicker('refresh');
             var selectEmployee = $('select[name="employee-id"]');
             selectEmployee.val(userId);
