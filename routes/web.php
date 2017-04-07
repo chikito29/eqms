@@ -5,7 +5,7 @@ Route::get('callback', 'NAController@callback');
 Route::get('login', 'NAController@login');
 
 // Resource Controllers
-Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit']]);
+Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit', 'update', 'show']]);
 Route::resource('revision-requests', 'RevisionRequestController');
 Route::resource('revision-requests', 'RevisionRequestController');
 Route::resource('documents', 'DocumentController');
@@ -42,4 +42,5 @@ Route::post('cpars/save-as-draft/{cpar}', 'CparController@saveAsDraft')->name('c
 Route::post('cpars/verify/{cpar}', 'CparController@postVerify')->name('cpars.verify.post');
 Route::post('cpars/review/{cpar}', 'CparController@saveReview')->name('review-cpar');
 Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
+Route::post('access-requests/{access_request}/grant', 'AccessRequestController@grant')->name('access-requests.grant');
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');

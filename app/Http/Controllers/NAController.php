@@ -10,21 +10,21 @@ class NAController extends Controller
     public function login() {
         $query = http_build_query([
     		'client_id' => env('NA_CLIENT_ID', 0),
-    		'redirect_uri' => env('NA_CLIENT_REDIRECT', 'http://localhost/callback'),
-    		'response_type' => env('NA_CLIENT_RESPONSE_TYPE', 'code'),
+    		'redirect_uri' => env('NA_CLIENT_REDIRECT'),
+    		'response_type' => env('NA_CLIENT_RESPONSE_TYPE'),
     		'scope' => ''
     	]);
-    	return redirect(env('NA_URL', 'authorize-url') .'/oauth/authorize?'. $query);
+    	return redirect(env('NA_URL') . '/oauth/authorize?' . $query);
     }
 
     public function callback(Request $request) {
         $http = new Client();
-    	$tokenResponse = $http->post(env('NA_URL', 'token-url') .'/oauth/token'  , [
+    	$tokenResponse = $http->post(env('NA_URL') . '/oauth/token', [
     		'form_params' => [
     			'grant_type' => 'authorization_code',
     			'client_id' => env('NA_CLIENT_ID', 0),
-    			'client_secret' => env('NA_CLIENT_SECRET', 'your-client-secret'),
-    			'redirect_uri' => env('NA_CLIENT_REDIRECT', 'http://localhost/callback'),
+    			'client_secret' => env('NA_CLIENT_SECRET'),
+    			'redirect_uri' => env('NA_CLIENT_REDIRECT'),
     			'code' => $request['code']
     		]
     	]);

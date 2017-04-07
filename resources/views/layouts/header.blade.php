@@ -25,10 +25,12 @@
                 @endforeach
             </ul>
         </li>
-        <li class="xn-openable">
+        <li class="xn-openable @yield('nav-view')">
             <a href="#">View</a>
             <ul>
-                <li><a href="#"><span class="fa fa-folder"></span> Revision Logs</a></li>
+                <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
+                <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-shield"></span> Access Requests</a></li>
+                <li><a href="#"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>
         </li>
         @if(request('user.role') != 'default')
@@ -36,9 +38,7 @@
             <a href="#">Actions</a>
             <ul>
                 <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Document</a></li>
-                <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-pencil"></span> Revision Request</a></li>
                 <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
-                <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-clock-o"></span> Access Requests</a></li>
             </ul>
         </li>
         <li class="xn-openable @yield('nav-audit-findings')">

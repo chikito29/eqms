@@ -2,7 +2,7 @@
 
 @section('page-title')Revision Request | eQMS @endsection
 
-@section('nav-actions') active @endsection
+@section('nav-view') active @endsection
 
 @section('page-content')
 <!-- PAGE CONTENT WRAPPER -->
