@@ -2,7 +2,7 @@
 
 @section('page-title')Access Requests | eQMS @endsection
 
-@section('nav-actions') active @endsection
+@section('nav-view') active @endsection
 
 @section('page-content')
 <div class="page-content-wrap">
