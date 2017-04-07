@@ -19,12 +19,13 @@ class NAAuthentication
     {
         session(['intended' => $request->url()]);
         if ($request->session()->has('na_access_token')) {
-            $http = new Client();
-            try{
-                $userDetailsResponse = $http->get(env('NA_OAUTH_USER_URL', 'your-user-url'), [
-            		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'], 'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+            $client = new Client();
+            try {
+                $userDetailsResponse = $client->get(env('NA_URL') . '/api/user', [
+            		'headers' => ['Authorization' => 'Bearer ' . session('na_access_token'), 'Accept' => 'application/json'],
+                    'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
             	]);
-            }catch (RequestException $e) {
+            } catch (RequestException $e) {
 
                 // Check if the API Authentication Fails
                 if ($e->getResponse()->getStatusCode() == 401) {
