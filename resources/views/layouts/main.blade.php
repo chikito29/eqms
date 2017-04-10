@@ -23,7 +23,13 @@
                 <!-- PAGE CONTENT WRAPPER -->
                 <div class="page-content-wrap">
 
-                    @include('layouts.header')
+                    @if (request('user.role') == 'super-admin')
+                        @include('headers.super-admin')
+                    @elseif (request('user.role') == 'admin')
+                        @include('headers.admin')
+                    @else
+                        @include('headers.default')
+                    @endif
 
                     @yield('page-content')
 

@@ -45,10 +45,12 @@ class NA extends Model
         try{
             $response = $client->get(env('NA_URL') . '/api/users' , [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+                'query' => [
+                    'client_id' => env('NA_CLIENT_ID', 0),
+                ]
             ]);
         }catch (RequestException $e) {}
-        return json_decode((string) $response->getBody(), true);
+        return json_decode((string) $response->getBody());
     }
 
     public static function user($id) {

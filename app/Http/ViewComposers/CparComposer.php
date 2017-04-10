@@ -41,11 +41,5 @@ class CparComposer {
 
         if ($count > 0) session(['answered' => $count]);
         else session()->forget('answered');
-
-        $view->with([
-            'sections' => Section::with('documents')->get()
-        ]);
     }
 }
-
-
