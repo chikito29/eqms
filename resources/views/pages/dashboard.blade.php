@@ -264,6 +264,7 @@
 @endsection
 
 @section('scripts')
+    <script type='text/javascript' src='/js/plugins/icheck/icheck.min.js'></script>
     <script type="text/javascript" src="{{ url('js/plugins/morris/raphael-min.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/morris/morris.min.js') }}"></script>
     <script type="text/javascript">
