@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client;
 
 class NA extends Model {
+    
     public static function positions() {
         $client = new Client();
         try {
@@ -16,7 +17,7 @@ class NA extends Model {
         } catch (RequestException $e) {
         }
 
-        return json_decode((string)$response->getBody(), TRUE);
+        return json_decode((string)$response->getBody());
     }
 
     public static function branches() {
@@ -29,7 +30,7 @@ class NA extends Model {
         } catch (RequestException $e) {
         }
 
-        return json_decode((string)$response->getBody(), TRUE);
+        return json_decode((string)$response->getBody());
     }
 
     public static function departments() {
@@ -42,7 +43,7 @@ class NA extends Model {
         } catch (RequestException $e) {
         }
 
-        return json_decode((string)$response->getBody(), TRUE);
+        return json_decode((string)$response->getBody());
     }
 
     public static function users($chief = NULL) {

@@ -64,11 +64,11 @@ class RevisionRequestController extends Controller
 
             if ($request->recommendation_status == 'For Disapproval') {
                 $revisionRequest->fill(['status' => 'Denied'])->save();
-                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                Mail::to(NA::user($revisionRequest->user_id)->email)
                     ->send(new DeniedRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
             } else {
                 $revisionRequest->fill(['status' => 'Processing'])->save();
-                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                Mail::to(NA::user($revisionRequest->user_id)->email)
                     ->send(new OnProcessRevisionRequest(RevisionRequest::with('reference_document', 'section_b')->find($id)));
             }
 
@@ -97,11 +97,11 @@ class RevisionRequestController extends Controller
 
             if ($request->approved) {
                 $revisionRequest->fill(['status' => 'Approved'])->save();
-                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                Mail::to(NA::user($revisionRequest->user_id)->email)
                     ->send(new ApprovedRevisionRequest(RevisionRequest::with('reference_document', 'section_b', 'section_c')->find($id)));
             } else {
                 $revisionRequest->fill(['status' => 'Denied'])->save();
-                Mail::to(NA::user($revisionRequest->user_id)['email'])
+                Mail::to(NA::user($revisionRequest->user_id)->email)
                     ->send(new DeniedRevisionRequest(RevisionRequest::with('reference_document', 'section_b', 'section_c')->find($id)));
             }
 
