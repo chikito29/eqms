@@ -21,6 +21,7 @@ class CreateEqmsUsersTable extends Migration
             $table->string('branch');
             $table->string('department');
             $table->string('fullname');
+            $table->string('email');
             $table->timestamps();
         });
     }

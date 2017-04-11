@@ -29,19 +29,12 @@ class CparComposer {
 
     /**
      * Bind data to the view.
+     * Bind data to the view.
      *
      * @param  View $view
      * @return void
      */
     public function compose(View $view) {
-        $count = 0;
-        foreach ($this->cpars->get() as $cpar) {
-            if ($cpar->cparClosed->status <> 1 && $cpar->cparAnswered->status == 1 && $cpar->cparReviewed->status == 0) $count++;
-        }
-
-        if ($count > 0) session(['answered' => $count]);
-        else session()->forget('answered');
-
         $view->with([
             'sections' => Section::with('documents')->get()
         ]);

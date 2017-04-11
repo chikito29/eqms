@@ -7,6 +7,7 @@ use App\Mail\CparCreated;
 use App\Mail\CparFinalized;
 use App\Mail\CparReviewed as ReviewedCpar;
 use App\Mail\CparAnswered as AnsweredCpar;
+use App\NA;
 use App\ResponsiblePerson;
 use App\Section;
 use App\Document;
@@ -29,21 +30,7 @@ class CparController extends Controller {
     }
 
     public function getEmail($id) {
-        $client = new Client();
-        $employees = $client->get(env('NA_URL') . '/api/users', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . session('na_access_token')
-            ]
-        ]);
-
-        return $employees = json_decode((string)$employees->getBody());
-
-        foreach ($employees as $employee) {
-            if ($employee->id == $id) {
-                return $employee->email;
-                break;
-            }
-        }
+        return $employee = NA::user($id)->email;
     }
 
     public function index() {
@@ -52,20 +39,22 @@ class CparController extends Controller {
 
     public function create() {
         $sections = Section::with('documents')->get();
+        $users = NA::users();
 
-        return view('cpars.create', ['sections' => $sections]);
+        return view('cpars.create', ['sections' => $sections, 'users' => $users]);
     }
 
     public function store() {
+        return request()->all();
         //TODO: extract this validation to the model
         $document = Document::find(request('reference'));
 
         $this->validate(request(), [
             'tags'               => 'required',
-            'other-source'       => 'required',
+            'other_source'       => 'required',
             'details'            => 'required',
-            'person-responsible' => 'required',
-            'proposed-date'      => 'required',
+            'person_responsible' => 'required',
+            'proposed_date'      => 'required',
             'chief'              => 'required',
         ]);
 
@@ -90,18 +79,18 @@ class CparController extends Controller {
         $code = str_random(24);
 
         $cpar = Cpar::create([
-            'raised_by'          => request('raised-by'),
+            'raised_by'          => request('raised_by'),
             'department'         => request('department'),
             'branch'             => request('branch'),
             'severity'           => $severity,
             'document_id'        => request('reference'),
             'tags'               => request('tags'),
             'source'             => request('source'),
-            'other_source'       => request('other-source'),
+            'other_source'       => request('other_source'),
             'details'            => request('details'),
-            'person_reporting'   => request('raised-by'),
-            'person_responsible' => request('person-responsible'),
-            'proposed_date'      => request('proposed-date'),
+            'person_reporting'   => request('raised_by'),
+            'person_responsible' => request('person_responsible'),
+            'proposed_date'      => request('proposed_date'),
             'chief'              => request('chief')
         ]);
 
@@ -136,11 +125,6 @@ class CparController extends Controller {
         $cpar->cpar_closed_id   = $cparClosed->cpar_id;
         $cpar->save();
 
-        DocumentVersion::create([
-            'cpar_id'  => $cpar->id,
-            'document' => $document->body
-        ]);
-
         ResponsiblePerson::create([
             'cpar_id' => $cpar->id,
             'user_id' => $cpar->person_responsible,
@@ -149,9 +133,9 @@ class CparController extends Controller {
 
         session()->flash('notify', ['message' => 'CPAR successfully created.', 'type' => 'success']);
 
-        Mail::to($this->getEmail($cpar->chief))->send(new CparCreated($cpar->id));
+        Mail::to($this->getEmail($cpar->chief))->cc()->send(new CparCreated($cpar->id));
 
-        return redirect('cpars');
+        return redirect()->route('cpars.index');
     }
 
     public function show(Cpar $cpar) {
@@ -171,7 +155,7 @@ class CparController extends Controller {
         $this->validate(request(), [
             'tags'               => 'required',
             'details'            => 'required',
-            'person-responsible' => 'required',
+            'person_responsible' => 'required',
         ]);
 
         if (request('severity') == 'Observation') {
@@ -184,16 +168,16 @@ class CparController extends Controller {
             $severity = '<span class="label label-danger">' . request('severity') . '</span>';
         }
 
-        $cpar->person_responsible = request('person-responsible');
-        $cpar->root_cause         = request('root-cause');
+        $cpar->person_responsible = request('person_responsible');
+        $cpar->root_cause         = request('root_cause');
         $cpar->severity           = $severity;
         $cpar->department         = request('department');
-        $cpar->proposed_date      = request('proposed-date');
+        $cpar->proposed_date      = request('proposed_date');
         $cpar->severity           = request('severity');
         $cpar->document_id        = request('reference');
         $cpar->tags               = request('tags');
         $cpar->source             = request('source');
-        $cpar->other_source       = request('other-source');
+        $cpar->other_source       = request('other_source');
         $cpar->details            = request('details');
         $cpar->chief              = request('chief');
         $cpar->save();
@@ -327,8 +311,8 @@ class CparController extends Controller {
     public function answer(Cpar $cpar) {
         $this->validate(request(), [
             'correction' => 'required',
-            'root-cause' => 'required',
-            'cp-action'  => 'required',
+            'root_cause' => 'required',
+            'cp_action'  => 'required',
         ]);
 
         if (request()->hasFile('attachments')) {
@@ -346,8 +330,8 @@ class CparController extends Controller {
         }
 
         $cpar->correction = request('correction');
-        $cpar->cp_action  = request('cp-action');
-        $cpar->root_cause = request('root-cause');
+        $cpar->cp_action  = request('cp_action');
+        $cpar->root_cause = request('root_cause');
         $cpar->save();
 
         $cparAnswered = CparAnswered::find($cpar->id);
@@ -383,20 +367,20 @@ class CparController extends Controller {
 
     public function saveReview(Cpar $cpar) {
         $this->validate(request(), [
-            'date-completed'    => 'required',
-            'cpar-acceptance'   => 'required',
-            'date-accepted'     => 'required',
-            'verified-by'       => 'required',
-            'verification-date' => 'required',
+            'date_completed'    => 'required',
+            'cpar_acceptance'   => 'required',
+            'date_accepted'     => 'required',
+            'verified_by'       => 'required',
+            'verification_date' => 'required',
             'result'            => 'required',
         ]);
 
         //save cpar
-        $cpar->cpar_acceptance = request('cpar-acceptance');
-        $cpar->date_verified   = request('verification-date');
-        $cpar->date_accepted   = request('date-accepted');
-        $cpar->date_completed  = request('date-completed');
-        $cpar->verified_by     = request('verified-by');
+        $cpar->cpar_acceptance = request('cpar_acceptance');
+        $cpar->date_verified   = request('verification_date');
+        $cpar->date_accepted   = request('date_accepted');
+        $cpar->date_completed  = request('date_completed');
+        $cpar->verified_by     = request('verified_by');
         $cpar->result          = request('result');
         $cpar->save();
 
@@ -455,12 +439,12 @@ class CparController extends Controller {
 
     public function saveAsDraft(Cpar $cpar) {
         //save cpar
-        $cpar->cpar_acceptance = request('cpar-acceptance');
-        $cpar->cpar_number     = request('cpar-number');
-        $cpar->date_verified   = request('verification-date');
-        $cpar->date_accepted   = request('date-accepted');
-        $cpar->date_completed  = request('date-completed');
-        $cpar->verified_by     = request('verified-by');
+        $cpar->cpar_acceptance = request('cpar_acceptance');
+        $cpar->cpar_number     = request('cpar_number');
+        $cpar->date_verified   = request('verification_date');
+        $cpar->date_accepted   = request('date_accepted');
+        $cpar->date_completed  = request('date_completed');
+        $cpar->verified_by     = request('verified_by');
         $cpar->result          = request('result');
         $cpar->save();
 
@@ -476,7 +460,7 @@ class CparController extends Controller {
             'cpar-number' => 'required|unique:cpars,cpar_number'
         ]);
 
-        $updateCpar->cpar_number = request('cpar-number');
+        $updateCpar->cpar_number = request('cpar_number');
         $updateCpar->save();
 
         $cparReviewed = CparReviewed::find($cpar);

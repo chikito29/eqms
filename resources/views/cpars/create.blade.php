@@ -17,7 +17,7 @@
                 <form enctype="multipart/form-data" class="form-horizontal" action="/cpars" method="POST" role="form">
                     {{ csrf_field() }}
                     {{--Hidden inputs--}}
-                    <input type="text" class="hidden" value="{{ request('user.id') }}" name="raised-by"/>
+                    <input type="text" class="hidden" value="{{ request('user.id') }}" name="raised_by"/>
                     <input type="text" class="hidden" name="chief" value="Temporary"/>
                     <input type="text" class="hidden" name="link" id="link"/>
                     {{--End Hidden inputs--}}
@@ -92,11 +92,11 @@
                                     <span class="help-block"></span>
                                 </div>
                             </div>
-                            <div class="form-group @if($errors->first('other-source')) has-error @endif">
+                            <div class="form-group @if($errors->first('other_source')) has-error @endif">
                                 <label class="col-md-3 col-xs-5 control-label">Others: (Please specify)</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="3" name="other-source">{{ old('other-source') }}</textarea>
-                                    @if($errors->first('other-source')) @component('layouts.error') {{ $errors->first('other-source') }} @endcomponent @endif
+                                    <textarea class="form-control" rows="3" name="other_source">{{ old('other_source') }}</textarea>
+                                    @if($errors->first('other_source')) @component('layouts.error') {{ $errors->first('other_source') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group @if($errors->first('details')) has-error @endif">
@@ -111,19 +111,19 @@
                                 {{ request('user.first_name'). ' ' .request('user.last_name') }}
                                 @slot('help') Person Reporting To Non-Conformity @endslot
                             @endcomponent
-                            <div class="form-group @if($errors->first('person-responsible')) has-error @endif">
+                            <div class="form-group @if($errors->first('person_responsible')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control select" name="person-responsible" id="person-responsible" data-live-search="true"></select>
-                                    @if($errors->first('person-responsible')) @component('layouts.error') {{ $errors->first('person-responsible') }} @endcomponent
+                                    <select class="form-control select" name="person_responsible" id="person-responsible" data-live-search="true"></select>
+                                    @if($errors->first('person_responsible')) @component('layouts.error') {{ $errors->first('person_responsible') }} @endcomponent
                                     @else <span class="help-block">Person Responsible For Taking The CPAR</span> @endif
                                 </div>
                             </div>
                             <div class="form-group @if($errors->first('proposed-date')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Proposed Corrective Action Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="proposed-date" value="{{ old('proposed-date') }}"/>
-                                    @if($errors->first('proposed-date')) @component('layouts.error') {{ $errors->first('proposed-date') }} @endcomponent @endif
+                                    <input type="text" class="form-control datepicker" name="proposed_date" value="{{ old('proposed_date') }}"/>
+                                    @if($errors->first('proposed_date')) @component('layouts.error') {{ $errors->first('proposed_date') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group">
@@ -237,9 +237,11 @@
             $('#person-responsible').empty().append(employeeOptions);
 
             chiefOptions = "";
-            @foreach($employees as $employee)
-                @if($employee->chief == 1)
-                    chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
+
+            @foreach($users as $user)
+                @if($user->chief == 1)
+                    chiefOptions+= '<option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>';
+                    @break
                 @endif
             @endforeach
         $('#chief').empty().append(chiefOptions);

@@ -13,6 +13,7 @@
                 {{--user's fullname--}}
                 <input type="text" class="hidden" name="fullname">
                 <input type="text" class="hidden" name="department">
+                <input type="text" class="hidden" name="email">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <p>Add new eQMS user.<br><strong>Note: eQMS can only have one admin at a time.</strong></p>
@@ -34,13 +35,13 @@
                         <div class="form-group">
                             <label class="col-md-3 col-xs-12 control-label">Employee Name</label>
                             <div class="col-md-6 col-xs-12">
-                                <select class="form-control select" data-live-search="true" name="employee-id" onchange="setBranch()">
+                                <select class="form-control select" data-live-search="true" name="employee_id" onchange="setBranch()">
                                     <option style="display: none;">Select Employee</option>
                                     @foreach($result as $employee)
                                         @if(request('user.id') == $employee->id)
                                             @continue
                                         @else
-                                            <option value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                            <option value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
                                         @endif
                                     @endforeach
                                 </select>
@@ -80,6 +81,7 @@
         $('#branch').html(option.attr('branch'));
         $('input:text[name="fullname"]').val(option.html());
         $('input:text[name="department"]').val(option.attr('department'));
+        $('input:text[name="email"]').val(option.attr('email'));
     })
 </script>
 

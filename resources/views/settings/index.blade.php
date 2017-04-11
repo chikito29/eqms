@@ -97,7 +97,7 @@
                                     <label class="col-md-3 col-xs-12 control-label">Add As</label>
                                     <div class="col-md-9 col-xs-12">
                                         <select class="form-control select" name="role">
-                                            @if(\App\EqmsUser::where('role', 'Admin')->get()->count() == 0 )
+                                            @if($eqmsUsers->where('role', 'Admin')->count() == 0)
                                                 <option value="Admin">Admin</option>
                                             @endif
                                             <option value="Document Controller">Document Controller</option>
@@ -111,7 +111,15 @@
                                         <select class="form-control select" data-live-search="true" name="employee-id">
                                             <option style="display: none;" value="default">Select Employee</option>
                                             @foreach($employees as $employee)
-                                                <option value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                @foreach($eqmsUsers->pluck('user_id') as $userId)
+                                                    @if($employee->id == $userId)
+                                                        <option style="display: none;" value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                        @break
+                                                    @else
+                                                        <option value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                        @break
+                                                    @endif
+                                                @endforeach
                                             @endforeach
                                         </select>
                                     </div>
@@ -124,18 +132,16 @@
                                         <input type="text" class="form-control hidden" name="branch"/>
                                     </div>
                                 </div>
-
                             </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
 @stop
 
 @section('scripts')
@@ -154,6 +160,14 @@
             $('input:text[name="fullname"]').val(option.html());
             $('input:text[name="department"]').val(option.attr('department'));
         })
+
+        var formAdd = $('#user-form').html();
+        var userForm = $('#user-form');
+
+        function add() {
+            userForm.html(formAdd);
+            $('#add-modal').modal('toggle');
+        }
     </script>
     {{--end adding logic--}}
 
@@ -162,29 +176,6 @@
         $(function() {
             userForm = $('form[name="user-form"]');
         });
-
-        function edit(id, userId, role){
-            userForm.attr({
-                action: '/settings/' + id,
-                method: 'post'
-            });
-            userForm.prepend('{{ csrf_field() }}', '{{ method_field('patch') }}');
-
-            //populate selects
-            var selectRole = $('select[name="role"]');
-            if(role == 'Admin'){
-                selectRole.prepend('<option value="Admin">Admin</option>');
-            }
-            selectRole.val(role);
-            selectRole.selectpicker('refresh');
-            var selectEmployee = $('select[name="employee-id"]');
-            selectEmployee.val(userId);
-            selectEmployee.selectpicker('refresh');
-            selectEmployee.trigger('change');
-
-            $('.modal-title').html('Edit Administrator');
-            $('#add-modal').modal('toggle');
-        }
     </script>
     {{--end edit section--}}
 
@@ -220,6 +211,29 @@
             $('select[name="employee-id"]').selectpicker('refresh');
             $('#branch').html("");
             $('.modal-title').html('Add Administrator');
+            $('#add-modal').modal('toggle');
+        }
+
+        function edit(id, userId, role){
+            userForm.attr({
+                action: '/settings/' + id,
+                method: 'post'
+            });
+            userForm.prepend('{{ csrf_field() }}', '{{ method_field('patch') }}');
+
+            //populate selects
+            var selectRole = $('select[name="role"]');
+            if(role == 'Admin'){
+                selectRole.prepend('<option value="Admin">Admin</option>');
+            }
+            selectRole.val(role);
+            selectRole.selectpicker('refresh');
+            var selectEmployee = $('select[name="employee-id"]');
+            selectEmployee.val(userId);
+            selectEmployee.selectpicker('refresh');
+            selectEmployee.trigger('change');
+
+            $('.modal-title').html('Edit Administrator');
             $('#add-modal').modal('toggle');
         }
     </script>

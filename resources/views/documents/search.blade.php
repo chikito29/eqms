@@ -23,7 +23,7 @@
                             					str_replace( request('search'), '<mark>' .request('search'). '</mark>', substr(strip_tags(strtolower($document->body)), strpos(strip_tags(strtolower($document->body)), request('search')), 400))
                             					), 0, 400) !!}	</p>
 
-                            <p class="sr-item-links"><a href="{{ URL::to('documents/' . $document->id) }}" target="_new">Open in new window</a> </p>
+                            <p class="sr-item-links"><a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" target="_new">Open in new window</a> </p>
                         </div>
                     @endforeach
 

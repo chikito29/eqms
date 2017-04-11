@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -18,8 +17,7 @@ class AppServiceProvider extends ServiceProvider {
      */
     public function boot() {
         View::composer(
-            'layouts.header', 'App\Http\ViewComposers\CparComposer@compose',
-            'layouts.cpar-answer-nav', 'App\Http\ViewComposers\CparComposer@compose'
+            'layouts.header', 'App\Http\ViewComposers\CparComposer@compose'
         );
 
         View::composer([

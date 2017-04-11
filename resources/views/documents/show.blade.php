@@ -25,7 +25,7 @@
 
                 <div class="x-block-content">
                     <div class="tocify-content document" style="padding:50px;">
-                        {!! $document->body !!}
+                        {!! $body !!}
                     </div>
                 </div>
 

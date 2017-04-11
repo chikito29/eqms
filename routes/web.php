@@ -7,7 +7,7 @@ Route::get('login', 'NAController@login');
 // Resource Controllers
 Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit', 'update', 'show']]);
 Route::resource('revision-requests', 'RevisionRequestController');
-Route::resource('revision-requests', 'RevisionRequestController');
+Route::resource('revision-logs', 'RevisionLogController');
 Route::resource('documents', 'DocumentController');
 Route::resource('sections', 'SectionController');
 Route::resource('settings', 'SettingController');
@@ -44,3 +44,7 @@ Route::post('cpars/review/{cpar}', 'CparController@saveReview')->name('review-cp
 Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
 Route::post('access-requests/{access_request}/grant', 'AccessRequestController@grant')->name('access-requests.grant');
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');
+
+Route::get('test/{id}', function($id){
+   return \App\NA::user($id)->email;
+});

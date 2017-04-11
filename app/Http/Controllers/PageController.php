@@ -9,7 +9,7 @@ use App\RevisionRequest;
 
 class PageController extends Controller {
     public function __construct() {
-        $this->middleware('na.authenticate')->except('pageNotFound');
+        $this->middleware('na.authenticate')->except(['pageNotFound', 'answerCparLoginPost']);
     }
 
     public function home() {

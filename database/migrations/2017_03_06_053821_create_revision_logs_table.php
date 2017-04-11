@@ -15,6 +15,8 @@ class CreateRevisionLogsTable extends Migration
     {
         Schema::create('revision_logs', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('document_id');
+            $table->date('date');
             $table->string('revision_number');
             $table->string('manual_reference');
             $table->string('description');

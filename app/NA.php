@@ -5,61 +5,73 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client;
 
-class NA extends Model
-{
+class NA extends Model {
     public static function positions() {
         $client = new Client();
-        try{
+        try {
             $response = $client->get(env('NA_URL') . '/api/positions', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+                'query'   => ['client_id' => env('NA_CLIENT_ID', 0)]
             ]);
-        }catch (RequestException $e) {}
-        return json_decode((string) $response->getBody(), true);
+        } catch (RequestException $e) {
+        }
+
+        return json_decode((string)$response->getBody(), TRUE);
     }
 
     public static function branches() {
         $client = new Client();
-        try{
+        try {
             $response = $client->get(env('NA_URL') . '/api/branches', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+                'query'   => ['client_id' => env('NA_CLIENT_ID', 0)]
             ]);
-        }catch (RequestException $e) {}
-        return json_decode((string) $response->getBody(), true);
+        } catch (RequestException $e) {
+        }
+
+        return json_decode((string)$response->getBody(), TRUE);
     }
 
     public static function departments() {
         $client = new Client();
-        try{
+        try {
             $response = $client->get(env('NA_URL') . '/api/departments', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+                'query'   => ['client_id' => env('NA_CLIENT_ID', 0)]
             ]);
-        }catch (RequestException $e) {}
-        return json_decode((string) $response->getBody(), true);
+        } catch (RequestException $e) {
+        }
+
+        return json_decode((string)$response->getBody(), TRUE);
     }
 
-    public static function users() {
+    public static function users($chief = NULL) {
         $client = new Client();
-        try{
-            $response = $client->get(env('NA_URL') . '/api/users' , [
+        try {
+            $response = $client->get(env('NA_URL') . '/api/users', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+                'query'   => [
+                    'client_id' => env('NA_CLIENT_ID', 0),
+                    'chief'     => $chief
+                ]
             ]);
-        }catch (RequestException $e) {}
-        return json_decode((string) $response->getBody(), true);
+        } catch (RequestException $e) {
+        }
+
+        return json_decode((string)$response->getBody());
     }
 
     public static function user($id) {
         $client = new Client();
-        try{
+        try {
             $response = $client->get(env('NA_URL') . '/api/users/' . $id, [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => ['client_id' => env('NA_CLIENT_ID', 0)]
+                'query'   => ['client_id' => env('NA_CLIENT_ID', 0)]
             ]);
-        }catch (RequestException $e) {}
-        return json_decode((string) $response->getBody(), true);
+        } catch (RequestException $e) {
+        }
+
+        return json_decode((string)$response->getBody());
     }
 
     // Duration is the number of HOURS the user is allowed to access eQMS
@@ -68,16 +80,17 @@ class NA extends Model
         try {
             $response = $client->get(env('NA_URL') . '/api/temporary-access/grant', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => [
+                'query'   => [
                     'client_id' => env('NA_CLIENT_ID', 0),
-                    'user_id' => $id,
-                    'hour' => $duration
+                    'user_id'   => $id,
+                    'hour'      => $duration
                 ]
             ]);
         } catch (RequestException $e) {
-            return false;
+            return FALSE;
         }
-        return true;
+
+        return TRUE;
     }
 
     public static function revokeTemporaryAccess($id) {
@@ -85,15 +98,15 @@ class NA extends Model
         try {
             $response = $client->get(env('NA_URL') . '/api/temporary-access/revoke', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
-                'query' => [
-                    'client_id' => env('NA_CLIENT_ID', 0),
-                    'user_id' => $id
+                'query'   => [
+                    'client_id' => env('NA_CLIENT_ID', 0)
                 ]
             ]);
         } catch (RequestException $e) {
-            return false;
+            return FALSE;
         }
-        return true;
+
+        return TRUE;
     }
 
 }

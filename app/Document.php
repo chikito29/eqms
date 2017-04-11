@@ -14,4 +14,8 @@ class Document extends Model
     public function section() {
 	    return $this->belongsTo('App\Section');
 	}
+
+	public function revisionLogs() {
+        return $this->hasMany(RevisionLog::class);
+    }
 }

@@ -35,7 +35,7 @@
                                         <tr>
                                             <td>{{ $cpar->cpar_number }}</td>
                                             <td>
-                                                @foreach($result as $employee)
+                                                @foreach($employees as $employee)
                                                     @if($employee->id == $cpar->raised_by)
                                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                                     @endif
@@ -60,10 +60,11 @@
                                                 @endif
                                                 @component('components.button-state', compact('cpar')) @slot('title') close @endslot close @endcomponent
                                             </td>
-                                            <form method="GET" id="{{ $cpar->id }}"><input type="text" class="form-control hidden" name="cpar-number" required></form>
-                                            <form method="get" action="{{ route('cpars.close', $cpar->id) }}" accept-charset="UTF-8" id="{{ $cpar->id }}">
+                                            <form method="get" id="edit{{ $cpar->id }}"><input type="text" class="form-control hidden" name="cpar_number"></form>
+                                            <form method="get" action="{{ route('cpars.close', $cpar->id) }}" accept-charset="UTF-8" id="close{{ $cpar->id }}">
                                                 {{ csrf_field() }}
                                                 {{ method_field('delete') }}
+                                                <input type="text" class="form-control hidden" name="cpar_id">
                                             </form>
                                         </tr>
                                     @endforeach
@@ -129,8 +130,9 @@
 
         function closeCpar(id){
             var cparId = id;
+            $('#modal-yes').attr('onclick', '$("'+ "#close" + cparId + '").submit();');
+            $('input:text[name="cpar_id"]').val(id);
             $('#confirm-modal').modal('toggle');
-            $('#modal-yes').attr('onclick', '$("'+ "#" + cparId + '").submit();');
         }
 
         function checkButton(date, url){

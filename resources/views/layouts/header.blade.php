@@ -30,7 +30,7 @@
             <ul>
                 <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
                 <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-shield"></span> Access Requests</a></li>
-                <li><a href="#"><span class="fa fa-files-o"></span> Revision Logs</a></li>
+                <li><a href="{{ route('revision-logs.index') }}"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>
         </li>
         @if(request('user.role') != 'default')
@@ -54,7 +54,6 @@
                     <a href="#">Settings</a>
                     <ul>
                         <li><a href="{{ route('settings.index') }}"><span class="fa fa-users"></span> Administrators</a></li>
-                        <li><a href="{{ route('settings.create') }}"><span class="fa fa-plus"></span> Add User</a></li>
                     </ul>
                 </li>
             @endif

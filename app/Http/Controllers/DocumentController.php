@@ -15,47 +15,58 @@ class DocumentController extends Controller {
 
     public function index() {
         $documents = Document::where('body', 'like', '%' . request('search') . '%')->get();
+
         return view('documents.search', compact('documents'));
     }
 
     public function create() {
         $sections = Section::all();
+
         return view('documents.create', compact('sections'));
     }
 
     public function store(Request $request) {
         Validator::make($request->all(), ['section-id' => 'required', 'title' => 'required|max:255', 'body' => 'required'])->validate();
-        $document = new Document();
-		$document->section_id = request('section-id');
-		$document->title = request('title');
-		$document->body = request('body');
-		$document->created_by = request('user.first_name');
-		$document->save();
+        $document             = new Document();
+        $document->section_id = request('section-id');
+        $document->title      = request('title');
+        $document->body       = request('body');
+        $document->created_by = request('user.first_name');
+        $document->save();
         session()->flash('notify', ['message' => 'Posting \'' . $document->title . '\' successfull!', 'type' => 'success']);
+
         return redirect()->route('documents.show', $document->id);
     }
 
     public function show($id) {
         $document = Document::find($id);
-        return view('documents.show', compact('document'));
+        if (request('search')) {
+            $body = str_ireplace(request('search'), '<mark class="label label-warning">' . ucfirst(request('search')) . '</mark>', $document->body);
+        } else {
+            $body = $document->body;
+        }
+
+        return view('documents.show', compact('document', 'body'));
     }
 
     public function edit($id) {
         $document = Document::find($id);
         $sections = Section::all();
+
         return view('documents.edit', compact('document', 'sections'));
     }
 
     public function update(Request $request, $id) {
         $request->all();
         Validator::make($request->all(), ['section-id' => 'required', 'title' => 'required|max:255', 'body' => 'required'])->validate();
-        $document = Document::find($id);
-        $document->title = $request->input('title');
+        $document             = Document::find($id);
+        $document->title      = $request->input('title');
         $document->section_id = $request->input('section-id');
-        $document->body = $request->input('body');
+        $document->body       = $request->input('body');
         $document->updated_by = $request->user['id'];
         $document->save();
         session()->flash('notify', ['message' => $document->title . ' has been updated.', 'type' => 'success']);
+
         return redirect()->route('documents.show', $document->id);
     }
 
@@ -63,6 +74,7 @@ class DocumentController extends Controller {
         $document = Document::find($id);
         $document->delete();
         session()->flash('notify', ['message' => $document->title . ' has been removed!', 'type' => 'success']);
+
         return redirect('home');
     }
 }
