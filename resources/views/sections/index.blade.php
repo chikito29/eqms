@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('page-title')
-    Sections | eQMS
+    Procedures | eQMS
 @endsection
 
 @section('nav-actions') active @endsection
@@ -14,14 +14,14 @@
                     <div class="col-md-12">
                         <div class="x-block">
                             <div class="x-block-head">
-                                <h3>New Section</h3>
+                                <h3>New Procedures</h3>
                             </div>
                             <div class="x-block-content x-todo" style="margin-bottom: 20px;">
                                 <div class="x-todo-header">
                                     <form class="form-horizontal" action="{{ route('sections.store') }}" method="POST">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label class="col-md-2 col-xs-12 control-label">Section Name</label>
+                                            <label class="col-md-2 col-xs-12 control-label">Procedure Name</label>
                                             <div class="col-md-6 col-xs-12">
                                                 <input type="text" class="form-control" name="name" style="margin-top:7px;"/>
                                                 @if ($errors->has('name'))
@@ -79,10 +79,10 @@
     <div class="message-box animated fadeIn" data-sound="alert" id="mb-remove-section">
         <div class="mb-container">
             <div class="mb-middle">
-                <div class="mb-title"><span class="fa fa-times"></span> Remove <strong>Section</strong> ?</div>
+                <div class="mb-title"><span class="fa fa-times"></span> Remove <strong>Procedure</strong> ?</div>
                 <div class="mb-content">
-                    <p>Are you sure you want to remove this Section?</p>
-                    <p>Documents belong to this section will not be available</p>
+                    <p>Are you sure you want to remove this Procedure?</p>
+                    <p>Documents belong to this procedure will not be available</p>
                     <p>Press Yes if you sure.</p>
                 </div>
                 <div class="mb-footer">
