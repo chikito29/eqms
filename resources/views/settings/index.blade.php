@@ -111,17 +111,23 @@
                                     <div class="col-md-9 col-xs-12">
                                         <select class="form-control select" data-live-search="true" name="employee_id">
                                             <option style="display: none;" value="default">Select Employee</option>
-                                            @foreach($employees as $employee)
-                                                @foreach($eqmsUsers->pluck('user_id') as $userId)
-                                                    @if($employee->id == $userId)
-                                                        <option style="display: none;" value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
-                                                        @break
-                                                    @else
-                                                        <option value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
-                                                        @break
-                                                    @endif
+                                            @if($eqmsUsers->count() == 0)
+                                                @foreach($employees as $employee)
+                                                    <option value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
                                                 @endforeach
-                                            @endforeach
+                                            @else
+                                                @foreach($employees as $employee)
+                                                    @foreach($eqmsUsers->pluck('user_id') as $userId)
+                                                        @if($employee->id == $userId)
+                                                            <option style="display: none;" value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                            @break
+                                                        @else
+                                                            <option value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                            @break
+                                                        @endif
+                                                    @endforeach
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                 </div>

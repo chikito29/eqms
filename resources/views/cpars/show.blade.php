@@ -28,7 +28,7 @@
                             @endif
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->raised_by)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -49,9 +49,15 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $documentBody !!}</textarea>
+                                    <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $body !!}</textarea>
                                 </div>
                             </div>
+                            @component('components.show-single-line')
+                                @slot('label') Tags @endslot
+                                @foreach(explode(',', $cpar->tags) as $tag)
+                                    <span class="btn btn-default"><span class="fa fa-tag"> {{ $tag }}</span></span>
+                                @endforeach
+                            @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Source Of Non-Comformity @endslot
                                     {{ $cpar->source }}

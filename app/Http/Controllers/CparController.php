@@ -142,7 +142,15 @@ class CparController extends Controller {
     public function show(Cpar $cpar) {
         $sections = Section::with('documents')->get();
 
-        return view('cpars.show', compact('cpar', 'sections', 'documentBody'));
+        $document = Document::find($cpar->document_id);
+        $body = $document->body;
+        $tags = explode(',', $cpar->tags);
+
+        foreach ($tags as $tag){
+            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+        }
+
+        return view('cpars.show', compact('cpar', 'sections', 'body'));
     }
 
     public function edit(Cpar $cpar) {
@@ -179,7 +187,7 @@ class CparController extends Controller {
         $cpar->source             = request('source');
         $cpar->other_source       = request('other_source');
         $cpar->details            = request('details');
-        $cpar->chief              = request('chief');
+        $cpar->chief              = request('department_head');
         $cpar->save();
 
         session()->flash('notify', ['message' => 'CPAR successfully updated.', 'type' => 'success']);
@@ -211,10 +219,11 @@ class CparController extends Controller {
         }
 
         $document = Document::find($cpar->document_id);
-        return $cpar->tags;
+        $body = $document->body;
+        $tags = explode(',', $cpar->tags);
 
-        foreach ($cpar->tags as $tag){
-            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $document->body);
+        foreach ($tags as $tag){
+            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
         $dueDate = $this->holidays($cpar, 2017);

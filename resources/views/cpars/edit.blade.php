@@ -114,7 +114,7 @@
                             <div class="form-group @if($errors->first('person-responsible')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control select" name="person-responsible" id="person-responsible" data-live-search="true"></select>
+                                    <select class="form-control select" name="person_responsible" id="person-responsible" data-live-search="true"></select>
                                     @if($errors->first('person-responsible')) @component('layouts.error') {{ $errors->first('person-responsible') }} @endcomponent
                                     @else <span class="help-block">Person Responsible For Taking The CPAR</span> @endif
                                 </div>
@@ -122,14 +122,14 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Proposed Corrective Action Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="proposed-date" value="{{ $cpar->proposed_date }}"/>
+                                    <input type="text" class="form-control datepicker" name="proposed_date" value="{{ $cpar->proposed_date }}"/>
                                     <span class="help-block"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Department Head</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control select" name="department-head" id="department-head" data-live-search="true"></select>
+                                    <select class="form-control select" name="department_head" id="department-head" data-live-search="true"></select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -234,8 +234,8 @@
 
             chiefOptions = "";
             @foreach($employees as $employee)
-                @if($employee->department_head == 1)
-                    chiefOptions+= '<option value="{{ $employee->id }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>';
+                @if($employee->chief == 1)
+                    chiefOptions+= '<option value="{{ $employee->id }}" @if($cpar->chief == $employee->id) selected @endif>{{ $employee->first_name }} {{ $employee->last_name }}</option>';
                 @endif
             @endforeach
             $('#department-head').empty().append(chiefOptions);

@@ -12,8 +12,7 @@
 
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="{{ url('css/theme-default.css') }}"/>
-
-<!-- EOF CSS INCLUDE -->
+    <!-- EOF CSS INCLUDE -->
 </head>
 <body class="x-dashboard">
 <!-- START PAGE CONTAINER -->
@@ -64,6 +63,12 @@
                                             <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $body !!}</textarea>
                                         </div>
                                     </div>
+                                    @component('components.show-single-line')
+                                        @slot('label') Tags @endslot
+                                        @foreach(explode(',', $cpar->tags) as $tag)
+                                                <span class="btn btn-default"><span class="fa fa-tag"> {{ $tag }}</span></span>
+                                        @endforeach
+                                    @endcomponent
                                     @component('components.show-single-line')
                                         @slot('label') Source Of Non-Comformity @endslot
                                         {{ $cpar->source }}
