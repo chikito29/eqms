@@ -4,11 +4,7 @@
     </div>
     <ul>
         <li class="@yield('nav-home')">
-            @if(request('user.role') == 'default')
-                <a href="{{ route('pages.home') }}">Home</a>
-            @else
-                <a href="{{ route('pages.dashboard') }}">Dashboard</a>
-            @endif
+            <a href="{{ route('pages.dashboard') }}">Dashboard</a>
         </li>
         <li class="xn-openable @yield('nav-document')">
             <a href="#">Procedures</a>
@@ -25,20 +21,18 @@
                 @endforeach
             </ul>
         </li>
-        <li class="xn-openable">
+        <li class="xn-openable @yield('nav-view')">
             <a href="#">View</a>
             <ul>
-                <li><a href="#"><span class="fa fa-folder"></span> Revision Logs</a></li>
+                <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
+                <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-shield"></span> Access Requests</a></li>
+                <li><a href="#"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>
         </li>
-        @if(request('user.role') != 'default')
         <li class="xn-openable @yield('nav-actions')">
             <a href="#">Actions</a>
             <ul>
                 <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Document</a></li>
-                <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-pencil"></span> Revision Request</a></li>
-                <li><a href="{{ route('sections.index') }}"><span class="fa fa-folder-o"></span> Manage Sections</a></li>
-                <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-clock-o"></span> Access Requests</a></li>
             </ul>
         </li>
         <li class="xn-openable @yield('nav-audit-findings')">
@@ -49,7 +43,13 @@
                 @if(\App\Cpar::all()) <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li> @endif
             </ul>
         </li>
-        @endif
+        <li class="xn-openable @yield('nav-settings')">
+            <a href="#">Settings</a>
+            <ul>
+                <li><a href="{{ route('settings.index') }}"><span class="fa fa-users"></span> Administrators</a></li>
+                <li><a href="{{ route('sections.index') }}"><span class="fa fa-book"></span> Procedures</a></li>
+            </ul>
+        </li>
     </ul>
 
     <div class="x-features">
@@ -66,7 +66,6 @@
             <div class="x-features-profile">
                 <img src="{{ url('img/no-profile-image.png') }}">
                 <ul class="xn-drop-left animated zoomIn">
-                    <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
                     <li><a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
                 </ul>
             </div>

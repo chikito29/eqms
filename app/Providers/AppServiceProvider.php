@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use App\Section;
+use App\NA;
 
 class AppServiceProvider extends ServiceProvider {
     protected $result;
@@ -16,9 +18,11 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     public function boot() {
-        View::composer(
-            'layouts.header', 'App\Http\ViewComposers\CparComposer@compose'
-        );
+
+        // Passing sections collection on header load
+        View::composer(['headers.admin', 'headers.super-admin', 'headers.default'], function($view) {
+            $view->with(['sections' => Section::with('documents')->get()]);
+        });
 
         View::composer([
             'cpars.index', 'cpars.show', 'cpars.edit', 'cpars.answer-cpar',
@@ -26,19 +30,8 @@ class AppServiceProvider extends ServiceProvider {
             'emails.cpars.cpar-created', 'emails.cpars.cpar-answered', 'emails.cpars.cpar-finalized',
             'emails.cpars.cpar-reviewed', 'emails.cpars.expired', 'settings.create', 'settings.index'
         ], function ($view) {
-            $client = new Client();
-            $employees = $client->get(env('NA_URL') . '/api/users', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . session('na_access_token')
-                ]
-            ]);
-            $employees = json_decode((string)$employees->getBody());
-
-            $view->withEmployees($employees);
+            $view->withEmployees(NA::users());
         });
-
-
-
 
         Schema::defaultStringLength(191);
     }
