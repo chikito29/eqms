@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cpar;
+use App\EqmsUser;
 use App\Mail\CparCreated;
 use App\Mail\CparFinalized;
 use App\Mail\CparReviewed as ReviewedCpar;
@@ -17,16 +18,17 @@ use App\CparClosed;
 use App\CparAnswered;
 use App\CparReviewed;
 use App\DocumentVersion;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
 
 class CparController extends Controller {
     protected $cpars;
+    protected $eqmsUsers;
     protected $businessDays;
 
-    function __construct(Cpar $cpars) {
-        $this->cpars = $cpars->latest()->get();
-        $this->middleware('na.authenticate');
+    function __construct(Cpar $cpars, EqmsUser $eqmsUsers) {
+        $this->eqmsUsers = $eqmsUsers->get();
+        $this->cpars     = $cpars->latest()->get();
+        $this->middleware('na.authenticate')->except(['answerCpar', 'answer']);
     }
 
     public function getEmail($id) {
@@ -39,13 +41,12 @@ class CparController extends Controller {
 
     public function create() {
         $sections = Section::with('documents')->get();
-        $users = NA::users();
+        $users    = NA::users();
 
         return view('cpars.create', ['sections' => $sections, 'users' => $users]);
     }
 
     public function store() {
-        return request()->all();
         //TODO: extract this validation to the model
         $document = Document::find(request('reference'));
 
@@ -133,14 +134,13 @@ class CparController extends Controller {
 
         session()->flash('notify', ['message' => 'CPAR successfully created.', 'type' => 'success']);
 
-        Mail::to($this->getEmail($cpar->chief))->cc()->send(new CparCreated($cpar->id));
+        Mail::to($this->getEmail($cpar->chief))->send(new CparCreated($cpar->id));
 
         return redirect()->route('cpars.index');
     }
 
     public function show(Cpar $cpar) {
-        $sections     = Section::with('documents')->get();
-        $documentBody = $this->getDocument($cpar);
+        $sections = Section::with('documents')->get();
 
         return view('cpars.show', compact('cpar', 'sections', 'documentBody'));
     }
@@ -210,22 +210,17 @@ class CparController extends Controller {
             return redirect("cpar-on-review/$cpar->id")->withErrors(['code' => 'CPAR is already on review.']);
         }
 
-        $documentBody = $this->getDocument($cpar);
-        $dueDate      = $this->holidays($cpar, 2017);
-        $due          = $this->businessDays;
+        $document = Document::find($cpar->document_id);
+        return $cpar->tags;
 
-        return view('cpars.answer-cpar', compact('cpar', 'documentBody', 'dueDate', 'due'));
-    }
-
-    public function getDocument($cpar) {
-        $documentTags = explode(',', $cpar->tags);
-        $documentBody = $cpar->documentVersion->document;
-        $stripDoc     = str_replace('&nbsp;', '', $documentBody);
-        foreach ($documentTags as $tag) {
-            $stripDoc = str_replace(preg_replace('!\s+!', ' ', $tag), '<span style="background-color: yellow;">' . $tag . '</span>', $stripDoc);
+        foreach ($cpar->tags as $tag){
+            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $document->body);
         }
 
-        return $stripDoc;
+        $dueDate = $this->holidays($cpar, 2017);
+        $due     = $this->businessDays;
+
+        return view('cpars.answer-cpar', compact('cpar', 'body', 'dueDate', 'due'));
     }
 
     public function holidays($cpar, $year) {
@@ -359,8 +354,7 @@ class CparController extends Controller {
     }
 
     public function review(Cpar $cpar) {
-        $sections     = Section::with('documents')->get();
-        $documentBody = $this->getDocument($cpar);
+        $sections = Section::with('documents')->get();
 
         return view('cpars.review', compact('cpar', 'sections', 'documentBody'));
     }
@@ -406,8 +400,7 @@ class CparController extends Controller {
     public function verify(Cpar $cpar) {
         if ($cpar->chief == request('user.id')) {
             if ($cpar->cparClosed->status <> 1) {
-                $sections     = Section::with('documents')->get();
-                $documentBody = $this->getDocument($cpar);
+                $sections = Section::with('documents')->get();
 
                 $cparReviewed            = CparReviewed::find($cpar->id);
                 $cparReviewed->on_review = 1;

@@ -88,6 +88,7 @@
                         {{--user's fullname--}}
                         <input type="text" class="hidden" name="fullname">
                         <input type="text" class="hidden" name="department">
+                        <input type="text" class="hidden" name="email">
                         <div class="panel-body">
                             <p>Add new eQMS user.<br><strong>Note: eQMS can only have one admin at a time.</strong></p>
                         </div>
@@ -108,15 +109,15 @@
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-12 control-label">Employee Name</label>
                                     <div class="col-md-9 col-xs-12">
-                                        <select class="form-control select" data-live-search="true" name="employee-id">
+                                        <select class="form-control select" data-live-search="true" name="employee_id">
                                             <option style="display: none;" value="default">Select Employee</option>
                                             @foreach($employees as $employee)
                                                 @foreach($eqmsUsers->pluck('user_id') as $userId)
                                                     @if($employee->id == $userId)
-                                                        <option style="display: none;" value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                        <option style="display: none;" value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
                                                         @break
                                                     @else
-                                                        <option value="{{ $employee->id }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
+                                                        <option value="{{ $employee->id }}" email="{{ $employee->email }}" branch="{{ $employee->branch }}" department="{{ $employee->department }}">{{ $employee->first_name }} {{ $employee->last_name }}</option>
                                                         @break
                                                     @endif
                                                 @endforeach
@@ -159,25 +160,18 @@
             $('#branch').html(option.attr('branch'));
             $('input:text[name="fullname"]').val(option.html());
             $('input:text[name="department"]').val(option.attr('department'));
+            $('input:text[name="email"]').val(option.attr('email'));
         })
 
         var formAdd = $('#user-form').html();
-        var userForm = $('#user-form');
 
         function add() {
+            var userForm = $('#user-form');
             userForm.html(formAdd);
             $('#add-modal').modal('toggle');
         }
     </script>
     {{--end adding logic--}}
-
-    {{--edit section--}}
-    <script>
-        $(function() {
-            userForm = $('form[name="user-form"]');
-        });
-    </script>
-    {{--end edit section--}}
 
     {{--edit and delete--}}
     <script>
@@ -207,19 +201,19 @@
         }
 
         function addUser(){
-            $('select[name="employee-id"]').val('default');
-            $('select[name="employee-id"]').selectpicker('refresh');
+            $('select[name="employee_id"]').val('default');
+            $('select[name="employee_id"]').selectpicker('refresh');
             $('#branch').html("");
             $('.modal-title').html('Add Administrator');
             $('#add-modal').modal('toggle');
         }
 
         function edit(id, userId, role){
-            userForm.attr({
+            $('#user-form').attr({
                 action: '/settings/' + id,
                 method: 'post'
             });
-            userForm.prepend('{{ csrf_field() }}', '{{ method_field('patch') }}');
+            $('#user-form').prepend('{{ csrf_field() }}', '{{ method_field('patch') }}');
 
             //populate selects
             var selectRole = $('select[name="role"]');
@@ -228,7 +222,7 @@
             }
             selectRole.val(role);
             selectRole.selectpicker('refresh');
-            var selectEmployee = $('select[name="employee-id"]');
+            var selectEmployee = $('select[name="employee_id"]');
             selectEmployee.val(userId);
             selectEmployee.selectpicker('refresh');
             selectEmployee.trigger('change');

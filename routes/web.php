@@ -1,6 +1,8 @@
 <?php
 
 // NAControllers
+use App\Mail\CparCreated;
+
 Route::get('callback', 'NAController@callback');
 Route::get('login', 'NAController@login');
 
@@ -45,6 +47,18 @@ Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
 Route::post('access-requests/{access_request}/grant', 'AccessRequestController@grant')->name('access-requests.grant');
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');
 
-Route::get('test/{id}', function($id){
-   return \App\NA::user($id)->email;
+//development routes
+Route::get('reset-cpars', function(){
+    \App\Cpar::truncate();
+    \App\CparAnswered::truncate();
+    \App\CparReviewed::truncate();
+    \App\CparClosed::truncate();
+    \App\ResponsiblePerson::truncate();
+
+    return redirect('cpars');
+});
+Route::get('test', function(){
+    Mail::to('samplw@gmail.com', 'name2')
+        ->bcc('sample@gmail.com', 'name')
+        ->send(new CparCreated(1));
 });

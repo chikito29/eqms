@@ -41,7 +41,7 @@ class DocumentController extends Controller {
     public function show($id) {
         $document = Document::find($id);
         if (request('search')) {
-            $body = str_ireplace(request('search'), '<mark class="label label-warning">' . ucfirst(request('search')) . '</mark>', $document->body);
+            $body = str_ireplace(request('search'), '<mark style="background-color: yellow;">' . ucfirst(request('search')) . '</mark>', $document->body);
         } else {
             $body = $document->body;
         }

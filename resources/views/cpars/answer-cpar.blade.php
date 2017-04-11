@@ -61,7 +61,7 @@
                                     <div class="form-group">
                                         <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                         <div class="col-md-9 col-xs-12">
-                                            <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $documentBody !!}</textarea>
+                                            <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $body !!}</textarea>
                                         </div>
                                     </div>
                                     @component('components.show-single-line')

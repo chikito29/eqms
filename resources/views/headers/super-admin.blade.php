@@ -48,6 +48,7 @@
             <ul>
                 <li><a href="{{ route('settings.index') }}"><span class="fa fa-users"></span> Administrators</a></li>
                 <li><a href="{{ route('sections.index') }}"><span class="fa fa-book"></span> Procedures</a></li>
+                <li><a href="/reset-cpars"><span class="fa fa-refresh"></span> Reset CPARS</a></li>
             </ul>
         </li>
     </ul>

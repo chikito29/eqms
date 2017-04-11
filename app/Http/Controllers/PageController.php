@@ -9,7 +9,7 @@ use App\RevisionRequest;
 
 class PageController extends Controller {
     public function __construct() {
-        $this->middleware('na.authenticate')->except(['pageNotFound', 'answerCparLoginPost']);
+        $this->middleware('na.authenticate')->except(['pageNotFound', 'answerCparLoginPost', 'answerCparLogin']);
     }
 
     public function home() {
@@ -53,16 +53,10 @@ class PageController extends Controller {
         if ($cpar->responsiblePerson == null) {
             return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'It seems like you already responded to this cpar, if you want an access to it, please contact QMR.']);
         }
-        elseif ($cpar->person_responsible <> request('user.id')) {
-            return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'Accessing CPAR not intended to you is prohibited.']);
-        }
-        elseif ($cpar->person_responsible == request('user.id')) {
-            if (request('code') <> $cpar->responsiblePerson->code) {
-                return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'Accessing CPAR not intended to you is prohibited.']);
-            }
-            else {
-                return redirect("answer-cpar/$cpar->id");
-            }
+        elseif (request('code') <> $cpar->responsiblePerson->code) {
+            return redirect("answer-cpar/login/$cpar->id")->withErrors(['code' => 'Code provided do not exist']);
+        } else {
+            return redirect("answer-cpar/$cpar->id");
         }
     }
 
