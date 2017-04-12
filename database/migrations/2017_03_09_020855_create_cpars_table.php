@@ -40,7 +40,7 @@ class CreateCparsTable extends Migration
             $table->date('date_confirmed')->nullable();
             $table->date('date_accepted')->nullable();
             $table->date('date_verified')->nullable();
-            $table->integer('verified_by')->nullable();
+            $table->string('verified_by')->nullable();
             $table->longText('result')->nullable();
             $table->timestamps();
             $table->softDeletes();

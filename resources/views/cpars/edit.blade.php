@@ -93,7 +93,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Others: (Please specify)</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <textarea class="form-control" rows="3" name="other-source">{{ $cpar->other_source }}</textarea>
+                                    <textarea class="form-control" rows="3" name="other_source">{{ $cpar->other_source }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -5,13 +5,10 @@
 @endsection
 
 @section('verify-button')
-<div class="panel-footer">
     <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="finalizeCpar()" id="print-cpar">Finalize CPAR</button>
-</div>
 @stop
 
 @section('modals')
-    <a class="btn btn-primary hidden" data-toggle="modal" href="#verify-cpar" id="verify-cpar-modal-trigger">Trigger modal</a>
     <div class="modal fade" id="verify-cpar">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -35,11 +32,12 @@
 @section('scripts')
     <script>
         function finalizeCpar() {
-            $('#verify-cpar-modal-trigger').click();
+            $('#verify-cpar').modal('toggle');
         }
 
         function submitFinalizedCpar() {
             $('#form-cpar').attr('action', '{{ route('cpars.finalize', $cpar->id) }}');
+            $('#form-cpar').removeAttr('attr');
             $('#form-cpar').submit();
         }
     </script>

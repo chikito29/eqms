@@ -10,10 +10,6 @@ class Cpar extends Model {
 
     protected $guarded = [''];
 
-    public function dueDate() {
-        return $this->hasOne(DueDate::class);
-    }
-
     public function attachments() {
         return $this->hasMany(Attachment::class);
     }

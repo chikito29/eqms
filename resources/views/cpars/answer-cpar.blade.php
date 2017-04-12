@@ -66,7 +66,7 @@
                                     @component('components.show-single-line')
                                         @slot('label') Tags @endslot
                                         @foreach(explode(',', $cpar->tags) as $tag)
-                                                <span class="btn btn-default"><span class="fa fa-tag"> {{ $tag }}</span></span>
+                                                <span style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span>
                                         @endforeach
                                     @endcomponent
                                     @component('components.show-single-line')
@@ -119,8 +119,8 @@
                                     <div class="form-group  @if($errors->first('root-cause')) has-error @endif">
                                         <label class="col-md-3 col-xs-5 control-label">Root Cause Analysis</label>
                                         <div class="col-md-9 col-xs-7">
-                                            <textarea class="form-control" rows="10" name="root-cause" required>{{  old('root-cause') }}{{ $cpar->root_cause }}</textarea>
-                                            @if($errors->first('root-cause')) <span class="text text-danger">{{ $errors->first('root-cause') }}</span>
+                                            <textarea class="form-control" rows="10" name="root_cause" required>{{  old('root_cause') }}{{ $cpar->root_cause }}</textarea>
+                                            @if($errors->first('root_cause')) <span class="text text-danger">{{ $errors->first('root_cause') }}</span>
                                             @else <span class="help-block">What Failed In The System To Allow This Non-Conformance To Occur?</span>
                                             @endif
                                         </div>
@@ -128,8 +128,8 @@
                                     <div class="form-group @if($errors->first('cp-action')) has-error @endif">
                                         <label class="col-md-3 col-xs-5 control-label">Corrective/Preventive Action</label>
                                         <div class="col-md-9 col-xs-7">
-                                            <textarea class="form-control" rows="10" name="cp-action" required>{{ old('cp-action') }}{{ $cpar->cp_action }}</textarea>
-                                            @if($errors->first('cp-action')) <span class="text text-danger">{{ $errors->first('cp-action') }}</span>
+                                            <textarea class="form-control" rows="10" name="cp_action" required>{{ old('cp_action') }}{{ $cpar->cp_action }}</textarea>
+                                            @if($errors->first('cp_action')) <span class="text text-danger">{{ $errors->first('cp_action') }}</span>
                                             @else <span class="help-block">Specific Details Of Corrective Action Taken To Prevent Recurrence/Occurrence</span>
                                             @endif
                                         </div>
@@ -146,7 +146,7 @@
                                             @endif
                                         @endforeach
                                     @endcomponent
-                                    <div class="form-group @if(request('user.first_name') <> $cpar->person_responsible) hidden @endif">
+                                    <div class="form-group">
                                         <label class="col-md-3 col-xs-5 control-label">Attachment</label>
                                         <div class="col-md-9 col-xs-7">
                                             <input type="file" multiple id="file-simple" name="attachments[]"/>

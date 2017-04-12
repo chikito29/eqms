@@ -8,7 +8,9 @@
 
 @section('page-content')
     <div class="page-content-wrap">
-
+        @if(session('attention'))
+            @include('layouts.attention')
+        @endif
         <div class="page-title">
             <h2><span class="fa fa-pencil"></span> CORRECTIVE AND PREVENTIVE ACTION REPORT FORM</h2>
         </div>
@@ -16,7 +18,7 @@
         <div class="row">
             <div class="col-md-9">
 
-                <form class="form-horizontal" role="form" id="form-cpar" action="/action-summary/{{ $cpar->id }}" method="GET">
+                <form class="form-horizontal" role="form" id="form-cpar" action="/action-summary/{{ $cpar->id }}" method="GET" target="_blank">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
@@ -55,7 +57,7 @@
                             @component('components.show-single-line')
                                 @slot('label') Tags @endslot
                                 @foreach(explode(',', $cpar->tags) as $tag)
-                                    <span class="btn btn-default"><span class="fa fa-tag"> {{ $tag }}</span></span>
+                                    <span style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span>
                                 @endforeach
                             @endcomponent
                             @component('components.show-single-line')
@@ -187,16 +189,16 @@
                                         </li>
                                     </div>
                                 </div>
-                                @yield('verify-button')
-                            @endif
-                            @if(request('user.type') == 'admin')
                                 <div class="panel-footer">
-                                    <button type="button" class="btn btn-primary btn-rounded pull-right" onclick="printCpar()">Print CPAR</button>
+                                    @yield('verify-button')
+                                    @if(request('user.type') == 'admin')
+                                        <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
+                                    @endif
                                 </div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
 
             </div>
             <div class="col-md-3">
@@ -259,6 +261,8 @@
     <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
     <script type="text/javascript">
         $(function(){
+            var formBody = $('#form-cpar').html();
+
             $("#file-simple").fileinput({
                 showUpload: false,
                 showCaption: true,
@@ -277,6 +281,7 @@
         });
 
         function printCpar() {
+            $('#form-cpar').html(formBody);
             $('#form-cpar').submit();
         }
     </script>

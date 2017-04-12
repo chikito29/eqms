@@ -47,23 +47,22 @@
         </li>
     </ul>
 
-    <div class="x-features">
-        <div class="x-features-nav-open">
-            <span class="fa fa-bars"></span>
-        </div>
-        <div class="pull-right">
-            <div class="x-features-search @if(request('search')) active @endif">
-                <form class="form-horizontal" action="{{ route('documents.index') }}" method="get">
-                    <input type="text" name="search" value="@if(request('search')){{ request('search') }}@endif">
-                    <input type="submit">
-                </form>
+    <ul class="pull-right">
+        <li class="xn-openable" style="margin: 0 -25px;">
+            <a href="#"><strong>{{ request('user.first_name') }} {{ request('user.last_name') }}</strong></a>
+            <ul>
+                <li><a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
+            </ul>
+        </li>
+        <div class="x-features pull-right">
+            <div>
+                <div class="x-features-search @if(request('search')) active @endif">
+                    <form class="form-horizontal" action="{{ route('documents.index') }}" method="get">
+                        <input type="text" name="search" value="@if(request('search')){{ request('search') }}@endif">
+                        <input type="submit">
+                    </form>
+                </div>
             </div>
-            <div class="x-features-profile">
-                <img src="{{ url('img/no-profile-image.png') }}">
-                <ul class="xn-drop-left animated zoomIn">
-                    <li><a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
-                </ul>
-            </div>
         </div>
-    </div>
+    </ul>
 </div>

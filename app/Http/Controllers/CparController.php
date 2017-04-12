@@ -150,6 +150,10 @@ class CparController extends Controller {
             $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
+        session()->flash('attention', ['body' => '<strong class="text text-danger">Disclaimer</strong>: If the <strong>Document Reference</strong> does not show any <strong>highlighting</strong>, this means that the target
+                                      <strong>document section</strong> has already been <strong>revised</strong> or <strong>deleted</strong>.
+                                      Please refer to <strong>Tags</strong> instead.', 'color' => 'info']);
+
         return view('cpars.show', compact('cpar', 'sections', 'body'));
     }
 
@@ -365,7 +369,15 @@ class CparController extends Controller {
     public function review(Cpar $cpar) {
         $sections = Section::with('documents')->get();
 
-        return view('cpars.review', compact('cpar', 'sections', 'documentBody'));
+        $document = Document::find($cpar->document_id);
+        $body = $document->body;
+        $tags = explode(',', $cpar->tags);
+
+        foreach ($tags as $tag){
+            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+        }
+
+        return view('cpars.review', compact('cpar', 'sections', 'body'));
     }
 
     public function saveReview(Cpar $cpar) {
@@ -387,6 +399,8 @@ class CparController extends Controller {
         $cpar->result          = request('result');
         $cpar->save();
 
+        $user = NA::user($cpar->person_responsible);
+
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
@@ -396,12 +410,12 @@ class CparController extends Controller {
                 $attachment->file_name   = 'attachment_' . ($key + 1);
                 $attachment->file_path   = 'storage/' . $path;
                 $attachment->section     = 'answer';
-                $attachment->uploaded_by = request('user.first_name') . ' ' . request('user.last_name');
+                $attachment->uploaded_by = $user->first_name .' '. $user->last_name;
                 $attachment->save();
             }
         }
 
-        session()->pull('attention', ['body' => '<strong>To finalize the CPAR that has been reviewed</strong>, the Document Controller needs to add its <strong>CPAR Number</strong>', 'color' => 'info']);
+        session()->flash('attention', ['body' => '<strong>To finalize the CPAR that has been reviewed</strong>, the Document Controller needs to add its <strong>CPAR Number</strong>', 'color' => 'info']);
 
         return redirect()->route('cpars.index');
     }
@@ -415,14 +429,22 @@ class CparController extends Controller {
                 $cparReviewed->on_review = 1;
                 $cparReviewed->save();
 
-                return view('cpars.verify', compact('cpar', 'sections', 'documentBody'));
+                $document = Document::find($cpar->document_id);
+                $body = $document->body;
+                $tags = explode(',', $cpar->tags);
+
+                foreach ($tags as $tag){
+                    $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+                }
+
+                return view('cpars.verify', compact('cpar', 'sections', 'body'));
             }
             else {
                 return route('cpars.cpar-on-review', $cpar->id);
             }
         }
         else {
-            return view('errors.page-not-found');
+            return view('errors.404');
         }
     }
 

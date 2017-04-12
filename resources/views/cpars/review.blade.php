@@ -1,4 +1,4 @@
-@extends('layouts.super-admin')
+@extends('layouts.main')
 
 @section('page-title') Create CPAR | eQMS @stop
 
@@ -41,11 +41,15 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $documentBody !!}</textarea>
-                                    <input type="text" class="hidden" name="reference" value="{{ $cpar->document_id }}">
-                                    <input type="text" class="hidden" name="tags" value="{{ $cpar->tags }}">
+                                    <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $body !!}</textarea>
                                 </div>
                             </div>
+                            @component('components.show-single-line')
+                                @slot('label') Tags @endslot
+                                @foreach(explode(',', $cpar->tags) as $tag)
+                                    <span style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span>
+                                @endforeach
+                            @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Source Of Non-Conformity @endslot
                                 {{ $cpar->source }}
@@ -62,7 +66,7 @@
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->person_reporting)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -71,7 +75,7 @@
                             @endcomponent
                             @component('components.show-single-line')
                                 @slot('label') Name @endslot
-                                @foreach($result as $employee)
+                                @foreach($employees as $employee)
                                     @if($employee->id == $cpar->person_responsible)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
@@ -99,14 +103,14 @@
                             <div class="form-group @if($errors->first('date-completed')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Corrective/Preventive Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="date-completed" value="{{ old('date-completed') }}"/>
-                                    @if($errors->first('date-completed')) @component('layouts.error') {{ $errors->first('date_completed') }} @endcomponent @endif
+                                    <input type="text" class="form-control datepicker" name="date_completed" value="{{ old('date_completed') }}"/>
+                                    @if($errors->first('date_completed')) @component('layouts.error') {{ $errors->first('date_completed') }} @endcomponent @endif
                                 </div>
                             </div>
                             @component('components.show-single-line')
                                 @slot('label') Department Head @endslot
                                 @foreach($employees as $employee)
-                                    @if($employee->id == $cpar->department_head)
+                                    @if($employee->id == $cpar->chief)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
                                 @endforeach
@@ -123,8 +127,8 @@
                             <div class="form-group @if($errors->first('cpar-acceptance')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Acceptance Of CPAR</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <textarea class="form-control" rows="4" name="cpar-acceptance">{{ $cpar->cpar_acceptance }}</textarea>
-                                    @if($errors->first('cpar-acceptance')) @component('layouts.error') {{ $errors->first('cpar-acceptance') }} @endcomponent
+                                    <textarea class="form-control" rows="4" name="cpar_acceptance">{{ $cpar->cpar_acceptance }}</textarea>
+                                    @if($errors->first('cpar_acceptance')) @component('layouts.error') {{ $errors->first('cpar_acceptance') }} @endcomponent
                                     @else <span class="help-block">Comments If Any</span>
                                     @endif
                                 </div>
@@ -132,21 +136,21 @@
                             <div class="form-group @if($errors->first('date-accepted')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Date CPAR Accepted</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="date-accepted" value="{{ $cpar->date_accepted }}">
-                                    @if($errors->first('date-accepted')) @component('layouts.error') {{ $errors->first('date-accepted') }} @endcomponent @endif
+                                    <input type="text" class="form-control datepicker" name="date_accepted" value="{{ $cpar->date_accepted }}">
+                                    @if($errors->first('date_accepted')) @component('layouts.error') {{ $errors->first('date_accepted') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group @if($errors->first('verified-by')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Name</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control" name="verified-by"
+                                    <input type="text" class="form-control" name="verified_by"
                                        @foreach($employees as $employee)
                                            @if($employee->id == $cpar->verified_by)
                                                 value="{{ $employee->first_name }} {{ $employee->last_name }}"
                                            @endif
                                        @endforeach
                                     />
-                                    @if($errors->first('verified-by')) @component('layouts.error') {{ $errors->first('verified-by') }} @endcomponent
+                                    @if($errors->first('verified_by')) @component('layouts.error') {{ $errors->first('verified_by') }} @endcomponent
                                     @else<span class="help-block">QMR / AUDITOR / CEO</span>
                                     @endif
                                 </div>
@@ -154,8 +158,8 @@
                             <div class="form-group @if($errors->first('verification-date')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Verification Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="verification-date" value="{{ $cpar->date_verified }}"/>
-                                    @if($errors->first('verification-date')) @component('layouts.error') {{ $errors->first('verification-date') }} @endcomponent @endif
+                                    <input type="text" class="form-control datepicker" name="verification_date" value="{{ $cpar->date_verified }}"/>
+                                    @if($errors->first('verification_date')) @component('layouts.error') {{ $errors->first('verification_date') }} @endcomponent @endif
                                 </div>
                             </div>
                             <div class="form-group @if($errors->first('result')) has-error @endif">
@@ -177,7 +181,9 @@
                                 <div class="col-md-9 col-xs-7">
                                     <li class="list-unstyled">
                                         @if($cpar->attachments->count() > 0)
-                                            <ul>$cpar->attachments->file_name</ul>
+                                            @foreach($cpar->attachments as $attachment)
+                                                <ul>{{  $attachment->file_name }} added by {{ $attachment->uploaded_by }}</ul>
+                                            @endforeach
                                         @else
                                             No Attachment Available From Person Responsible
                                         @endif
