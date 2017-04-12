@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('page-title')Access Requests | eQMS @endsection
+@section('page-title') Access Requests | eQMS @endsection
 
 @section('nav-view') active @endsection
 
@@ -16,8 +16,8 @@
                     <div class="x-block">
                         <div class="x-block-head">
                             <h3>Access Requests</h3>
-
                         </div>
+
                         <div class="x-block-content">
                             <table class="table x-table">
                                 <tr>

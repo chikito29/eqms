@@ -1,10 +1,10 @@
 @extends('layouts.main')
 
 @section('page-title')
-    Home | Cpar Index
+    CPAR Forms | Cpar Index
 @endsection
 
-@section('nav-audit-findings') active @endsection
+@section('nav-view') active @endsection
 
 @section('page-content')
     <div class="page-content-wrap" style="margin-top: -25px;">
