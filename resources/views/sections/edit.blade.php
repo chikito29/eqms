@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('page-title')
-    Home | eQMS
+    Procedures | eQMS
 @endsection
 
 @section('nav-actions') active @endsection
@@ -9,12 +9,12 @@
 @section('page-content')
     <div class="page-content-wrap" style="margin-top: -25px;">
         <div class="x-content" >
-            <div class="x-content-inner" style="margin-top:-20px;">
+            <div class="x-content-inner" style="margin-top:-20px; height: 90vh;">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="x-block">
                             <div class="x-block-head">
-                                <h3>Edit Section</h3>
+                                <h3>Edit Procedure</h3>
                             </div>
                             <div class="x-block-content x-todo" style="margin-bottom: 20px;">
                                 <div class="x-todo-header">
@@ -22,7 +22,7 @@
                                         {{ csrf_field() }}
                                         {{ method_field('put') }}
                                         <div class="form-group">
-                                            <label class="col-md-2 col-xs-12 control-label">Old Section Name</label>
+                                            <label class="col-md-2 col-xs-12 control-label">Old Procedure Name</label>
                                             <div class="col-md-6 col-xs-12">
                                                 <input type="text" class="form-control" style="margin-top:7px;" value="{{ $section->name }}" disabled/>
                                             </div>

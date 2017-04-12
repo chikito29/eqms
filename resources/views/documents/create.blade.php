@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('page-title')New Document |eQMS @endsection
+@section('page-title')New Document | eQMS @endsection
 
 @section('nav-actions') active @endsection
 

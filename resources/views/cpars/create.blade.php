@@ -2,7 +2,7 @@
 
 @section('page-title') Create CPAR | eQMS @stop
 
-@section('nav-audit-findings') active @stop
+@section('nav-actions') active @stop
 
 @section('page-content')
     <div class="page-content-wrap">

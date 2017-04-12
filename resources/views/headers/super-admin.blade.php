@@ -26,6 +26,7 @@
             <ul>
                 <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
                 <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-shield"></span> Access Requests</a></li>
+                <li><a href="{{ route('cpars.index') }}"><span class="fa fa-envelope-o"></span> CPAR Forms</a></li>
                 <li><a href="#"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>
         </li>
@@ -33,14 +34,7 @@
             <a href="#">Actions</a>
             <ul>
                 <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Document</a></li>
-            </ul>
-        </li>
-        <li class="xn-openable @yield('nav-audit-findings')">
-            <a href="#">Audit Findings</a>
-            <ul>
-                <li><a href="{{ route('documents.create') }}"><span class="fa fa-file-o"></span> New Audit Findings</a></li>
-                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil"></span> Create CPAR</a></li>
-                @if(\App\Cpar::all()) <li><a href="{{ route('cpars.index') }}"><span class="fa fa-folder-o"></span> Manage CPAR</a></li> @endif
+                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil-square-o"></span> Create CPAR</a></li>
             </ul>
         </li>
         <li class="xn-openable @yield('nav-settings')">

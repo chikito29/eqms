@@ -1,58 +1,64 @@
 @extends('layouts.main')
 
-@section('page-title')
-    Settings
-@endsection
+@section('page-title') Administrators | eQMS @endsection
+
+@section('nav-settings') active @stop
 
 @section('page-content')
-    <div class="page-content-wrap" style="margin-top: -25px;">
+    <div class="page-content-wrap">
         @if(session('attention'))
             @include('layouts.attention')
         @endif
+
         <div class="x-content" >
-            <div class="x-content-inner" style="margin-top:-20px;">
+            <div class="x-content-inner" style="margin-top:-45px; height: 90vh;">
+
                 <div class="row">
                     <div class="col-md-12">
+
                         <div class="x-block">
                             <div class="x-block-head">
                                 <h3>Administrators List</h3>
                                 <button class="btn btn-success pull-right" onclick="addUser()"><span class="fa fa-user"></span>ADD</button>
                             </div>
-                            <table class="table table-striped" id="table-application">
-                                <thead>
-                                <tr>
-                                    <th>Added By</th>
-                                    <th>Full Name</th>
-                                    <th>Role</th>
-                                    <th>Branch</th>
-                                    <th>Department</th>
-                                    <th with="120">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($eqmsUsers as $user)
-                                        <tr>
-                                            <td>{{ $user->added_by }}</td>
-                                            <td>{{ $user->fullname }}</td>
-                                            <td>{{ $user->role }}</td>
-                                            <td>{{ $user->branch }}</td>
-                                            <td>{{ $user->department }}</td>
-                                            <td>
-                                                <form id="form{{ $user->id }}" class="indexForm">
-                                                    <button type="button" onclick="edit('{{ $user->id }}', '{{ $user->user_id }}', '{{ $user->role }}')" class="btn btn-info"><span class="fa fa-edit"></span>Edit</button>
-                                                    <button type="button" onclick="confirmDelete('{{ $user->id }}')" class="btn btn-danger"><span class="fa fa-trash"></span>Delete</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+
+                            <div class="x-block-content">
+                                <table class="table x-table" id="table-application">
+                                    <thead>
+                                    <tr>
+                                        <th>Added By</th>
+                                        <th>Full Name</th>
+                                        <th>Role</th>
+                                        <th>Branch</th>
+                                        <th>Department</th>
+                                        <th with="120">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($eqmsUsers as $user)
+                                            <tr>
+                                                <td>{{ $user->added_by }}</td>
+                                                <td>{{ $user->fullname }}</td>
+                                                <td>{{ $user->role }}</td>
+                                                <td>{{ $user->branch }}</td>
+                                                <td>{{ $user->department }}</td>
+                                                <td>
+                                                    <form id="form{{ $user->id }}" class="indexForm">
+                                                        <button type="button" onclick="edit('{{ $user->id }}', '{{ $user->user_id }}', '{{ $user->role }}')" class="btn btn-info"><span class="fa fa-edit"></span>Edit</button>
+                                                        <button type="button" onclick="confirmDelete('{{ $user->id }}')" class="btn btn-danger"><span class="fa fa-trash"></span>Delete</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 @endsection
 

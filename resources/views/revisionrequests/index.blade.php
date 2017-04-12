@@ -16,15 +16,6 @@
                     <div class="x-block">
                         <div class="x-block-head">
                             <h3>REVISION REQUESTS</h3>
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">NEW   <span class="caret" style="margin-left: 20px;"></span></a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Draft</a></li>
-                                        <li><a href="{{ route('revision-requests.create') }}">Revision Request</a></li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                         <div class="x-block-content">
                             <table class="table x-table">
