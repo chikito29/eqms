@@ -15,7 +15,7 @@
         <span class="fa fa-times"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Create CPAR Number')
-    <button id="create-cpar-number-btn" class="btn btn-info btn-rounded btn-sm @if($user->role <> 'Document Controller' && $cpar->branch <> 'Makati') hidden @endif" onclick="openCparNumberModal({{ $cpar->id }})">
+    <button id="create-cpar-number-btn" class="btn btn-info btn-rounded btn-sm @if((\App\HelperClasses\User::isAdmin(request('user.id')) || \App\HelperClasses\User::isDocumentController(request('user.id'))) && $cpar->cparReviewed->status == 1) @else hidden @endif" onclick="openCparNumberModal({{ $cpar->id }})">
         <span class="fa fa-plus"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Print Reviewed CPAR')

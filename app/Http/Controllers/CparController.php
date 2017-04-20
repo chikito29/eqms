@@ -145,11 +145,11 @@ class CparController extends Controller {
         $sections = Section::with('documents')->get();
 
         $document = Document::find($cpar->document_id);
-        $body = $document->body;
+        $body = str_replace('&nbsp;', ' ', $document->body);
         $tags = explode(',', $cpar->tags);
 
         foreach ($tags as $tag){
-            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+            $body = str_ireplace(str_replace('&nbsp;', ' ', $tag), '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
         session()->flash('attention', ['body' => '<strong class="text text-danger">Disclaimer</strong>: If the <strong>Document Reference</strong> does not show any <strong>highlighting</strong>, this means that the target
@@ -415,7 +415,7 @@ class CparController extends Controller {
         $user = NA::user($cpar->person_responsible);
 
         $cparReviewed = CparReviewed::where('cpar_id', $cpar->id)->first();
-        $cparReviewed->status;
+        $cparReviewed->status = 1;
         $cparReviewed->save();
 
         if (request()->hasFile('attachments')) {
