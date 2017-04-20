@@ -16,7 +16,7 @@
                         <div class="x-block">
                             <div class="x-block-head">
                                 <h3>Revision Logs</h3>
-                                <button class="btn btn-success pull-right" onclick="add()"><span class="fa fa-user"></span>ADD</button>
+                                <button class="btn btn-success pull-right @if(App\HelperClasses\User::isDocumentController(request('user.id'))) @else hidden @endif" onclick="add()"><span class="fa fa-user"></span>ADD</button>
                             </div>
                             <table class="table table-striped" id="table-application">
                                 <thead>
@@ -26,7 +26,7 @@
                                     <th>Brief Description of revision</th>
                                     <th>Revision no.</th>
                                     <th>Approved By</th>
-                                    <th with="120">Actions</th>
+                                    <th class="@if(App\HelperClasses\User::isDocumentController(request('user.id'))) @else hidden @endif" with="120">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -37,7 +37,7 @@
                                             <td>{{ $log->description }}</td>
                                             <td>{{ $log->revision_number }}</td>
                                             <td>{{ $log->approved_by }}</td>
-                                            <td>
+                                            <td class="@if(App\HelperClasses\User::isDocumentController(request('user.id'))) @else hidden @endif">
                                                 <form class="form">
                                                     <button class="btn btn-info" type="button" onclick="confirmation('{{ $log->id }}', 'update', '{{ $log }}')"><span class="fa fa-edit"></span> Edit</button>
                                                     <button class="btn btn-danger" type="button" onclick="confirmation('{{ $log->id }}', 'delete')"><span class="fa fa-trash"></span> Delete</button>
