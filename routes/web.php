@@ -28,7 +28,7 @@ Route::get('home', 'PageController@home')->name('pages.home')->middleware('na.au
 Route::get('page-not-found', 'PageController@pageNotFound')->name('page-not-found');
 Route::get('answer-cpar/{cpar}', 'CparController@answerCpar')->name('answer-cpar');
 Route::get('cpar-closed', 'CparController@cparClosed')->name('cpars.cpar-closed');
-Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('on-review');
+Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('cpars.on-review');
 Route::get('cpars/verify/{cpar}', 'CparController@verify')->name('cpars.verify');
 Route::get('cpars/review/{cpar}', 'CparController@review')->name('cpars.review');
 Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
@@ -48,17 +48,10 @@ Route::post('access-requests/{access_request}/grant', 'AccessRequestController@g
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');
 
 //development routes
-Route::get('reset-cpars', function(){
-    \App\Cpar::truncate();
-    \App\CparAnswered::truncate();
-    \App\CparReviewed::truncate();
-    \App\CparClosed::truncate();
-    \App\ResponsiblePerson::truncate();
-
-    return redirect('cpars');
-});
-Route::get('test', function(){
-    Mail::to('samplw@gmail.com', 'name2')
-        ->bcc('sample@gmail.com', 'name')
-        ->send(new CparCreated(1));
+Route::group(['middleware' => 'na.authenticate'], function() {
+    Route::get('reset-cpars', 'DevRoutes@resetCpars');
+    Route::get('eqms-users/{role?}', 'DevRoutes@showEqmsUsers');
+    Route::get('na-users/{chief?}/{id?}', 'DevRoutes@showNAUsers');
+    Route::get('show-cpars/{id?}', 'DevRoutes@showCpars');
+    Route::get('test', 'DevRoutes@test');
 });

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client;
 
 class NA extends Model {
-    
+
     public static function positions() {
         $client = new Client();
         try {
@@ -46,14 +46,15 @@ class NA extends Model {
         return json_decode((string)$response->getBody());
     }
 
-    public static function users($chief = NULL) {
+    public static function users($chief = NULL, $id = NULL) {
         $client = new Client();
         try {
             $response = $client->get(env('NA_URL') . '/api/users', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
                 'query'   => [
                     'client_id' => env('NA_CLIENT_ID', 0),
-                    'chief'     => $chief
+                    'chief'     => $chief,
+                    'id'        => $id
                 ]
             ]);
         } catch (RequestException $e) {

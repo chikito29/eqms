@@ -4,14 +4,14 @@
 The CPAR that has been issued to
 @foreach($employees as $employee)
     @if($employee->id == $cpar->person_responsible)
-        {{ $employee->first_name }} {{ $employee->last_name }}
+        <strong>{{ $employee->first_name }} {{ $employee->last_name }}</strong>
     @endif
 @endforeach
 {{ $cpar->created_at->diffForHumans() }} has been answered
 and finalized and now ready to be reviewed.
 
 @component('mail::button', ['url' => route('cpars.review', $cpar->id)])
-    Click here to review cpar
+    Click here to start reviewing cpar
 @endcomponent
 
 Thanks,

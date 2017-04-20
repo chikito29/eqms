@@ -10,6 +10,8 @@
     <div class="page-content-wrap" style="margin-top: -25px;">
         @if(session('attention'))
             @include('layouts.attention')
+        @elseif($errors <> null)
+            @include('errors.error-message')
         @endif
         <div class="x-content" >
             <div class="x-content-inner" style="margin-top:-20px; height: 90vh;">
@@ -49,11 +51,11 @@
                                             <td>
                                                 @component('components.button-state', compact('cpar')) @slot('title') view @endslot view @endcomponent
                                                 @component('components.button-state', compact('cpar')) @slot('title') edit @endslot edit @endcomponent
-                                                @if($cpar->cparReviewed->status == 1 && $cpar->cpar_number == null)
-                                                    @component('components.button-state', compact('cpar')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
+                                                @if($cpar->cpar_number == null && $user->count() > 0)
+                                                    @component('components.button-state', compact('cpar', 'user')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
                                                 @elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)
                                                     @component('components.button-state', compact('cpar')) @slot('title') Print Reviewed CPAR @endslot Print Reviewed CPAR @endcomponent
-                                                @elseif($cpar->cparReviewed->status == 0 && $cpar->cpar_number == null)
+                                                @elseif($cpar->cparReviewed->status == 0 && $cpar->cpar_number == null && $cpar->cparReviewed->status <> 1)
                                                     @component('components.button-state', compact('cpar')) @slot('title') Print Closed CPAR @endslot Print Closed CPAR @endcomponent
                                                 @else
                                                     @component('components.button-state', compact('cpar')) @slot('title') review @endslot review @endcomponent
@@ -153,9 +155,9 @@
         }
 
         function saveCparNumber() {
-            $('#' + cparId).attr('action', '/cpars/create-cpar-number/' + cparId);
-            $('input:text[name="cpar-number"]').val($('input:text[name="cpar-number-input"]').val());
-            $('#' + cparId).submit();
+            $('#edit' + cparId).attr('action', '/cpars/create-cpar-number/' + cparId);
+            $('input:text[name="cpar_number"]').val($('input:text[name="cpar-number-input"]').val());
+            $('#edit' + cparId).submit();
         }
     </script>
 @endsection

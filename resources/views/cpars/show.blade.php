@@ -178,15 +178,23 @@
                                 <div class="form-group">
                                     <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                                     <div class="col-md-9 col-xs-7">
-                                        <li class="list-unstyled">
+										<div class="gallery" id="links">
                                             @if($cpar->attachments->count() > 0)
                                                 @foreach($cpar->attachments as $attachment)
-                                                    <ul>{{  $attachment->file_name }} added by {{ $attachment->uploaded_by }}</ul>
+							                            <a class="gallery-item" href="{{ asset($attachment->file_path) }}">
+							                                <div class="image">
+							                                    <img src="{{ asset($attachment->file_path) }}"/>
+							                                </div>
+							                                <div class="meta">
+							                                    <strong>{{  $attachment->file_name }}</strong>
+							                                    <span>added by {{ $attachment->uploaded_by }}</span>
+							                                </div>
+							                            </a>
                                                 @endforeach
                                             @else
                                                 No Attachment Avaible For This CPAR
                                             @endif
-                                        </li>
+										</div>
                                     </div>
                                 </div>
                                 <div class="panel-footer">
@@ -199,7 +207,6 @@
                             </div>
                         </div>
                     </form>
-
             </div>
             <div class="col-md-3">
 
@@ -259,6 +266,7 @@
 @section('scripts')
     <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
+	<script type="text/javascript" src="{{ url('js/plugins/blueimp/jquery.blueimp-gallery.min.js') }}"></script>
     <script type="text/javascript">
         $(function(){
             var formBody = $('#form-cpar').html();

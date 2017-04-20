@@ -37,7 +37,7 @@
 
         function submitFinalizedCpar() {
             $('#form-cpar').attr('action', '{{ route('cpars.finalize', $cpar->id) }}');
-            $('#form-cpar').removeAttr('attr');
+            $('#form-cpar').removeAttr('target');
             $('#form-cpar').submit();
         }
     </script>

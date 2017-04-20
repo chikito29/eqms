@@ -2,7 +2,8 @@
 #
 @foreach($employees as $employee)
     @if($employee->id == $cpar->person_responsible)
-        {{ $employee->first_name }} {{ $employee->last_name }}'s
+        <strong>{{ $employee->first_name }} {{ $employee->last_name }}'s</strong>
+		@break
     @endif
 @endforeach
 CPAR has been reviewed

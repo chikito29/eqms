@@ -226,7 +226,7 @@
             </tr>
             <tr>
                 <td colspan="5" style="border-top-style: hidden;">{{ Carbon\Carbon::parse($cpar->date_accepted)->toFormattedDateString() }}</td>
-                <td colspan="5" style="border-top-style: hidden;">&nbsp;</td>
+                <td colspan="5" style="border-top-style: hidden;" align="center"><img src="/img/limocon.jpg" height="40px" width="100px"></td>
             </tr>
             <tr>
                 <td colspan="5">VERIFICATION DATE:</td>
@@ -235,12 +235,7 @@
             <tr>
                 <td colspan="5" style="border-top-style: hidden;">{{ Carbon\Carbon::parse($cpar->date_verified)->toFormattedDateString() }}</td>
                 <td colspan="5" style="border-top-style: hidden;">
-                    @foreach($employees as $employee)
-                        @if($employee->id == $cpar->verified_by)
-                            {{ $employee->first_name }} {{ $employee->last_name }}
-                            @break
-                        @endif
-                    @endforeach
+                    {{ $cpar->verified_by }}
                 </td>
             </tr>
             <tr style="border-bottom-style: hidden;">

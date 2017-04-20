@@ -26,7 +26,7 @@ class CparController extends Controller {
     protected $businessDays;
 
     function __construct(Cpar $cpars, EqmsUser $eqmsUsers) {
-        $this->eqmsUsers = $eqmsUsers->get();
+        $this->eqmsUsers = $eqmsUsers->all();
         $this->cpars     = $cpars->latest()->get();
         $this->middleware('na.authenticate')->except(['answerCpar', 'answer']);
     }
@@ -36,7 +36,11 @@ class CparController extends Controller {
     }
 
     public function index() {
-        return view('cpars.index', ['cpars' => $this->cpars]);
+        $user = $this->eqmsUsers->where('user_id', request('user.id'));
+        foreach($user as $authUser) {
+            $user = $authUser;
+        }
+        return view('cpars.index', ['cpars' => $this->cpars, 'user' => $user]);
     }
 
     public function create() {
@@ -323,6 +327,8 @@ class CparController extends Controller {
             'cp_action'  => 'required',
         ]);
 
+        $responsiblePerson = collect(NA::user($cpar->responsiblePerson->user_id));
+
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
@@ -331,8 +337,8 @@ class CparController extends Controller {
                 $attachment->cpar_id     = $cpar->id;
                 $attachment->file_name   = 'attachment_' . ($key + 1);
                 $attachment->file_path   = 'storage/' . $path;
-                $attachment->section     = 'answer';
-                $attachment->uploaded_by = request('user.first_name') . ' ' . request('user.last_name');
+                $attachment->section   = 'answer';
+                $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
                 $attachment->save();
             }
         }
@@ -367,17 +373,26 @@ class CparController extends Controller {
     }
 
     public function review(Cpar $cpar) {
-        $sections = Section::with('documents')->get();
+        $admin = $this->eqmsUsers->where('user_id', request('user.id'));
+        if($admin->count() != 0) {
+            if($admin[0]['role'] == 'Admin') {
+                $sections = Section::with('documents')->get();
 
-        $document = Document::find($cpar->document_id);
-        $body = $document->body;
-        $tags = explode(',', $cpar->tags);
+                $document = Document::find($cpar->document_id);
+                $body = $document->body;
+                $tags = explode(',', $cpar->tags);
 
-        foreach ($tags as $tag){
-            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+                foreach ($tags as $tag){
+                    $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+                }
+
+                return view('cpars.review', compact('cpar', 'sections', 'body'));
+            } else {
+                return view('errors.404');
+            }
+        } else {
+            return view('errors.404');
         }
-
-        return view('cpars.review', compact('cpar', 'sections', 'body'));
     }
 
     public function saveReview(Cpar $cpar) {
@@ -401,15 +416,19 @@ class CparController extends Controller {
 
         $user = NA::user($cpar->person_responsible);
 
+        $cparReviewed = CparReviewed::where('cpar_id', $cpar->id)->first();
+        $cparReviewed->status;
+        $cparReviewed->save();
+
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
                 $path                    = $file->store('attachments', 'public');
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . ($key + 1);
+                $attachment->file_name   = 'attachment_' . (Attachment::where('cpar_id', $cpar->id)->get()->count() + 1);
                 $attachment->file_path   = 'storage/' . $path;
-                $attachment->section     = 'answer';
+                $attachment->section   = 'review';
                 $attachment->uploaded_by = $user->first_name .' '. $user->last_name;
                 $attachment->save();
             }
@@ -422,7 +441,7 @@ class CparController extends Controller {
 
     public function verify(Cpar $cpar) {
         if ($cpar->chief == request('user.id')) {
-            if ($cpar->cparClosed->status <> 1) {
+            if ($cpar->cparClosed->status <> 1 && $cpar->date_confirmed == NULL) {
                 $sections = Section::with('documents')->get();
 
                 $cparReviewed            = CparReviewed::find($cpar->id);
@@ -440,7 +459,7 @@ class CparController extends Controller {
                 return view('cpars.verify', compact('cpar', 'sections', 'body'));
             }
             else {
-                return route('cpars.cpar-on-review', $cpar->id);
+                return redirect()->route('cpars.on-review', $cpar->id);
             }
         }
         else {
@@ -455,7 +474,7 @@ class CparController extends Controller {
         $responsiblePerson = ResponsiblePerson::where('user_id', $cpar->person_responsible);
         $responsiblePerson->delete();
 
-        //notify department head
+        //notify QMR head
         Mail::to('qmr@newsim.ph')->send(new CparFinalized($cpar->id));
 
         return redirect('cpars');
@@ -480,8 +499,8 @@ class CparController extends Controller {
     public function createCparNumber($cpar) {
         $updateCpar = Cpar::find($cpar);
 
-        $this->validate(request(), [
-            'cpar-number' => 'required|unique:cpars,cpar_number'
+       $this->validate(request(), [
+            'cpar_number' => 'required|unique:cpars,cpar_number'
         ]);
 
         $updateCpar->cpar_number = request('cpar_number');
@@ -503,7 +522,7 @@ class CparController extends Controller {
         $cparClosed->save();
 
         //notify department head
-        Mail::to($this->getEmail($cpar->chief))->send(new ReviewedCpar($cpar));
+        Mail::to($this->getEmail($updateCpar->chief))->send(new ReviewedCpar($cpar));
 
         session()->flash('notify', ['message' => 'CPAR number successfully added.', 'type' => 'success']);
 

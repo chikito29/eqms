@@ -4,7 +4,8 @@
 The CPAR that has been issued to
 @foreach($employees as $employee)
     @if($employee->id == $cpar->person_responsible)
-        {{ $employee->first_name }} {{ $employee->last_name }}
+        <strong>{{ $employee->first_name }} {{ $employee->last_name }}</strong>
+        @break
     @endif
 @endforeach
 {{ $cpar->created_at->diffForHumans() }} has been answered

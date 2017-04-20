@@ -43,11 +43,16 @@
                                     to be answered last {{ $dueDate->toFormattedDateString() }}.</div>
                                 <div class="error-subtext">Your department head has also been notified regarding this issue.</div>
                             </div>
-                        @elseif($cpar->date_verified == NULL)
+                        @elseif($cpar->date_confirmed == NULL)
                             <div class="error-container">
-                                <div class="error-code">THANK YOU!</div>
+                                <div class="error-text">THANK YOU!</div>
                                 <div class="error-text">Your CPAR has been sent to your department head for finalization.</div>
                                 <div class="error-subtext">You may or may not be asked to revise your answer.</div>
+                            </div>
+                        @elseif($cpar->date_confirmed <> NULL)
+                            <div class="error-container">
+                                <div class="error-text">CPAR was already confirmed.</div>
+                                <div class="error-subtext">You will receive an email when the CPAR review is finalized.</div>
                             </div>
                         @else
                             <div class="error-container">

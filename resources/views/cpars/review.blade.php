@@ -100,10 +100,10 @@
                                 @slot('label') Proposed Corrective Action Complete Date @endslot
                                 {{ Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}
                             @endcomponent
-                            <div class="form-group @if($errors->first('date-completed')) has-error @endif">
+                            <div class="form-group @if($errors->first('date_completed')) has-error @endif">
                                 <label class="col-md-3 col-xs-12 control-label">Corrective/Preventive Complete Date</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <input type="text" class="form-control datepicker" name="date_completed" value="{{ old('date_completed') }}"/>
+                                    <input type="text" class="form-control datepicker" name="date_completed" value="{{ $cpar->date_completed }}"/>
                                     @if($errors->first('date_completed')) @component('layouts.error') {{ $errors->first('date_completed') }} @endcomponent @endif
                                 </div>
                             </div>
@@ -179,15 +179,23 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Attachment/s</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <li class="list-unstyled">
-                                        @if($cpar->attachments->count() > 0)
-                                            @foreach($cpar->attachments as $attachment)
-                                                <ul>{{  $attachment->file_name }} added by {{ $attachment->uploaded_by }}</ul>
-                                            @endforeach
-                                        @else
-                                            No Attachment Available From Person Responsible
-                                        @endif
-                                    </li>
+									<div class="gallery" id="links">
+										@if($cpar->attachments->count() > 0)
+											@foreach($cpar->attachments as $attachment)
+													<a class="gallery-item" href="{{ asset($attachment->file_path) }}">
+														<div class="image">
+															<img src="{{ asset($attachment->file_path) }}"/>
+														</div>
+														<div class="meta">
+															<strong>{{  $attachment->file_name }}</strong>
+															<span>added by {{ $attachment->uploaded_by }}</span>
+														</div>
+													</a>
+											@endforeach
+										@else
+											No Attachment Avaible For This CPAR
+										@endif
+									</div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -261,6 +269,7 @@
     <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/tagsinput/jquery.tagsinput.min.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
+	<script type="text/javascript" src="{{ url('js/plugins/blueimp/jquery.blueimp-gallery.min.js') }}"></script>
     <script type="text/javascript">
         $(function(){
             $("#file-simple").fileinput({
