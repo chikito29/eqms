@@ -4,3 +4,5 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+delete_document	C:\xampp\htdocs\eqms\resources\views\documents\show.blade.php	/^        function delete_document(row){$/;"	function	line:68
+edit_document	C:\xampp\htdocs\eqms\resources\views\documents\show.blade.php	/^        function edit_document(row){$/;"	function	line:79

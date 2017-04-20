@@ -274,7 +274,10 @@
               element: 'x-dashboard-line',
               data: [
                 @foreach($chartData as $data)
-                { y: '{{ $data->day }}', a: {{ $data->revision_request }} ,b: {{ $data->revision_request + 1 }}},
+                { y: '{{ $data->day }}', a: {{ $data->revision_request }} ,b: {{ $data->revision_request }}},
+                @endforeach
+				@foreach($chartDataCpar as $data)
+                { y: '{{ $data->day }}', a: {{ $data->cpar }} ,b: {{ $data->cpar }}},
                 @endforeach
               ],
               xkey: 'y',
@@ -282,7 +285,7 @@
               labels: ['Revision Request','CPAR'],
               resize: true,
               pointSize: '8px',
-              //pointStrokeColors: '#DEE4EC',
+              pointStrokeColors: '#DEE4EC',
               xLabels: 'day',
               gridTextSize: '11px',
               lineColors: ['#95B75D','#E34724'],

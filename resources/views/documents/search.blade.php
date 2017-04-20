@@ -15,12 +15,12 @@
 
                     @foreach($documents as $document)
                         <div class="sr-item">
-                            <a href="{{ URL::to('documents/' . $document->id) }}" class="sr-item-title">{{ $document->title }}</a>
+                            <a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" class="sr-item-title">{{ $document->title }}</a>
                             <div class="sr-item-link">{{ URL::to('documents/' . $document->id) }}</div>
                             <p class="limit">	{!!
                             			substr(
                             				ucfirst(
-                            					str_replace( request('search'), '<mark>' .request('search'). '</mark>', substr(strip_tags(strtolower($document->body)), strpos(strip_tags(strtolower($document->body)), request('search')), 400))
+                            					str_replace( request('search'), '<mark style="background-color: yellow;">' .request('search'). '</mark>', substr(strip_tags(strtolower($document->body)), strpos(strip_tags(strtolower($document->body)), request('search')), 400))
                             					), 0, 400) !!}	</p>
 
                             <p class="sr-item-links"><a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" target="_new">Open in new window</a> </p>

@@ -22,8 +22,9 @@ class PageController extends Controller {
     public function dashboard() {
         $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
         $chartData        = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
+        $chartDataCpar    = \App\Cpar::selectRaw('date(created_at) AS day, COUNT(*) cpar')->groupBy('day')->get();
 
-        return view('pages.dashboard', compact('chartData', 'revisionRequests'));
+        return view('pages.dashboard', compact('chartData', 'chartDataCpar', 'revisionRequests'));
     }
 
     public function actionSummary(Cpar $cpar) {

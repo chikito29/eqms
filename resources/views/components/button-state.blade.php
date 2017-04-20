@@ -19,7 +19,7 @@
         <span class="fa fa-plus"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Print Reviewed CPAR')
-    <button id="print-reviewed-cpar-btn" class="btn btn-info btn-rounded btn-sm @if(request('user.type') <> 'admin') hidden @endif" onclick='window.open("{{ route('action-summary', $cpar->id) }}")'>
+    <button id="print-reviewed-cpar-btn" class="btn btn-info btn-rounded btn-sm @if(\App\HelperClasses\User::isAdmin(request('user.id')) || \App\HelperClasses\User::isDocumentController(request('user.id'))) @else hidden @endif" onclick='window.open("{{ route('action-summary', $cpar->id) }}")'>
         <span class="fa fa-print"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Print Closed CPAR')

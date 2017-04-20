@@ -10,6 +10,7 @@ use App\CparReviewed;
 use App\EqmsUser;
 use App\NA;
 use App\ResponsiblePerson;
+use Illuminate\Support\Facades\Storage;
 
 class DevRoutes extends Controller
 {
@@ -29,7 +30,8 @@ class DevRoutes extends Controller
     }
 
     function showNAUsers($chief = null, $id = NULL) {
-        return collect(collect(NA::users($chief, $id))->where('id', 5)->first());
+        //return collect(collect(NA::users($chief, $id))->where('id', 5)->first());
+		return collect(NA::users());
     }
 
     function showEqmsUsers($role = null){
@@ -45,7 +47,6 @@ class DevRoutes extends Controller
     }
 
     function test() {
-        return $responsiblePerson = NA::user(2);
-		return $responsiblePerson['id'];
+        return EqmsUser::where('user_id', 3)->where('role', 'Admin')->get();
     }
 }

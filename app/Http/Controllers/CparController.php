@@ -36,10 +36,8 @@ class CparController extends Controller {
     }
 
     public function index() {
-        $user = $this->eqmsUsers->where('user_id', request('user.id'));
-        foreach($user as $authUser) {
-            $user = $authUser;
-        }
+        $user = $this->eqmsUsers->where('user_id', request('user.id'))->first();
+
         return view('cpars.index', ['cpars' => $this->cpars, 'user' => $user]);
     }
 

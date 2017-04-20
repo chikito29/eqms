@@ -4,7 +4,7 @@
     </div>
     <ul>
         <li class="@yield('nav-home')">
-            <a href="{{ route('pages.dashboard') }}">Dashboard</a>
+            <a href="{{ route('pages.home') }}">Home</a>
         </li>
         <li class="xn-openable @yield('nav-document')">
             <a href="#">Procedures</a>

@@ -51,7 +51,7 @@
                                             <td>
                                                 @component('components.button-state', compact('cpar')) @slot('title') view @endslot view @endcomponent
                                                 @component('components.button-state', compact('cpar')) @slot('title') edit @endslot edit @endcomponent
-                                                @if($cpar->cpar_number == null && $user->count() > 0)
+                                                @if($cpar->cpar_number == null && $user != NULL)
                                                     @component('components.button-state', compact('cpar', 'user')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
                                                 @elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)
                                                     @component('components.button-state', compact('cpar')) @slot('title') Print Reviewed CPAR @endslot Print Reviewed CPAR @endcomponent
