@@ -25,14 +25,14 @@
             <a href="#">View</a>
             <ul>
                 <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
-                <li><a href="{{ route('cpars.index') }}"><span class="fa fa-envelope-o"></span> CPAR Forms</a></li>
+                <li><a href="{{ route('cpars.index') }}"><span class="fa fa-list"></span> CPARs</a></li>
                 <li><a href="{{ route('revision-logs.index') }}"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>
         </li>
         <li class="xn-openable @yield('nav-actions')">
             <a href="#">Actions</a>
             <ul>
-                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil-square-o"></span> Create CPAR</a></li>
+                <li><a href="{{ route('cpars.create') }}"><span class="fa fa-pencil-square-o"></span> Raise a CPAR</a></li>
             </ul>
         </li>
     </ul>

@@ -4,3 +4,10 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+User	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^class User {$/;"	class	line:6
+isAdmin	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^	static function isAdmin($id) {$/;"	function	line:7
+user	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^		$user = EqmsUser::where('user_id', $id)->where('role', 'Admin')->get();$/;"	variable	line:8
+isDocumentController	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^	static function isDocumentController($id) {$/;"	function	line:16
+user	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^		$user = EqmsUser::where('user_id', $id)->where('role', 'Document Controller')->where('branch', 'Makati')->get();$/;"	variable	line:17
+isSuperAdmin	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^	static function isSuperAdmin($id) {$/;"	function	line:25
+user	C:\xampp\htdocs\eqms\app\HelperClasses\User.php	/^		$user = EqmsUser::where('user_id', $id)->where('role', 'Document Controller')->where('branch', 'Makati')->get();$/;"	variable	line:26

@@ -21,4 +21,13 @@ class User {
 			return false;
 		}
 	}
+
+	static function isSuperAdmin($id) {
+		$user = EqmsUser::where('user_id', $id)->where('role', 'Document Controller')->where('branch', 'Makati')->get();
+		if($user->count() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
