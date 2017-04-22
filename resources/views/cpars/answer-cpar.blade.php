@@ -63,12 +63,14 @@
                                             <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $body !!}</textarea>
                                         </div>
                                     </div>
-                                    @component('components.show-single-line')
-                                        @slot('label') Tags @endslot
-                                        @foreach(explode(',', $cpar->tags) as $tag)
-                                                <span style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span>
-                                        @endforeach
-                                    @endcomponent
+									<div class="form-group">
+		                                <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
+										<div class="col-md-9 col-xs-12">
+			                                @foreach(explode(',', $cpar->tags) as $tag)
+			                                    <span style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span><br><br>
+			                                @endforeach
+										</div>
+		                            </div>
                                     @component('components.show-single-line')
                                         @slot('label') Source Of Non-Comformity @endslot
                                         {{ $cpar->source }}

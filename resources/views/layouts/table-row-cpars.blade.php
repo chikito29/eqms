@@ -40,7 +40,7 @@
 			</form>
 		</tr>
 	@else
-		@if(request('user.branch') == $cpar->branch && request('user.department') == $cpar->department)
+		@if((request('user.branch') == $cpar->branch && request('user.department') == $cpar->department) || request('user.id') == $cpar->raised_by)
 			<tr>
 				<td>{{ $cpar->cpar_number }}</td>
 				<td>

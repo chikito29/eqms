@@ -15,16 +15,16 @@ use Illuminate\Support\Facades\Storage;
 class DevRoutes extends Controller
 {
     function resetCpars() {
-		$file_names = Attachment::select('file_name')->get();
+		$file_paths = Attachment::select('file_path')->get();
         Cpar::truncate();
         CparAnswered::truncate();
         CparReviewed::truncate();
         CparClosed::truncate();
         ResponsiblePerson::truncate();
-        Attachment::truncate();
-		foreach($file_names as $file_name) {
-			Storage::delete($file_name);
+		foreach($file_paths as $file_path) {
+			unlink($file_path->file_path);
 		}
+		Attachment::truncate();
 
         return redirect('cpars');
     }
@@ -47,6 +47,6 @@ class DevRoutes extends Controller
     }
 
     function test() {
-        return EqmsUser::where('user_id', 3)->where('role', 'Admin')->get();
+        return Attachment::select('id')->get()->count() + 1;
     }
 }

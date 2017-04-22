@@ -132,6 +132,39 @@
                                     <select class="form-control select" name="department_head" id="department-head" data-live-search="true"></select>
                                 </div>
                             </div>
+							<div class="form-group">
+								<label class="col-md-3 col-xs-5 control-label">Attachment</label>
+								<div class="col-md-9 col-xs-7">
+									<input type="file" multiple id="file-simple" name="attachments[]"/>
+									<span class="help-block">Attach document / scanned document if needed.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 col-xs-5 control-label">Attachments</label>
+								<div class="col-md-9 col-xs-7">
+									<div class="gallery" id="links">
+										@if($cpar->attachments->count() > 0)
+											@foreach($cpar->attachments as $attachment)
+												<a class="gallery-item" href="{{ asset($attachment->file_path) }}" id="{{ $attachment->id }}">
+													<div class="image">
+														<img src="{{ asset($attachment->file_path) }}"/>
+														<ul class="gallery-item-controls">
+					                                        <li><label class="check"><input type="checkbox" class="icheckbox"/></label></li>
+															<li><span class="gallery-item-remove"><i class="fa fa-times"></i></span></li>
+					                                    </ul>
+													</div>
+													<div class="meta">
+														<strong>{{  $attachment->file_name }}</strong>
+														<span>added by {{ $attachment->uploaded_by }}</span>
+													</div>
+												</a>
+											@endforeach
+										@else
+											No Attachment Avaible For This CPAR
+										@endif
+									</div>
+								</div>
+							</div>
                             <div class="form-group">
                                 <div class="col-md-12 col-xs-5">
                                     <button class="btn btn-primary btn-rounded pull-right">Save Changes</button>
@@ -140,7 +173,9 @@
                         </div>
                     </div>
                 </form>
-
+				<form method="post" id="delete-form">
+					{{ csrf_field() }} {{ method_field('delete') }}
+				</form>
             </div>
             <div class="col-md-3">
 
@@ -195,12 +230,14 @@
     </div>
 @stop
 
+
 @section('scripts')
     <script type="text/javascript" src="/js/plugins/bootstrap/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/tagsinput/jquery.tagsinput.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url('js/plugins/icheck/icheck.min.js') }}"></script>
     <script type="text/javascript">
         $(function(){
             $("#file-simple").fileinput({
@@ -239,6 +276,13 @@
                 @endif
             @endforeach
             $('#department-head').empty().append(chiefOptions);
+
+			$(".gallery-item-remove").on("click",function(){
+				var deleteForm = $('#delete-form');
+				var id = $(this).parents(".gallery-item").attr('id');
+				deleteForm.attr('action', '/attachment/' + id);
+				deleteForm.submit();
+	        });
         });
 
         $('#summernote').summernote({

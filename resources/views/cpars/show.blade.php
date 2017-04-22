@@ -54,12 +54,14 @@
                                     <textarea class="summernote" name="proposed_revision" id="summernote" disabled>{!! $body !!}</textarea>
                                 </div>
                             </div>
-                            @component('components.show-single-line')
-                                @slot('label') Tags @endslot
-                                @foreach(explode(',', $cpar->tags) as $tag)
-                                    <span style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span>
-                                @endforeach
-                            @endcomponent
+							<div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
+								<div class="col-md-9 col-xs-12">
+	                                @foreach(explode(',', $cpar->tags) as $tag)
+	                                    <span style="min-height: 100px; overflow: hidden; border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span><br><br>
+	                                @endforeach
+								</div>
+                            </div>
                             @component('components.show-single-line')
                                 @slot('label') Source Of Non-Comformity @endslot
                                     {{ $cpar->source }}
@@ -175,7 +177,14 @@
                                         {{ $cpar->result }}
                                     @endcomponent
                                 @endif
-                                <div class="form-group">
+                                <div class="panel-footer">
+                                    @yield('verify-button')
+                                    @if(request('user.type') == 'admin')
+                                        <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
+                                    @endif
+                                </div>
+                                @endif
+								<div class="form-group">
                                     <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                                     <div class="col-md-9 col-xs-7">
 										<div class="gallery" id="links">
@@ -197,13 +206,6 @@
 										</div>
                                     </div>
                                 </div>
-                                <div class="panel-footer">
-                                    @yield('verify-button')
-                                    @if(request('user.type') == 'admin')
-                                        <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
-                                    @endif
-                                </div>
-                                @endif
                             </div>
                         </div>
                     </form>

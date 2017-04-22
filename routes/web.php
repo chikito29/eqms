@@ -9,6 +9,7 @@ Route::get('login', 'NAController@login');
 // Resource Controllers
 Route::resource('access-requests', 'AccessRequestController', ['except' => ['create', 'edit', 'update', 'show']]);
 Route::resource('revision-requests', 'RevisionRequestController');
+Route::resource('attachment', 'AttachmentController');
 Route::resource('revision-logs', 'RevisionLogController');
 Route::resource('documents', 'DocumentController');
 Route::resource('sections', 'SectionController');

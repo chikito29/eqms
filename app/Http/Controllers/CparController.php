@@ -97,19 +97,19 @@ class CparController extends Controller {
             'chief'              => request('chief')
         ]);
 
-        //TODO: put this method in verifying section
-        /*if (request('attachments')) {
-            $files = request('attachments');
-            foreach ($files as $file) {
-                $path = $file->store('attachments', 'public');
-                $attachment = new Attachment();
-                $attachment->cpar_id = $cpar->id;
-                $attachment->file_name = 'storage/' . $path;
-                $attachment->uploaded_by = request('user.first_name') . ' ' . request('user.last_name');
+		if (request()->hasFile('attachments')) {
+            $files = request()->file('attachments');
+            foreach ($files as $key => $file) {
+                $path                    = $file->store('attachments', 'public');
+                $attachment              = new Attachment();
+                $attachment->cpar_id     = $cpar->id;
+                $attachment->file_name   = 'attachment_' . Attachment::select('id')->get()->count() + 1;
+                $attachment->file_path   = 'storage/' . $path;
+                $attachment->section   = 'creation';
+                $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
                 $attachment->save();
             }
-        }*/
-
+        }
 
         $cparAnswered = CparAnswered::create([
             'cpar_id' => $cpar->id
@@ -196,6 +196,23 @@ class CparController extends Controller {
         $cpar->chief              = request('department_head');
         $cpar->save();
 
+		$responsiblePerson = collect(NA::user($cpar->responsiblePerson->user_id));
+		$sequence = Attachment::select('id')->get()->count() + 1;
+
+		if (request()->hasFile('attachments')) {
+            $files = request()->file('attachments');
+            foreach ($files as $key => $file) {
+                $path                    = $file->store('attachments', 'public');
+                $attachment              = new Attachment();
+                $attachment->cpar_id     = $cpar->id;
+                $attachment->file_name   = 'attachment_' . $sequence;
+                $attachment->file_path   = 'storage/' . $path;
+                $attachment->section     = 'creation';
+                $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
+                $attachment->save();
+            }
+        }
+
         session()->flash('notify', ['message' => 'CPAR successfully updated.', 'type' => 'success']);
 
         return redirect()->route('cpars.show', ['cpar' => $cpar->id]);
@@ -224,12 +241,12 @@ class CparController extends Controller {
             return redirect("cpar-on-review/$cpar->id")->withErrors(['code' => 'CPAR is already on review.']);
         }
 
-        $document = Document::find($cpar->document_id);
-        $body = $document->body;
+		$document = Document::find($cpar->document_id);
+        $body = str_replace('&nbsp;', ' ', $document->body);
         $tags = explode(',', $cpar->tags);
 
         foreach ($tags as $tag){
-            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+            $body = str_ireplace(str_replace('&nbsp;', ' ', $tag), '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
         $dueDate = $this->holidays($cpar, 2017);
@@ -333,7 +350,7 @@ class CparController extends Controller {
                 $path                    = $file->store('attachments', 'public');
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . ($key + 1);
+                $attachment->file_name   = 'attachment_' . Attachment::select('id')->get()->count() + 1;
                 $attachment->file_path   = 'storage/' . $path;
                 $attachment->section   = 'answer';
                 $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
@@ -424,7 +441,7 @@ class CparController extends Controller {
                 $path                    = $file->store('attachments', 'public');
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . (Attachment::where('cpar_id', $cpar->id)->get()->count() + 1);
+                $attachment->file_name   = 'attachment_' . Attachment::select('id')->get()->count() + 1;
                 $attachment->file_path   = 'storage/' . $path;
                 $attachment->section   = 'review';
                 $attachment->uploaded_by = $user->first_name .' '. $user->last_name;

@@ -132,6 +132,13 @@
                                     <select class="form-control select" name="chief" id="chief" data-live-search="true"></select>
                                 </div>
                             </div>
+							<div class="form-group">
+								<label class="col-md-3 col-xs-5 control-label">Attachment</label>
+								<div class="col-md-9 col-xs-7">
+									<input type="file" multiple id="file-simple" name="attachments[]"/>
+									<span class="help-block">Attach document / scanned document if needed.</span>
+								</div>
+							</div>
                             <div class="form-group">
                                 <div class="col-md-12 col-xs-5">
                                     <button class="btn btn-primary btn-rounded pull-right">Submit</button>

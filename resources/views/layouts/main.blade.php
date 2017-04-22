@@ -100,6 +100,8 @@
         <script type="text/javascript" src="{{ url('js/plugins.js') }}"></script>
         <script type="text/javascript" src="{{ url('js/actions.js') }}"></script>
         <!-- END TEMPLATE -->
+
+		@yield('post-scripts')
     <!-- END SCRIPTS -->
     </body>
 </html>
