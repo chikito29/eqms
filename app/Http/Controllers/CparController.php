@@ -35,6 +35,19 @@ class CparController extends Controller {
         return $employee = NA::user($id)->email;
     }
 
+	public function colorize($severity) {
+		if ($severity == 'Observation') {
+            $severity = '<span class="label label-info">' . request('severity') . '</span>';
+        }
+        elseif ($severity == 'Minor') {
+            $severity = '<span class="label label-warning">' . request('severity') . '</span>';
+        }
+        else {
+            $severity = '<span class="label label-danger">' . request('severity') . '</span>';
+        }
+		return $severity;
+	}
+
     public function index() {
         $user = $this->eqmsUsers->where('user_id', request('user.id'))->first();
 
@@ -69,16 +82,7 @@ class CparController extends Controller {
             return back()->withInput();
         }
 
-        if (request('severity') == 'Observation') {
-            $severity = '<span class="label label-info">' . request('severity') . '</span>';
-        }
-        elseif (request('severity') == 'Minor') {
-            $severity = '<span class="label label-warning">' . request('severity') . '</span>';
-        }
-        else {
-            $severity = '<span class="label label-danger">' . request('severity') . '</span>';
-        }
-
+        $severity = $this->colorize(request('severity'));
         $code = str_random(24);
 
         $cpar = Cpar::create([
@@ -97,17 +101,18 @@ class CparController extends Controller {
             'chief'              => request('chief')
         ]);
 
+		$sequence = Attachment::select('id')->get()->count() + 1;
+
 		if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
                 $path                    = $file->store('attachments', 'public');
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . Attachment::select('id')->get()->count() + 1;
+                $attachment->file_name   = 'attachment_' . $sequence;
                 $attachment->file_path   = 'storage/' . $path;
                 $attachment->section   = 'creation';
-                $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
-                $attachment->save();
+                $attachment->uploaded_by = request('user.first_name') .' '. request('user.last_name');
             }
         }
 
@@ -172,15 +177,7 @@ class CparController extends Controller {
             'person_responsible' => 'required',
         ]);
 
-        if (request('severity') == 'Observation') {
-            $severity = '<span class="label label-info">' . request('severity') . '</span>';
-        }
-        elseif (request('severity') == 'Minor') {
-            $severity = '<span class="label label-warning">' . request('severity') . '</span>';
-        }
-        else {
-            $severity = '<span class="label label-danger">' . request('severity') . '</span>';
-        }
+        $severity = $this->colorize(request('severity'));
 
         $cpar->person_responsible = request('person_responsible');
         $cpar->root_cause         = request('root_cause');
@@ -343,6 +340,7 @@ class CparController extends Controller {
         ]);
 
         $responsiblePerson = collect(NA::user($cpar->responsiblePerson->user_id));
+		$sequence = Attachment::select('id')->get()->count() + 1;
 
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
@@ -350,7 +348,7 @@ class CparController extends Controller {
                 $path                    = $file->store('attachments', 'public');
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . Attachment::select('id')->get()->count() + 1;
+                $attachment->file_name   = 'attachment_' . $sequence;
                 $attachment->file_path   = 'storage/' . $path;
                 $attachment->section   = 'answer';
                 $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
@@ -394,8 +392,8 @@ class CparController extends Controller {
                 $sections = Section::with('documents')->get();
 
                 $document = Document::find($cpar->document_id);
-                $body = $document->body;
-                $tags = explode(',', $cpar->tags);
+                $body     = $document->body;
+                $tags     = explode(',', $cpar->tags);
 
                 foreach ($tags as $tag){
                     $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
@@ -429,11 +427,12 @@ class CparController extends Controller {
         $cpar->result          = request('result');
         $cpar->save();
 
-        $user = NA::user($cpar->person_responsible);
-
-        $cparReviewed = CparReviewed::where('cpar_id', $cpar->id)->first();
+        $cparReviewed         = CparReviewed::where('cpar_id', $cpar->id)->first();
         $cparReviewed->status = 1;
+		$cparReviewed->reviewed_by  = request('user.first_name') .' '. request('user.last_name');
         $cparReviewed->save();
+
+		$sequence = Attachment::select('id')->get()->count() + 1;
 
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
@@ -441,13 +440,15 @@ class CparController extends Controller {
                 $path                    = $file->store('attachments', 'public');
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . Attachment::select('id')->get()->count() + 1;
+                $attachment->file_name   = 'attachment_' . $sequence;
                 $attachment->file_path   = 'storage/' . $path;
-                $attachment->section   = 'review';
-                $attachment->uploaded_by = $user->first_name .' '. $user->last_name;
+                $attachment->section     = 'review';
+                $attachment->uploaded_by = request('user.first_name') .' '. request('user.last_name');
                 $attachment->save();
             }
         }
+
+		Mail::to(EqmsUser::mainDocumentController()->email)->send(new CparFinalized());
 
         session()->flash('attention', ['body' => '<strong>To finalize the CPAR that has been reviewed</strong>, the Document Controller needs to add its <strong>CPAR Number</strong>', 'color' => 'info']);
 
@@ -490,7 +491,9 @@ class CparController extends Controller {
         $responsiblePerson->delete();
 
         //notify QMR head
-        Mail::to('qmr@newsim.ph')->send(new CparFinalized($cpar->id));
+        Mail::to(EqmsUser::where('role', 'Admin')->get()[0]->email)->send(new CparFinalized($cpar->id));
+
+		session()->flash('attention', ['body' => 'CPAR has been sent to QMR for review. You will receive an email when the review process has been finalized. Thank you.', 'color' => 'info']);
 
         return redirect('cpars');
     }
@@ -522,10 +525,8 @@ class CparController extends Controller {
         $updateCpar->save();
 
         $cparReviewed = CparReviewed::find($cpar);
-        //update on review and reviewed by
         $cparReviewed->status      = 1;
         $cparReviewed->notified    = 1;
-        $cparReviewed->reviewed_by = request('user.first_name') . ' ' . request('user.last_name');
         $cparReviewed->save();
 
         $cparClosed = CparClosed::find($cpar);

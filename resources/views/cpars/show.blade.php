@@ -58,7 +58,7 @@
                                 <label class="col-md-3 col-xs-12 control-label">Procedure/Process/Scope/Other References</label>
 								<div class="col-md-9 col-xs-12">
 	                                @foreach(explode(',', $cpar->tags) as $tag)
-	                                    <span style="min-height: 100px; overflow: hidden; border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></span><br><br>
+	                                    <label style="border: solid 1px; border-color: rgb(220,220,220); padding: 4px 13px; border-radius: 3px; background-color: rgb(250,250,250);"><span class="fa fa-tag"> {{ $tag }}</span></label><br><br>
 	                                @endforeach
 								</div>
                             </div>
@@ -75,22 +75,20 @@
                                 {{ $cpar->details }}
                             @endcomponent
                             @component('components.show-single-line')
-                                @slot('label') Name @endslot
+                                @slot('label') Person Reporting To Non-Conformity @endslot
                                 @foreach($employees as $employee)
                                     @if($employee->id == $cpar->raised_by)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
                                 @endforeach
-                                @slot('help') Person Reporting To Non-Conformity @endslot
                             @endcomponent
                             @component('components.show-single-line')
-                                @slot('label') Name @endslot
+                                @slot('label') Person Responsible For Taking The CPAR @endslot
                                 @foreach($employees as $employee)
                                     @if($employee->id == $cpar->person_responsible)
                                         {{ $employee->first_name }} {{ $employee->last_name }}
                                     @endif
                                 @endforeach
-                                @slot('help') Person Responsible For Taking The CPAR @endslot
                             @endcomponent
                             @if($cpar->correction)
                                 @component('components.show-multi-line')
@@ -177,13 +175,6 @@
                                         {{ $cpar->result }}
                                     @endcomponent
                                 @endif
-                                <div class="panel-footer">
-                                    @yield('verify-button')
-                                    @if(request('user.type') == 'admin')
-                                        <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
-                                    @endif
-                                </div>
-                                @endif
 								<div class="form-group">
                                     <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                                     <div class="col-md-9 col-xs-7">
@@ -206,6 +197,13 @@
 										</div>
                                     </div>
                                 </div>
+                                <div class="panel-footer">
+                                    @yield('verify-button')
+                                    @if(request('user.type') == 'admin')
+                                        <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
+                                    @endif
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </form>

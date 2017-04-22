@@ -47,6 +47,6 @@ class DevRoutes extends Controller
     }
 
     function test() {
-        return Attachment::select('id')->get()->count() + 1;
+        \Illuminate\Support\Facades\Mail::to(EqmsUser::mainDocumentController()->email)->send(new \App\Mail\CreateCparNumber());
     }
 }
