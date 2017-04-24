@@ -28,8 +28,9 @@ class RevisionRequestForm extends FormRequest
     public function rules()
     {
         return [
-            'proposed_revision' => 'required',
-            'revision_reason' => 'required|max:600'
+            'revision_reason' => 'required|max:600',
+            'reference_document_tags' => 'required',
+            'attachments' => 'required_if:proposed_revision,"<p><br></p>"'
         ];
     }
 
@@ -58,7 +59,7 @@ class RevisionRequestForm extends FormRequest
             }
         }
 
-        Mail::to('qmr@newsim.ph')->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
+        Mail::to(\App\EqmsUser::adminEmail())->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
         session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
     }
 }

@@ -47,6 +47,6 @@ class DevRoutes extends Controller
     }
 
     function test() {
-        \Illuminate\Support\Facades\Mail::to(EqmsUser::mainDocumentController()->email)->send(new \App\Mail\CreateCparNumber());
+        return \App\EqmsUser::where('role', 'Admin')->first()->email;
     }
 }

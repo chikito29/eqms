@@ -1,5 +1,5 @@
 @foreach($cpars as $cpar)
-	@if(App\HelperClasses\User::isAdmin(request('user.id')) || App\HelperClasses\User::isDocumentController(request('user.id')))
+	@if(App\EqmsUser::isAdmin(request('user.id')) || App\EqmsUser::isMainDocumentController(request('user.id'))	|| App\HelperClasses\User::isSuperAdmin(request('user.id')))
 		<tr>
 			<td>{{ $cpar->cpar_number }}</td>
 			<td>

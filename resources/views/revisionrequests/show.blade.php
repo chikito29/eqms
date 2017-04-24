@@ -117,12 +117,17 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group @if($errors->has('recommendation_reason')) has-error @endif">
                             <label class="col-md-3 col-xs-5 control-label">Reason for Recommendation / Disapproval</label>
                             <div class="col-md-9 col-xs-7">
                                 @if( ! $revisionRequest->section_b)
                                 <textarea class="form-control" rows="5" name="recommendation_reason" maxlength="600"></textarea>
                                 <span class="help-block">Maximum: 600 characters.</span>
+								@if ($errors->has('recommendation_reason'))
+								<span class="help-block successful">
+									<strong class="text-danger">{{ $errors->first('recommendation_reason') }}</strong>
+								</span>
+								@endif
                                 @else
                                 <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
                                     {{ $revisionRequest->section_b->recommendation_reason }}
@@ -185,6 +190,11 @@
                                 @if( ! $revisionRequest->section_c)
                                 <input type="file" multiple id="file-simple" name="attachments[]"/>
                                 <span class="help-block">Upload the signed revision request by the CEO.</span>
+								@if ($errors->has('attachments'))
+								<span class="help-block successful">
+									<strong class="text-danger">{{ $errors->first('attachments') }}</strong>
+								</span>
+								@endif
                                 @else
                                     @if(count($revisionRequest->attachments->where('section', 'revision-request-c')) > 0)
                                         @foreach($revisionRequest->attachments->where('section', 'revision-request-c') as $attachment)
@@ -221,6 +231,17 @@
             @endif
             @endif
             <!-- End Section C -->
+
+			@if($errors->has('others'))
+				<div class="alert alert-danger" role="alert">
+					<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<strong>Woops!</strong> One of the following fields <em>must</em> be filled:<br>
+					<ul>
+						<li> <strong>Action Taken</strong> </li>
+						<li> <strong>If others, please specify</strong> </li>
+					</ul>
+				</div>
+			@endif
 
             <!-- Start Section D -->
             @if($revisionRequest->section_b && $revisionRequest->section_c)

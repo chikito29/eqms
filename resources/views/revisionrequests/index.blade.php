@@ -10,6 +10,13 @@
     <div class="x-content" >
         <div class="x-content-inner" style="margin-top:-45px; height: 90vh;">
 
+			@if($errors->has('revision_request_number'))
+				<div class="alert alert-danger" role="alert">
+					<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<strong>Woops!</strong> Looks like you forgot to enter the <em>Revision Request Number</em>. Please try again.
+				</div>
+			@endif
+
             <div class="row">
                 <div class="col-md-12">
 

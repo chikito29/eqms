@@ -15,8 +15,21 @@ class EqmsUser extends Model
 		}
 	}
 
+	static function isAdmin($id) {
+		$user = EqmsUser::where('user_id', $id)->where('role', 'Admin')->get();
+		if($user->count() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	static function getEqmsUser($id) {
 		return EqmsUser::find($id);
+	}
+
+	static function adminEmail() {
+		return \App\EqmsUser::where('role', 'Admin')->first()->email;
 	}
 
 	public function scopeMainDocumentController($query) {

@@ -54,6 +54,10 @@ class RevisionRequestController extends Controller
         $revisionRequest = RevisionRequest::with('section_b', 'section_c', 'section_d')->find($id);
 
         if ( ! $revisionRequest->section_b) {
+			$this->validate(request(),[
+				'recommendation_reason' => 'required'
+			]);
+
             RevisionRequestSectionB::create([
                 'revision_request_id' => $id,
                 'user_id' => $request->user['id'],
@@ -73,6 +77,10 @@ class RevisionRequestController extends Controller
             }
 
         } else if ( ! $revisionRequest->section_c) {
+			$this->validate(request(),[
+				'attachments' => 'required'
+			]);
+
             RevisionRequestSectionC::create([
                 'revision_request_id' => $id,
                 'user_id' => $request->user['id'],
@@ -106,6 +114,10 @@ class RevisionRequestController extends Controller
             }
 
         } else if ( ! $revisionRequest->section_d) {
+			$this->validate(request(), [
+				'others' => 'required_without:action_taken'
+			]);
+
             RevisionRequestSectionD::create([
                 'revision_request_id' => $id,
                 'user_id' => $request->user['id'],
@@ -115,6 +127,10 @@ class RevisionRequestController extends Controller
             ]);
 
         } else {
+			$this->validate(request(), [
+				'revision_request_number' => 'required'
+			]);
+
             $revisionRequest->fill(['revision_request_number' => $request->revision_request_number])->save();
             return redirect()->route('revision-requests.index');
 

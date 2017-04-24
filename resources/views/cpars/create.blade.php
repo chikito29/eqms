@@ -107,16 +107,16 @@
                                 </div>
                             </div>
                             @component('components.show-single-line')
-                                @slot('label') Name @endslot
+                                @slot('label') Person Reporting To Non-Conformity @endslot
                                 {{ request('user.first_name'). ' ' .request('user.last_name') }}
-                                @slot('help') Person Reporting To Non-Conformity @endslot
                             @endcomponent
                             <div class="form-group @if($errors->first('person_responsible')) has-error @endif">
-                                <label class="col-md-3 col-xs-12 control-label">Name</label>
+                                <label class="col-md-3 col-xs-12 control-label"> Person Responsible For Taking The CPAR </label>
                                 <div class="col-md-9 col-xs-12">
                                     <select class="form-control select" name="person_responsible" id="person-responsible" data-live-search="true"></select>
-                                    @if($errors->first('person_responsible')) @component('layouts.error') {{ $errors->first('person_responsible') }} @endcomponent
-                                    @else <span class="help-block">Person Responsible For Taking The CPAR</span> @endif
+                                    @if($errors->first('person_responsible'))
+										@component('layouts.error') {{ $errors->first('person_responsible') }} @endcomponent
+                                    @endif
                                 </div>
                             </div>
                             <div class="form-group @if($errors->first('proposed-date')) has-error @endif">

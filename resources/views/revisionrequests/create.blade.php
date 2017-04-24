@@ -6,7 +6,16 @@
 
 @section('page-content')
 <div class="page-content-wrap">
-
+	@if($errors->has('attachments'))
+		<div class="alert alert-danger" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<strong>Woops!</strong> One of the following fields <em>must</em> be filled:<br>
+			<ul>
+				<li> <strong>Proposed Revision</strong> </li>
+				<li> <strong>Attachments</strong> </li>
+			</ul>
+		</div>
+	@endif
     <div class="page-title">
         <h2><span class="fa fa-pencil"></span> Revision Request</h2>
     </div>
@@ -14,7 +23,7 @@
     <div class="row">
         <div class="col-md-9">
 
-            <form enctype="multipart/form-data" class="form-horizontal" action="{{ route('revision-requests.store') }}" method="POST" role="form">
+            <form enctype="multipart/form-data" class="form-horizontal" action="{{ route('revision-requests.store') }}" method="POST" role="form" id="revision-form">
                 {{ csrf_field() }}
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -50,29 +59,29 @@
                                 <span class="help-block">Tag the section(s) of the document you are trying to address. e.g. 4.2.3.2</span>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group @if($errors->has('attachments')) has-error @endif">
                             <label class="col-md-2 col-xs-5 control-label">Proposed Revision</label>
                             <div class="col-md-10 col-xs-7">
                                 <textarea class="summernote" name="proposed_revision"></textarea>
                                 <span class="help-block">You may use this editor to submit your revision request or upload a document.</span>
                             </div>
-                            @if ($errors->has('proposed_revision'))
-                            <span class="help-block successful">
-                                <strong class="text-danger">{{ $errors->first('proposed_revision') }}</strong>
-                            </span>
-                            @endif
                         </div>
-                        <div class="form-group">
+                        <div class="form-group @if($errors->has('attachments')) has-error @endif">
                             <label class="col-md-2 col-xs-5 control-label">Attachments</label>
                             <div class="col-md-10 col-xs-7">
                                 <input type="file" multiple id="file-simple" name="attachments[]"/>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group @if($errors->has('revision_reason')) has-error @endif">
                             <label class="col-md-2 col-xs-5 control-label">Reason for Revision</label>
                             <div class="col-md-10 col-xs-7">
                                 <textarea class="form-control" rows="5" name="revision_reason" maxlength="600"></textarea>
                                 <span class="help-block">Maximum: 600 characters</span>
+								@if ($errors->has('revision_reason'))
+								<span class="help-block successful">
+									<strong class="text-danger">{{ $errors->first('revision_reason') }}</strong>
+								</span>
+								@endif
                             </div>
                         </div>
                         <div class="form-group">
@@ -161,5 +170,15 @@
             ['misc', ['fullscreen']],
         ]
     });
+
+	// function submit() {
+	// 	if($('.summernote').code() == "") {
+	// 		$('textarea[name="proposed_revision"]').val('none');
+	// 	}
+	// 	if($('#file-simple').val() == ''){
+	// 		$('#attachments_validator').val("none");
+	// 	}
+	// 	$('#revision-form').submit();
+	// }
 </script>
 @endsection
