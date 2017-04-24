@@ -45,19 +45,20 @@ class RevisionRequestForm extends FormRequest
             'revision_reason' => $this->revision_reason
         ]);
 
-        if ($files = $this->file('attachments')) {
-            foreach($files as $key => $file) {
-                $path = $file->store('attachments', 'public');
-
-                Attachment::create([
-                    'revision_request_id' => $revisionRequest->id,
-                    'file_name' => 'attachment_' . ($key + 1),
-                    'file_path' => 'storage/' . $path,
-                    'section' => 'revision-request-a',
-                    'uploaded_by' => $this->user['first_name'] . ' ' . $this->user['last_name']
-                ]);
-            }
-        }
+		if (request()->hasFile('attachments')) {
+			$files = request()->file('attachments');
+			foreach ($files as $key => $file) {
+				$sequence = Attachment::where('revision_request_id', $revisionRequest->id)->select('id')->get()->count() + 1;
+				$path                            = $file->store('attachments', 'public');
+				$attachment                      = new Attachment();
+				$attachment->revision_request_id = $revisionRequest->id;
+				$attachment->file_name           = 'attachment_' . $sequence;
+				$attachment->file_path           = 'storage/' . $path;
+				$attachment->section             = 'revision-request-a';
+				$attachment->uploaded_by         = $revisionRequest->user['first_name'] . ' ' . $revisionRequest->user['last_name'];
+				$attachment->save();
+			}
+		}
 
         Mail::to(\App\EqmsUser::adminEmail())->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
         session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);

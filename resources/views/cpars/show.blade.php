@@ -178,24 +178,16 @@
 								<div class="form-group">
                                     <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                                     <div class="col-md-9 col-xs-7">
-										<div class="gallery" id="links">
-                                            @if($cpar->attachments->count() > 0)
-                                                @foreach($cpar->attachments as $attachment)
-							                            <a class="gallery-item" href="{{ asset($attachment->file_path) }}">
-							                                <div class="image">
-							                                    <img src="{{ asset($attachment->file_path) }}"/>
-							                                </div>
-							                                <div class="meta">
-							                                    <strong>{{  $attachment->file_name }}</strong>
-							                                    <span>added by {{ $attachment->uploaded_by }}</span>
-							                                </div>
-							                            </a>
-                                                @endforeach
-                                            @else
-                                                No Attachment Avaible For This CPAR
-                                            @endif
-										</div>
-                                    </div>
+										<ul>
+											@if($cpar->attachments->count() > 0)
+	                                            @foreach($cpar->attachments as $attachment)
+							                            <li> <a class="gallery-item" href="{{ asset($attachment->file_path) }}">{{ $attachment->file_name }}</a> </li>
+	                                            @endforeach
+	                                        @else
+	                                            No Attachment Avaible For This CPAR
+	                                        @endif
+										</ul>
+									</div>
                                 </div>
                                 <div class="panel-footer">
                                     @yield('verify-button')

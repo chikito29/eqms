@@ -101,20 +101,20 @@ class CparController extends Controller {
             'chief'              => request('chief')
         ]);
 
-		$sequence = Attachment::select('id')->get()->count() + 1;
-
 		if (request()->hasFile('attachments')) {
-            $files = request()->file('attachments');
-            foreach ($files as $key => $file) {
-                $path                    = $file->store('attachments', 'public');
-                $attachment              = new Attachment();
-                $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . $sequence;
-                $attachment->file_path   = 'storage/' . $path;
-                $attachment->section   = 'creation';
-                $attachment->uploaded_by = request('user.first_name') .' '. request('user.last_name');
-            }
-        }
+			$files = request()->file('attachments');
+			foreach ($files as $key => $file) {
+				$sequence = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+				$path                            = $file->store('attachments', 'public');
+				$attachment                      = new Attachment();
+				$attachment->revision_request_id = $revisionRequest->id;
+				$attachment->file_name           = 'attachment_' . $sequence;
+				$attachment->file_path           = 'storage/' . $path;
+				$attachment->section             = 'create';
+				$attachment->uploaded_by         = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
+				$attachment->save();
+			}
+		}
 
         $cparAnswered = CparAnswered::create([
             'cpar_id' => $cpar->id
@@ -194,21 +194,21 @@ class CparController extends Controller {
         $cpar->save();
 
 		$responsiblePerson = collect(NA::user($cpar->responsiblePerson->user_id));
-		$sequence = Attachment::select('id')->get()->count() + 1;
 
 		if (request()->hasFile('attachments')) {
-            $files = request()->file('attachments');
-            foreach ($files as $key => $file) {
-                $path                    = $file->store('attachments', 'public');
-                $attachment              = new Attachment();
-                $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . $sequence;
-                $attachment->file_path   = 'storage/' . $path;
-                $attachment->section     = 'creation';
-                $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
-                $attachment->save();
-            }
-        }
+			$files = request()->file('attachments');
+			foreach ($files as $key => $file) {
+				$sequence = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+				$path                            = $file->store('attachments', 'public');
+				$attachment                      = new Attachment();
+				$attachment->revision_request_id = $revisionRequest->id;
+				$attachment->file_name           = 'attachment_' . $sequence;
+				$attachment->file_path           = 'storage/' . $path;
+				$attachment->section             = 'edited';
+				$attachment->uploaded_by         = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
+				$attachment->save();
+			}
+		}
 
         session()->flash('notify', ['message' => 'CPAR successfully updated.', 'type' => 'success']);
 
@@ -340,21 +340,21 @@ class CparController extends Controller {
         ]);
 
         $responsiblePerson = collect(NA::user($cpar->responsiblePerson->user_id));
-		$sequence = Attachment::select('id')->get()->count() + 1;
 
-        if (request()->hasFile('attachments')) {
-            $files = request()->file('attachments');
-            foreach ($files as $key => $file) {
-                $path                    = $file->store('attachments', 'public');
-                $attachment              = new Attachment();
-                $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . $sequence;
-                $attachment->file_path   = 'storage/' . $path;
-                $attachment->section   = 'answer';
-                $attachment->uploaded_by = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
-                $attachment->save();
-            }
-        }
+		if (request()->hasFile('attachments')) {
+			$files = request()->file('attachments');
+			foreach ($files as $key => $file) {
+				$sequence = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+				$path                            = $file->store('attachments', 'public');
+				$attachment                      = new Attachment();
+				$attachment->revision_request_id = $revisionRequest->id;
+				$attachment->file_name           = 'attachment_' . $sequence;
+				$attachment->file_path           = 'storage/' . $path;
+				$attachment->section             = 'answer-cpar';
+				$attachment->uploaded_by         = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
+				$attachment->save();
+			}
+		}
 
         $cpar->correction = request('correction');
         $cpar->cp_action  = request('cp_action');
@@ -432,21 +432,20 @@ class CparController extends Controller {
 		$cparReviewed->reviewed_by  = request('user.first_name') .' '. request('user.last_name');
         $cparReviewed->save();
 
-		$sequence = Attachment::select('id')->get()->count() + 1;
-
-        if (request()->hasFile('attachments')) {
-            $files = request()->file('attachments');
-            foreach ($files as $key => $file) {
-                $path                    = $file->store('attachments', 'public');
-                $attachment              = new Attachment();
-                $attachment->cpar_id     = $cpar->id;
-                $attachment->file_name   = 'attachment_' . $sequence;
-                $attachment->file_path   = 'storage/' . $path;
-                $attachment->section     = 'review';
-                $attachment->uploaded_by = request('user.first_name') .' '. request('user.last_name');
-                $attachment->save();
-            }
-        }
+		if (request()->hasFile('attachments')) {
+			$files = request()->file('attachments');
+			foreach ($files as $key => $file) {
+				$sequence = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+				$path                            = $file->store('attachments', 'public');
+				$attachment                      = new Attachment();
+				$attachment->revision_request_id = $revisionRequest->id;
+				$attachment->file_name           = 'attachment_' . $sequence;
+				$attachment->file_path           = 'storage/' . $path;
+				$attachment->section             = 'save-review';
+				$attachment->uploaded_by         = $responsiblePerson['first_name'] .' '. $responsiblePerson['last_name'];
+				$attachment->save();
+			}
+		}
 
 		Mail::to(EqmsUser::mainDocumentController()->email)->send(new CparFinalized());
 

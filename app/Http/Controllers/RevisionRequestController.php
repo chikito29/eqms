@@ -32,7 +32,7 @@ class RevisionRequestController extends Controller
     }
 
     public function create() {
-        $documentTitles = Document::select('id', 'title')->get();
+        $documentTitles         = Document::select('id', 'title')->get();
         if($referenceDocumentId = request('reference_document')) {
             $referenceDocument = Document::find($referenceDocumentId);
             return view('revisionrequests.create', compact('documentTitles', 'referenceDocument'));
@@ -59,9 +59,9 @@ class RevisionRequestController extends Controller
 			]);
 
             RevisionRequestSectionB::create([
-                'revision_request_id' => $id,
-                'user_id' => $request->user['id'],
-                'user_name' => $request->user['first_name'] . ' ' . $request->user['last_name'],
+                'revision_request_id'   => $id,
+                'user_id'               => $request->user['id'],
+                'user_name'             => $request->user['first_name'] . ' ' . $request->user['last_name'],
                 'recommendation_status' => $request->recommendation_status,
                 'recommendation_reason' => $request->recommendation_reason
             ]);
@@ -83,25 +83,26 @@ class RevisionRequestController extends Controller
 
             RevisionRequestSectionC::create([
                 'revision_request_id' => $id,
-                'user_id' => $request->user['id'],
-                'user_name' => $request->user['first_name'] . ' ' . $request->user['last_name'],
-                'ceo_remarks' => $request->ceo_remarks,
-                'approved' => $request->approved
+                'user_id'             => $request->user['id'],
+                'user_name'           => $request->user['first_name'] . ' ' . $request->user['last_name'],
+                'ceo_remarks'         => $request->ceo_remarks,
+                'approved'            => $request->approved
             ]);
 
-            if ($files = $request->file('attachments')) {
-                foreach($files as $key => $file) {
-                    $path = $file->store('attachments', 'public');
-
-                    Attachment::create([
-                        'revision_request_id' => $id,
-                        'file_name' => 'attachment_' . ($key + 1),
-                        'file_path' => 'storage/' . $path,
-                        'section' => 'revision-request-c',
-                        'uploaded_by' => $revisionRequest->user['first_name'] . ' ' . $revisionRequest->user['last_name']
-                    ]);
-                }
-            }
+			if (request()->hasFile('attachments')) {
+				$files = request()->file('attachments');
+				foreach ($files as $key => $file) {
+					$sequence = Attachment::where('revision_request_id', $revisionRequest->id)->select('id')->get()->count() + 1;
+					$path                            = $file->store('attachments', 'public');
+					$attachment                      = new Attachment();
+					$attachment->revision_request_id = $revisionRequest->id;
+					$attachment->file_name           = 'attachment_' . $sequence;
+					$attachment->file_path           = 'storage/' . $path;
+					$attachment->section             = 'revision-request-a';
+					$attachment->uploaded_by         = $revisionRequest->user['first_name'] . ' ' . $revisionRequest->user['last_name'];
+					$attachment->save();
+				}
+			}
 
             if ($request->approved) {
                 $revisionRequest->fill(['status' => 'Approved'])->save();
@@ -120,10 +121,10 @@ class RevisionRequestController extends Controller
 
             RevisionRequestSectionD::create([
                 'revision_request_id' => $id,
-                'user_id' => $request->user['id'],
-                'user_name' => $request->user['first_name'] . ' ' . $request->user['last_name'],
-                'action_taken' => implode(',', $request->action_taken),
-                'others' => $request->others,
+                'user_id'             => $request->user['id'],
+                'user_name'           => $request->user['first_name'] . ' ' . $request->user['last_name'],
+                'action_taken'        => implode(',', $request->action_taken),
+                'others'              => $request->others,
             ]);
 
         } else {
