@@ -12,41 +12,43 @@ use App\NA;
 use App\ResponsiblePerson;
 use Illuminate\Support\Facades\Storage;
 
-class DevRoutes extends Controller
-{
+class DevRoutes extends Controller {
     function resetCpars() {
-		$file_paths = Attachment::select('file_path')->get();
+        $file_paths = Attachment::select('file_path')->get();
         Cpar::truncate();
         CparAnswered::truncate();
         CparReviewed::truncate();
         CparClosed::truncate();
         ResponsiblePerson::truncate();
-		foreach($file_paths as $file_path) {
-			unlink($file_path->file_path);
-		}
-		Attachment::truncate();
+        foreach ($file_paths as $file_path) {
+            unlink($file_path->file_path);
+        }
+        Attachment::truncate();
 
         return redirect('cpars');
     }
 
-    function showNAUsers($chief = null, $id = NULL) {
+    function showNAUsers($chief = NULL, $id = NULL) {
         // return collect(collect(NA::users($chief, $id))->where('id', 5)->first());
-		return collect(NA::users($chief, $id));
+        return collect(NA::users($chief, $id));
     }
 
-    function showEqmsUsers($role = null){
-        if($role == null) {
+    function showEqmsUsers($role = NULL) {
+        if ($role == NULL) {
             return EqmsUser::all();
-        } elseif($role == 'Admin' || $role == 'Document Controller') {
+        }
+        elseif ($role == 'Admin' || $role == 'Document Controller') {
             return EqmsUser::where('role', $role)->get();
         }
 
-}
+    }
+
     function showCpars() {
         return Cpar::all();
     }
 
     function test() {
-		return \App\RevisionRequest::all();
+        $cpar = \App\Cpar::find(4);
+        return $cpar->cparAnswered;
     }
 }

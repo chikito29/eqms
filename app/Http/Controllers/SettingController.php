@@ -58,6 +58,7 @@ class SettingController extends Controller {
         $setting->role       = request('role');
         $setting->branch     = request('branch');
         $setting->department = request('department');
+        $setting->email      = request('email');
         $setting->save();
 
         return redirect()->route('settings.index');

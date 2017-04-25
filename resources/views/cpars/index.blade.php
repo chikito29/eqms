@@ -33,7 +33,7 @@
                                 </tr>
                                 </thead>
                                 <tbody id="cpars-table-body">
-                                @include('layouts.table-row-cpars', ['cpar', 'user'])
+                                @include('layouts.table-row-cpars', ['cpar'])
                                 </tbody>
                             </table>
                         </div>

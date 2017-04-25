@@ -15,16 +15,16 @@
         <span class="fa fa-times"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Create CPAR Number')
-    <button id="create-cpar-number-btn" class="btn btn-info btn-rounded btn-sm @if((\App\HelperClasses\User::isAdmin(request('user.id')) || \App\HelperClasses\User::isDocumentController(request('user.id'))) && $cpar->cparReviewed->status == 1) @else hidden @endif" onclick="openCparNumberModal({{ $cpar->id }})">
+    <button id="create-cpar-number-btn" class="btn btn-info btn-rounded btn-sm @if((! \App\HelperClasses\User::isDefault(request('user.id'))) && $cpar->cparReviewed->status == 1) @else hidden @endif" onclick="openCparNumberModal({{ $cpar->id }})">
         <span class="fa fa-plus"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Print Reviewed CPAR')
-    <button id="print-reviewed-cpar-btn" class="btn btn-info btn-rounded btn-sm @if(\App\HelperClasses\User::isAdmin(request('user.id')) || \App\HelperClasses\User::isDocumentController(request('user.id'))) @else hidden @endif" onclick='window.open("{{ route('action-summary', $cpar->id) }}")'>
+    <button id="print-reviewed-cpar-btn" class="btn btn-info btn-rounded btn-sm @if(! \App\HelperClasses\User::isDefault(request('user.id'))) @else hidden @endif" onclick='window.open("{{ route('action-summary', $cpar->id) }}")'>
         <span class="fa fa-print"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Print Closed CPAR')
     <button id="print-closed-cpar-btn" class="btn btn-info btn-rounded btn-sm
-    @if(request('user.type') <> 'admin' || ($cpar->cparClosed->status <> 1 && $cpar->cparReviewed->status <> 1))
+    @if(request('user.type') <> 'role' || ($cpar->cparClosed->status <> 1 && $cpar->cparReviewed->status <> 1))
             hidden
     @endif"
         onclick='window.location.href = "{{ route('action-summary', $cpar->id) }}"'>

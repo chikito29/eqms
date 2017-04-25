@@ -19,9 +19,9 @@
 				@if($cpar->raised_by == request('user.id'))
 					@component('components.button-state', compact('cpar')) @slot('title') edit @endslot edit @endcomponent
 				@endif
-				@if($user != NULL)
+				@if(! App\HelperClasses\User::isDefault())
 					@if($cpar->cpar_number == null)
-						@component('components.button-state', compact('cpar', 'user')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
+						@component('components.button-state', compact('cpar')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
 					@elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)
 						@component('components.button-state', compact('cpar')) @slot('title') Print Reviewed CPAR @endslot Print Reviewed CPAR @endcomponent
 					@elseif($cpar->cparReviewed->status == 0 && $cpar->cpar_number == null && $cpar->cparReviewed->status <> 1)
@@ -62,7 +62,7 @@
 					@endif
 					@if($user != NULL)
 						@if($cpar->cpar_number == null)
-							@component('components.button-state', compact('cpar', 'user')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
+							@component('components.button-state', compact('cpar')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
 						@elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)
 							@component('components.button-state', compact('cpar')) @slot('title') Print Reviewed CPAR @endslot Print Reviewed CPAR @endcomponent
 						@elseif($cpar->cparReviewed->status == 0 && $cpar->cpar_number == null && $cpar->cparReviewed->status <> 1)
