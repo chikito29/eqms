@@ -148,6 +148,18 @@
                                             @endif
                                         @endforeach
                                     @endcomponent
+									<div class="form-group">
+	                                    <label class="col-md-3 col-xs-5 control-label">Attachments</label>
+	                                    <div class="col-md-9 col-xs-7">
+											@if($cpar->attachments->count() > 0)
+	                                            @foreach($cpar->attachments as $attachment)
+							                           <a class="control-label" href="{{ asset($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a> uploaded by: {{ $attachment->uploaded_by }}<br>
+	                                            @endforeach
+	                                        @else
+	                                            No Attachment Avaible For This CPAR
+	                                        @endif
+										</div>
+	                                </div>
                                     <div class="form-group">
                                         <label class="col-md-3 col-xs-5 control-label">Attachment</label>
                                         <div class="col-md-9 col-xs-7">

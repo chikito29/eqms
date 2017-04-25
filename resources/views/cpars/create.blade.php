@@ -248,7 +248,8 @@
             @foreach($users as $user)
                 @if($user->chief == 1)
                     chiefOptions+= '<option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>';
-                    @break
+                @else
+					@continue
                 @endif
             @endforeach
         $('#chief').empty().append(chiefOptions);

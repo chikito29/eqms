@@ -20,9 +20,11 @@ class CreateRevisionRequestTable extends Migration
             $table->string('user_name');
             $table->integer('reference_document_id')->nullable();
             $table->mediumText('reference_document_tags')->nullable();
-            $table->mediumText('proposed_revision');
+            $table->mediumText('proposed_revision')->nullable();
             $table->mediumText('revision_reason');
             $table->string('status')->default('New');
+            $table->boolean('has_appeal')->default(false);
+            $table->boolean('uses_old_attachment')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

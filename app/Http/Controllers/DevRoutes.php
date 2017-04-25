@@ -30,8 +30,8 @@ class DevRoutes extends Controller
     }
 
     function showNAUsers($chief = null, $id = NULL) {
-        //return collect(collect(NA::users($chief, $id))->where('id', 5)->first());
-		return collect(NA::users());
+        // return collect(collect(NA::users($chief, $id))->where('id', 5)->first());
+		return collect(NA::users($chief, $id));
     }
 
     function showEqmsUsers($role = null){
@@ -47,6 +47,6 @@ class DevRoutes extends Controller
     }
 
     function test() {
-        return \App\EqmsUser::where('role', 'Admin')->first()->email;
+		return \App\RevisionRequest::all();
     }
 }

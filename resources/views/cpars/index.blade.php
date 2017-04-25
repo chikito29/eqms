@@ -21,21 +21,21 @@
                             <div class="x-block-head">
                                 <h3>CPAR List</h3>
                             </div>
-                            <table class="table table-striped" id="table-application">
-                                    <thead>
-                                    <tr>
-                                        <th>CPAR #</th>
-                                        <th>RAISED BY</th>
-                                        <th>SEVERITY</th>
-                                        <th>ISSUED</th>
-                                        <th>STATUS</th>
-                                        <th with="120">Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @include('layouts.table-row-cpars', ['cpar', 'user'])
-                                    </tbody>
-                                </table>
+                            <table class="table table-striped" id="cpars-table">
+                                <thead>
+                                <tr>
+                                    <th>CPAR #</th>
+                                    <th>RAISED BY</th>
+                                    <th>SEVERITY</th>
+                                    <th>ISSUED</th>
+                                    <th>STATUS</th>
+                                    <th with="120">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="cpars-table-body">
+                                @include('layouts.table-row-cpars', ['cpar', 'user'])
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -123,5 +123,8 @@
             $('input:text[name="cpar_number"]').val($('input:text[name="cpar-number-input"]').val());
             $('#edit' + cparId).submit();
         }
+		if($('#cpars-table-body').children().length == 0) {
+			$('#cpars-table-body').html('<tr><td colspan="6" align="center">No CPAR Available.</td></tr>');
+		}
     </script>
 @endsection

@@ -30,7 +30,7 @@ class RevisionRequestForm extends FormRequest
         return [
             'revision_reason' => 'required|max:600',
             'reference_document_tags' => 'required',
-            'attachments' => 'required_if:proposed_revision,"<p><br></p>"'
+			'attachments' => 'required_if:proposed_revision,"<p><br></p>"'
         ];
     }
 

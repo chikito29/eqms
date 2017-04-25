@@ -56,7 +56,7 @@
                             <div class="col-md-9 col-xs-7">
                                 @if(count($revisionRequest->attachments->where('section', 'revision-request-a')) > 0)
                                     @foreach($revisionRequest->attachments->where('section', 'revision-request-a') as $attachment)
-                                        <a href="{{ url($attachment->file_path) }}" target="_blank"><label class="control-label">{{ $attachment->file_name }}</label></a><br>
+                                        <a class="control-label" href="{{ url($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a><br>
                                     @endforeach
                                 @else
                                     <label class="control-label">None</label>

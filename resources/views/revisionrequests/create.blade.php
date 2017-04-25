@@ -30,12 +30,12 @@
                         <h3>Section A: Formal Request</h3>
                         <p>This is to formalize a request for a revision to the document as follows:</p>
                     </div>
-                    <div class="panel-body form-group-separated">
+                    <div class="panel-body form-group-separated" id="main-panel">
                         @if(isset($referenceDocument))
                         <div class="form-group">
                             <label class="col-md-2 col-xs-5 control-label">Reference Document</label>
                             <div class="col-md-10 col-xs-7">
-                                <a href="{{ route('documents.show', $referenceDocument->id) }}" target="_blank"><label class="control-label">{{ $referenceDocument->title }}</label></a>
+                                <a href="{{ route('documents.show', $referenceDocument->id) }}" target="_blank" id="#denied_link"><label class="control-label">{{ $referenceDocument->title }}</label></a>
                                 <input type="hidden" name="reference_document_id" value="{{ $referenceDocument->id }}">
                             </div>
                         </div>
@@ -55,27 +55,38 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-12 control-label">Section / Page / Process</label>
                             <div class="col-md-10 col-xs-12">
-                                <input type="text" class="tagsinput" name="reference_document_tags" data-placeholder="add section"/>
+                                <input type="text" class="tagsinput" name="reference_document_tags" data-placeholder="add section" value="{{ old('reference_document_tags') }}" id="tags"/>
                                 <span class="help-block">Tag the section(s) of the document you are trying to address. e.g. 4.2.3.2</span>
                             </div>
                         </div>
                         <div class="form-group @if($errors->has('attachments')) has-error @endif">
                             <label class="col-md-2 col-xs-5 control-label">Proposed Revision</label>
                             <div class="col-md-10 col-xs-7">
-                                <textarea class="summernote" name="proposed_revision"></textarea>
+								@if(isset($revisionRequest) && $revisionRequest->proposed_revision <> "<p><br></p>")
+									@include('revisionrequests.appeal-elements.old-proposed-revision', ['revisionRequest'])
+								@endif
+                                <textarea class="summernote" name="proposed_revision">{{ old('proposed_revision') }}</textarea>
                                 <span class="help-block">You may use this editor to submit your revision request or upload a document.</span>
                             </div>
                         </div>
+						@if(isset($revisionRequest) && count($revisionRequest->attachments->where('revision_request_id', $revisionRequest->id)) > 0)
+							@include('revisionrequests.appeal-elements.old-attachments', ['revisionRequest'])
+						@endif
                         <div class="form-group @if($errors->has('attachments')) has-error @endif">
                             <label class="col-md-2 col-xs-5 control-label">Attachments</label>
                             <div class="col-md-10 col-xs-7">
                                 <input type="file" multiple id="file-simple" name="attachments[]"/>
+								<span class="help-block">
+								</span>
                             </div>
                         </div>
+						@if(isset($revisionRequest) && $revisionRequest->section_b->recommendation_status == "For Disapproval")
+							@include('revisionrequests.appeal-elements.recommendation-reason', ['revisionRequest'])
+						@endif
                         <div class="form-group @if($errors->has('revision_reason')) has-error @endif">
                             <label class="col-md-2 col-xs-5 control-label">Reason for Revision</label>
                             <div class="col-md-10 col-xs-7">
-                                <textarea class="form-control" rows="5" name="revision_reason" maxlength="600"></textarea>
+                                <textarea class="form-control" rows="5" name="revision_reason" maxlength="600">{{ old('revision_reason') }}</textarea>
                                 <span class="help-block">Maximum: 600 characters</span>
 								@if ($errors->has('revision_reason'))
 								<span class="help-block successful">
@@ -148,6 +159,7 @@
 @endsection
 
 @section('scripts')
+<script type='text/javascript' src={{ url('js/plugins/icheck/icheck.min.js') }}></script>
 <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
 <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
@@ -171,14 +183,8 @@
         ]
     });
 
-	// function submit() {
-	// 	if($('.summernote').code() == "") {
-	// 		$('textarea[name="proposed_revision"]').val('none');
-	// 	}
-	// 	if($('#file-simple').val() == ''){
-	// 		$('#attachments_validator').val("none");
-	// 	}
-	// 	$('#revision-form').submit();
-	// }
+	@if(isset($revisionRequest))
+		@include('revisionrequests.appeal-elements.denied-request-link', ['revisionRequest'])
+	@endif
 </script>
 @endsection

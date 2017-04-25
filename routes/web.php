@@ -33,6 +33,7 @@ Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('cpars.on-r
 Route::get('cpars/verify/{cpar}', 'CparController@verify')->name('cpars.verify');
 Route::get('cpars/review/{cpar}', 'CparController@review')->name('cpars.review');
 Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
+Route::get('revision-requests/appeal/{revision_request}', 'RevisionRequestController@appeal')->name('revision-requests.appeal');
 
 //Route GET Closure
 Route::get('unauthorize', function () { return view('errors.unauthorize'); });
@@ -47,6 +48,7 @@ Route::post('cpars/review/{cpar}', 'CparController@saveReview')->name('review-cp
 Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
 Route::post('access-requests/{access_request}/grant', 'AccessRequestController@grant')->name('access-requests.grant');
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');
+Route::post('revision-requests/appeal/{revision_request}/{old_revision_request}', 'RevisionRequestController@storeAppeal')->name('revision-requests.store-appeal');
 
 //development routes
 Route::group(['middleware' => 'na.authenticate'], function() {

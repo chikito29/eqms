@@ -4,4 +4,3 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-submit	C:\xampp\htdocs\eqms\resources\views\revisionrequests\create.blade.php	/^	function submit() {$/;"	function	line:181

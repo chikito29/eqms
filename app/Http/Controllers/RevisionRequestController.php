@@ -148,4 +148,56 @@ class RevisionRequestController extends Controller
         return view('revisionrequests.print', compact('revisionRequest'));
     }
 
+	public function appeal(RevisionRequest $revisionRequest) {
+		$referenceDocument = Document::find($revisionRequest->reference_document_id);
+		return view('revisionrequests.appeal', compact('revisionRequest', 'referenceDocument'));
+	}
+
+	public function storeAppeal() {
+		$this->validate(request(),[
+			'reference_document_tags' => 'required',
+			'revision_reason' => 'required',
+			'attachments' => 'required_without:use_attachment',
+			'proposed_revision' => 'required_without:use_attachment|required_if:attachments,""'
+		]);
+
+		$revisionRequest = RevisionRequest::create([
+            'user_id'                 => request('user.id'),
+            'user_name'               => request('user.first_name') . ' ' . request('user.last_name'),
+            'reference_document_id'   => request('reference_document_id'),
+            'reference_document_tags' => request('reference_document_tags'),
+            'proposed_revision'       => request('proposed_revision'),
+            'revision_reason'         => request('revision_reason'),
+			'status'                  => 'Appeal'
+        ]);
+
+		$old_revision_request = RevisionRequest::find(request('old_revision_request'));
+		$old_revision_request->has_appeal = 1;
+		$old_revision_request->save();
+
+		if(request('uses_old_attachment') != null) {
+			$revisionRequest->uses_old_attachment = 1;
+			$revisionRequest->save();
+		}
+
+		if (request()->hasFile('attachments')) {
+			$files = request()->file('attachments');
+			foreach ($files as $key => $file) {
+				$sequence = Attachment::where('revision_request_id', $revisionRequest->id)->select('id')->get()->count() + 1;
+				$path                            = $file->store('attachments', 'public');
+				$attachment                      = new Attachment();
+				$attachment->revision_request_id = $revisionRequest->id;
+				$attachment->file_name           = 'appeal_attachment_' . $sequence;
+				$attachment->file_path           = 'storage/' . $path;
+				$attachment->section             = 'appeal';
+				$attachment->uploaded_by         = request('user.first_name') . ' ' . request('user.last_name');
+				$attachment->save();
+			}
+		}
+
+        Mail::to(\App\EqmsUser::adminEmail())->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
+        session()->flash('notify', ['message' => 'Sending revision request appeal successful.', 'type' => 'success']);
+
+		return redirect('revision-requests');
+	}
 }
