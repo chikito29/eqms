@@ -48,7 +48,7 @@ Route::post('cpars/review/{cpar}', 'CparController@saveReview')->name('review-cp
 Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
 Route::post('access-requests/{access_request}/grant', 'AccessRequestController@grant')->name('access-requests.grant');
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');
-Route::post('revision-requests/appeal/{revision_request}/{old_revision_request}', 'RevisionRequestController@storeAppeal')->name('revision-requests.store-appeal');
+Route::post('revision-requests/appeal/{revision_request}', 'RevisionRequestController@storeAppeal')->name('revision-requests.store-appeal');
 
 //development routes
 Route::group(['middleware' => 'na.authenticate'], function() {

@@ -12,6 +12,6 @@
 
 		$('#tags').val(tags);
 
-		$('#revision-form').attr('action', '{{ route('revision-requests.store-appeal', $revisionRequest->id, "old_revision_request=$revisionRequest->id") }}');
+		$('#revision-form').attr('action', '{{ route('revision-requests.store-appeal', $revisionRequest->id) }}');
 	</script>
 @stop

@@ -23,6 +23,14 @@
                         <p>This is to formalize a request for a revision to the document as follows:</p>
                     </div>
                     <div class="panel-body form-group-separated">
+                        @if($revisionRequest->appeal_id <> null)
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Appeal Link</label>
+                                <div class="col-md-9 col-xs-7">
+                                    <label class="control-label"><a href="{{ route('revision-requests.show', $revisionRequest->appeal_id) }}">SEE APPEAL HERE <span class="fa fa-external-link"></span></a></label>
+                                </div>
+                            </div>
+                        @endif
                         <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Revision Request No.</label>
                             <div class="col-md-9 col-xs-7">
@@ -38,7 +46,7 @@
                         <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Reference Document</label>
                             <div class="col-md-9 col-xs-7">
-                                <a href="{{ route('documents.show', $revisionRequest->reference_document->id) }}" target="_blank"><label class="control-label">{{ $revisionRequest->reference_document->title }} <span class="fa fa-external-link"></span></label></a>
+                                <label class="control-label"><a href="{{ route('documents.show', $revisionRequest->reference_document->id) }}" target="_blank">{{ $revisionRequest->reference_document->title }} <span class="fa fa-external-link"></span></a></label>
                             </div>
                         </div>
                         <div class="form-group">

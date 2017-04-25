@@ -23,6 +23,8 @@ class CreateRevisionRequestTable extends Migration
             $table->mediumText('proposed_revision')->nullable();
             $table->mediumText('revision_reason');
             $table->string('status')->default('New');
+            //additionnal appeal attributes
+            $table->integer('revision_request_id')->nullable();
             $table->boolean('has_appeal')->default(false);
             $table->boolean('uses_old_attachment')->default(false);
             $table->timestamps();

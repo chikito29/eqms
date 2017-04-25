@@ -5,9 +5,9 @@ use App\EqmsUser;
 use App\NA;
 
 class User {
-	static function isSuperAdmin($id) {
-		$user = collect(\App\NA::user($id))['type'];
-		if($user == 'super-admin') {
+	static function isDefault() {
+
+		if(request('user.role') == 'default') {
 			return true;
 		} else {
 			return false;
