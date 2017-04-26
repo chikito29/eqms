@@ -30,7 +30,6 @@ class CparFinalized extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@newsim.ph')
-                    ->markdown('emails.cpars.cpar-finalized');
+        return $this->markdown('emails.cpars.cpar-finalized');
     }
 }

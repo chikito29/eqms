@@ -30,8 +30,7 @@ class OnProcessRevisionRequest extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@newsim.ph')
-                    ->subject('Processing Revision Request')
+        return $this->subject('Processing Revision Request')
                     ->markdown('emails.revisionrequests.on-process');
     }
 }

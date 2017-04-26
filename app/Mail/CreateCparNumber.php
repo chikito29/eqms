@@ -17,7 +17,6 @@ class CreateCparNumber extends Mailable
      * @return $this
      */
     public function build() {
-        return $this->from('no-reply@newsim.ph')
-                    ->markdown('emails.cpars.create-cpar-number');
+        return $this->markdown('emails.cpars.create-cpar-number');
     }
 }

@@ -166,29 +166,32 @@ class RevisionRequestController extends Controller {
         return view('revisionrequests.appeal', compact('revisionRequest', 'referenceDocument'));
     }
 
-    public function storeAppeal() {
+    public function storeAppeal($id) {
         $this->validate(request(), [
             'reference_document_tags' => 'required',
             'revision_reason'         => 'required',
-            'attachments'             => 'required_without:use_attachment',
-            'proposed_revision'       => 'required_without:use_attachment|required_if:attachments,""'
+            'attachments'             => 'required_without:uses_old_attachment',
+            'proposed_revision'       => 'required_without:uses_old_attachment|required_if:attachments,""'
         ]);
 
         $revisionRequest = RevisionRequest::create([
             'user_id'                 => request('user.id'),
             'user_name'               => request('user.first_name') . ' ' . request('user.last_name'),
             'reference_document_id'   => request('reference_document_id'),
+            'revision_request_id'     => $id,
             'reference_document_tags' => request('reference_document_tags'),
             'proposed_revision'       => request('proposed_revision'),
             'revision_reason'         => request('revision_reason'),
+            'is_appeal'               => 1,
             'status'                  => 'Appeal'
         ]);
 
-        $old_revision_request             = RevisionRequest::find(request('old_revision_request'));
+        $old_revision_request             = RevisionRequest::find(request('reference_document_id'));
         $old_revision_request->has_appeal = 1;
         $old_revision_request->save();
 
-        if (request('uses_old_attachment') != NULL) {
+        $uses_old_attachment = request('uses_old_attachment');
+        if ($uses_old_attachment <> NULL) {
             $revisionRequest->uses_old_attachment = 1;
             $revisionRequest->save();
         }

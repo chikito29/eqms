@@ -30,8 +30,7 @@ class DeniedRevisionRequest extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@newsim.ph')
-                    ->subject('Revision Request Denied')
+        return $this->subject('Revision Request Denied')
                     ->markdown('emails.revisionrequests.denied');
     }
 }

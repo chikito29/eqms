@@ -48,7 +48,6 @@ class DevRoutes extends Controller {
     }
 
     function test() {
-        $cpar = \App\Cpar::find(4);
-        return $cpar->cparAnswered;
+        return $appeal = \App\RevisionRequest::find(1);
     }
 }

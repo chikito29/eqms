@@ -28,7 +28,6 @@ class CparCreated extends Mailable {
      * @return $this
      */
     public function build() {
-        return $this->from('no-reply@newsim.ph')
-                    ->markdown('emails.cpars.cpar-created');
+        return $this->markdown('emails.cpars.cpar-created');
     }
 }

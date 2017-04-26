@@ -30,7 +30,6 @@ class CparExpired extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@newsim.ph')
-                    ->markdown('emails.cpars.expired');
+        return $this->markdown('emails.cpars.expired');
     }
 }

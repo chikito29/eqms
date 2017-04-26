@@ -23,13 +23,15 @@
                         <p>This is to formalize a request for a revision to the document as follows:</p>
                     </div>
                     <div class="panel-body form-group-separated">
-                        @if($revisionRequest->appeal_id <> null)
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Appeal Link</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <label class="control-label"><a href="{{ route('revision-requests.show', $revisionRequest->appeal_id) }}">SEE APPEAL HERE <span class="fa fa-external-link"></span></a></label>
-                                </div>
+                        @php $appeal = \App\RevisionRequest::find($revisionRequest->revision_request_id) @endphp
+                        @if($appeal <> null && ($revisionRequest->appeal_id <> null && ($appeal->status == 'Denied' || $appeal->status == 'Approved')))
+                            @include('revisionrequests.appeal-elements.appeal-link', ['revisioRequest' => $revisionRequest])
+                        @elseif($revisionRequest->appeal_id <> null)
+                            <div class="form-group" style="text-align: center;">
+                                <label class="control-label" style="padding: 10px; font-weight: bold;">Appeal is still on review.</label>
                             </div>
+                        @elseif($revisionRequest->is_appeal == 1)
+                            @include('revisionrequests.appeal-elements.denied_link', ['revisionRequest' => $revisionRequest])
                         @endif
                         <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Revision Request No.</label>
@@ -62,10 +64,16 @@
                         <div class="form-group">
                             <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                             <div class="col-md-9 col-xs-7">
-                                @if(count($revisionRequest->attachments->where('section', 'revision-request-a')) > 0)
-                                    @foreach($revisionRequest->attachments->where('section', 'revision-request-a') as $attachment)
+                                @if($revisionRequest->is_appeal == 1 && $revisionRequest->uses_old_attachment == 1)
+                                    @foreach(\App\RevisionRequest::find($revisionRequest->revision_request_id)->attachments->where('section', 'revision-request-a') as $attachment)
                                         <a class="control-label" href="{{ url($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a><br>
                                     @endforeach
+                                @elseif($revisionRequest->is_appeal == 0)
+                                    @if(count($revisionRequest->attachments->where('section', 'revision-request-a')) > 0)
+                                        @foreach($revisionRequest->attachments->where('section', 'revision-request-a') as $attachment)
+                                            <a class="control-label" href="{{ url($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a><br>
+                                        @endforeach
+                                    @endif
                                 @else
                                     <label class="control-label">None</label>
                                 @endif
@@ -325,46 +333,23 @@
                 </div>
                 <div class="panel-body form-group-separated">
                     <div class="form-group">
-                        <label class="col-md-4 col-xs-5 control-label">Last visit</label>
-                        <div class="col-md-8 col-xs-7 line-height-30">12:46 27.11.2015</div>
+                        <label class="col-md-4 col-xs-5 control-label">Role</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">{{ request('user.role') }}</div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 col-xs-5 control-label">Registration</label>
-                        <div class="col-md-8 col-xs-7 line-height-30">01:15 21.11.2015</div>
+                        <label class="col-md-4 col-xs-5 control-label">Username</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">{{ request('user.username') }}</div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 col-xs-5 control-label">Groups</label>
-                        <div class="col-md-8 col-xs-7">administrators, managers, team-leaders, developers</div>
+                        <label class="col-md-4 col-xs-5 control-label">Department</label>
+                        <div class="col-md-8 col-xs-7">{{ request('user.department') }}</div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 col-xs-5 control-label">Birthday</label>
-                        <div class="col-md-8 col-xs-7 line-height-30">14.02.1989</div>
+                        <label class="col-md-4 col-xs-5 control-label">Branch</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">{{ request('user.branch') }}</div>
                     </div>
                 </div>
 
-            </div>
-
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <h3>Contact</h3>
-                    <p>Feel free to contact us for any issues you might have with our products.</p>
-                    <div class="form-group">
-                        <label>E-mail</label>
-                        <input type="email" class="form-control" placeholder="youremail@domain.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <input type="email" class="form-control" placeholder="Message subject">
-                    </div>
-                    <div class="form-group">
-                        <label>Message</label>
-                        <textarea class="form-control" placeholder="Your message" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <button class="btn btn-default"><span class="fa fa-paperclip"></span> Add attachment</button>
-                    <button class="btn btn-success pull-right"><span class="fa fa-envelope-o"></span> Send</button>
-                </div>
             </div>
 
         </div>
@@ -389,5 +374,9 @@
             allowedFileExtensions : ['.jpg']
         });
     });
+
+    if('{{ $revisionRequest->is_appeal }}' == '1') {
+        $('.page-title').html('<h2><span class="fa fa-legal"></span> Appeal</h2>');
+    }
 </script>
 @endsection

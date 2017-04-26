@@ -30,8 +30,7 @@ class ApprovedRevisionRequest extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@newsim.ph')
-                    ->subject('Revision Request Approved')
+        return $this->subject('Revision Request Approved')
                     ->markdown('emails.revisionrequests.approved');
     }
 }

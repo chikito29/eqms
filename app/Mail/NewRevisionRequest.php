@@ -30,7 +30,6 @@ class NewRevisionRequest extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@newsim.ph')
-                    ->markdown('emails.revisionrequests.new');
+        return $this->markdown('emails.revisionrequests.new');
     }
 }
