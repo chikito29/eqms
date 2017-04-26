@@ -343,14 +343,14 @@ class CparController extends Controller {
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
-                $sequence                        = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
-                $path                            = $file->store('attachments', 'public');
-                $attachment                      = new Attachment();
-                $attachment->revision_request_id = $revisionRequest->id;
-                $attachment->file_name           = 'attachment_' . $sequence;
-                $attachment->file_path           = 'storage/' . $path;
-                $attachment->section             = 'answer-cpar';
-                $attachment->uploaded_by         = $responsiblePerson['first_name'] . ' ' . $responsiblePerson['last_name'];
+                $sequence                = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+                $path                    = $file->store('attachments', 'public');
+                $attachment              = new Attachment();
+                $attachment->cpar_id     = $cpar->id;
+                $attachment->file_name   = 'attachment_' . $sequence;
+                $attachment->file_path   = 'storage/' . $path;
+                $attachment->section     = 'answer-cpar';
+                $attachment->uploaded_by = $responsiblePerson['first_name'] . ' ' . $responsiblePerson['last_name'];
                 $attachment->save();
             }
         }
@@ -385,9 +385,9 @@ class CparController extends Controller {
     }
 
     public function review(Cpar $cpar) {
-        $admin = $this->eqmsUsers->where('user_id', request('user.id'));
-        if ($admin->count() != 0) {
-            if ($admin[0]['role'] == 'Admin') {
+        $admin = \App\EqmsUser::where('user_id', request('user.id'))->first();
+        if ($admin != NULL) {
+            if ($admin->role == 'Admin') {
                 $sections = Section::with('documents')->get();
 
                 $document = Document::find($cpar->document_id);
@@ -433,22 +433,25 @@ class CparController extends Controller {
         $cparReviewed->reviewed_by = request('user.first_name') . ' ' . request('user.last_name');
         $cparReviewed->save();
 
+
+        $responsiblePerson = collect(NA::user($cpar->person_responsible));
+
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
-                $sequence                        = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
-                $path                            = $file->store('attachments', 'public');
-                $attachment                      = new Attachment();
-                $attachment->revision_request_id = $revisionRequest->id;
-                $attachment->file_name           = 'attachment_' . $sequence;
-                $attachment->file_path           = 'storage/' . $path;
-                $attachment->section             = 'save-review';
-                $attachment->uploaded_by         = $responsiblePerson['first_name'] . ' ' . $responsiblePerson['last_name'];
+                $sequence                = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+                $path                    = $file->store('attachments', 'public');
+                $attachment              = new Attachment();
+                $attachment->cpar_id     = $cpar->id;
+                $attachment->file_name   = 'attachment_' . $sequence;
+                $attachment->file_path   = 'storage/' . $path;
+                $attachment->section     = 'save-review';
+                $attachment->uploaded_by = $responsiblePerson['first_name'] . ' ' . $responsiblePerson['last_name'];
                 $attachment->save();
             }
         }
 
-        Mail::to(EqmsUser::mainDocumentController()->email)->send(new CparFinalized());
+        Mail::to(EqmsUser::mainDocumentController()->email)->send(new CparFinalized($cpar->id));
 
         session()->flash('attention', ['body' => '<strong>To finalize the CPAR that has been reviewed</strong>, the Document Controller needs to add its <strong>CPAR Number</strong>', 'color' => 'info']);
 

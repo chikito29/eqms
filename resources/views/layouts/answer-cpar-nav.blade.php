@@ -20,7 +20,6 @@
             <div class="x-features-profile">
                 <img src="{{ url('img/no-profile-image.png') }}">
                 <ul class="xn-drop-left animated zoomIn">
-                    <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
                     <li><a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
                 </ul>
             </div>

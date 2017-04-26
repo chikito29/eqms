@@ -24,7 +24,7 @@
 
                     @if (request('user.role') == 'super-admin')
                         @include('headers.super-admin')
-                    @elseif (request('user.role') == 'admin')
+                    @elseif (request('user.role') == 'admin' || request('user.role') == 'document-controller')
                         @include('headers.admin')
                     @else
                         @include('headers.default')

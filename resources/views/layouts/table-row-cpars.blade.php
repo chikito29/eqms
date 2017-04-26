@@ -1,5 +1,5 @@
 @foreach($cpars as $cpar)
-	@if(! App\HelperClasses\User::isDefault())
+	@if(request('user.role') != 'default')
 		<tr>
 			<td>{{ $cpar->cpar_number }}</td>
 			<td>
@@ -19,7 +19,7 @@
 				@if($cpar->raised_by == request('user.id'))
 					@component('components.button-state', compact('cpar')) @slot('title') edit @endslot edit @endcomponent
 				@endif
-				@if(! App\HelperClasses\User::isDefault())
+				@if(request('user.role') != 'default')
 					@if($cpar->cpar_number == null)
 						@component('components.button-state', compact('cpar')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
 					@elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)
@@ -40,7 +40,7 @@
 			</form>
 		</tr>
 	@else
-		@if(request('user.branch') == $cpar->branch && request('user.department') == $cpar->department) || request('user.id') == $cpar->raised_by)
+		@if((request('user.branch') == $cpar->branch && request('user.department') == $cpar->department) || request('user.id') == $cpar->raised_by)
 			<tr>
 				<td>{{ $cpar->cpar_number }}</td>
 				<td>
@@ -60,7 +60,7 @@
 					@if($cpar->raised_by == request('user.id'))
 						@component('components.button-state', compact('cpar')) @slot('title') edit @endslot edit @endcomponent
 					@endif
-					@if($user != NULL)
+					@if(! App\HelperClasses\User::isDefault())
 						@if($cpar->cpar_number == null)
 							@component('components.button-state', compact('cpar')) @slot('title') Create CPAR Number @endslot Create CPAR Number @endcomponent
 						@elseif($cpar->cparReviewed->status == 1 && $cpar->cpar_number <> null)

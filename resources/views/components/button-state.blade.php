@@ -11,11 +11,11 @@
         <span class="fa fa-pencil"> {{ $slot }}</span>
     </button>
 @elseif($title == 'close')
-    <button id="close-btn" type="button" class="btn btn-primary btn-rounded btn-sm @if($cpar->cparClosed->status == 1 || $cpar->cparReviewed->on_review == 1 || $cpar->cparAnswered->status == 1) hidden @endif" onclick="closeCpar({{  $cpar->id }})">
+    <button id="close-btn" type="button" class="btn btn-primary btn-rounded btn-sm @if(($cpar->cparClosed->status == 1 || $cpar->cparReviewed->on_review == 1 || $cpar->cparAnswered->status == 1) && request('user.role') == 'Admin') @else hidden @endif" onclick="closeCpar({{  $cpar->id }})">
         <span class="fa fa-times"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Create CPAR Number')
-    <button id="create-cpar-number-btn" class="btn btn-info btn-rounded btn-sm @if((! \App\HelperClasses\User::isDefault(request('user.id'))) && $cpar->cparReviewed->status == 1) @else hidden @endif" onclick="openCparNumberModal({{ $cpar->id }})">
+    <button id="create-cpar-number-btn" class="btn btn-info btn-rounded btn-sm @if((request('user.role') == 'document-controller' && request('user.branch') == 'Makati') && $cpar->cparReviewed->status == 1) @else hidden @endif" onclick="openCparNumberModal({{ $cpar->id }})">
         <span class="fa fa-plus"> {{ $slot }}</span>
     </button>
 @elseif($title == 'Print Reviewed CPAR')

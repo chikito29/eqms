@@ -48,6 +48,6 @@ class DevRoutes extends Controller {
     }
 
     function test() {
-        return $appeal = \App\RevisionRequest::find(1);
+        return \App\EqmsUser::mainDocumentController()->email;
     }
 }
