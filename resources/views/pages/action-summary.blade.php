@@ -208,7 +208,7 @@
     </table>
 </div>
 
-    <div style="display: block; width:90%; margin: auto; padding-top: 70px; page-break-before: always;">
+    <div style="display: block; width:90%; margin: auto; padding-top: 70px; page-break-before: always; padding-bottom: 10px;">
         <table class="tbl-info" style="width:100%; border-collapse:collapse;">
             <tbody>
             <tr>
@@ -247,6 +247,7 @@
             </tbody>
         </table>
     </div>
+    <span style="margin-left: 40px;"> NSCPI-QM-01-8/27JAN2016NSCPI-QM-01-8/27JAN2016 </span>
 
     <div class="footer" style="height:100px;">
         <img style="width:100%; height:10%;" src="{{ url('img/newsim_line_bar.png') }}"/>
