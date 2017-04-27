@@ -39,9 +39,6 @@
                                 </thead>
                                 <tbody id="requests-table-body">
                                     @foreach($revisionRequests as $revisionRequest)
-                                        @if($revisionRequest->status == 'Denied' ||
-                                        (($revisionRequest->status == 'Approved' && $revisionRequest->revision_request_number <> null)
-                                        || request('user.role') == 'admin'))
                                             <tr>
                                             <td>
                                                 <a href="#" class="x-user"><img src="{{ url('img/no-profile-image.png') }}"><span>{{ $revisionRequest->user_name }}</span></a><span>{{ $revisionRequest->created_at->toDayDateTimeString() }}</span>
@@ -76,7 +73,6 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                        @endif
                                     @endforeach
                                 </tbody>
                             </table>

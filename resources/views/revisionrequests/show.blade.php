@@ -102,6 +102,10 @@
             </form>
             <!-- End Section A -->
 
+        @if($revisionRequest->status == 'Denied' ||
+            (($revisionRequest->status == 'Approved' && $revisionRequest->revision_request_number <> null)
+            || request('user.role') == 'admin'))
+
             <!-- Start Section B -->
             <form enctype="multipart/form-data" class="form-horizontal" action="{{ route('revision-requests.update', $revisionRequest->id) }}" method="post">
                 {{ csrf_field() }}
@@ -322,6 +326,8 @@
             @endif
             @endif
             <!-- End Section D -->
+
+            @endif
 
         </div>
         <div class="col-md-3">

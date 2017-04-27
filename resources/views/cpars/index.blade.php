@@ -38,6 +38,7 @@
                             </table>
                         </div>
                     </div>
+                    {{ $cpars->links() }}
                 </div>
             </div>
         </div>

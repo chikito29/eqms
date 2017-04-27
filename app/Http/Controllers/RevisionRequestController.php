@@ -99,7 +99,7 @@ class RevisionRequestController extends Controller {
                 $files = request()->file('attachments');
                 foreach ($files as $key => $file) {
                     $sequence                        = Attachment::where('revision_request_id', $revisionRequest->id)->select('id')->get()->count() + 1;
-                    $path                            = $file->store('attachments', 'public');
+                    $path                            = Storage::putFile('attachments', new File($file));
                     $attachment                      = new Attachment();
                     $attachment->revision_request_id = $revisionRequest->id;
                     $attachment->file_name           = 'attachment_' . $sequence;
@@ -200,7 +200,7 @@ class RevisionRequestController extends Controller {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
                 $sequence                        = Attachment::where('revision_request_id', $revisionRequest->id)->select('id')->get()->count() + 1;
-                $path                            = $file->store('attachments', 'public');
+                $path                            = Storage::putFile('attachments', new File($file));
                 $attachment                      = new Attachment();
                 $attachment->revision_request_id = $revisionRequest->id;
                 $attachment->file_name           = 'appeal_attachment_' . $sequence;

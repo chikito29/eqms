@@ -38,7 +38,7 @@ Route::get('revision-requests/appeal/{revision_request}', 'RevisionRequestContro
 //Route GET Closure
 Route::get('unauthorize', function () { return view('errors.unauthorize'); });
 Route::get('pending', function () { return view('accessrequests.pending'); });
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () { return view('welcome'); })->name('/');
 
 // Individual POST Requests
 Route::post('answer-cpar/login/{cpar}', 'PageController@answerCparLoginPost')->name('answer-cpar-login-post');
@@ -57,4 +57,10 @@ Route::group(['middleware' => 'na.authenticate'], function() {
     Route::get('na-users/{chief?}/{id?}', 'DevRoutes@showNAUsers');
     Route::get('show-cpars/{id?}', 'DevRoutes@showCpars');
     Route::get('test', 'DevRoutes@test');
+});
+
+Route::get('/foo', function () {
+    return $exitCode = Artisan::call('route:list');
+
+    //
 });

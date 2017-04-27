@@ -6,7 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\RevisionRequest;
 use App\Attachment;
 use App\Mail\NewRevisionRequest;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class RevisionRequestForm extends FormRequest
 {
@@ -30,7 +32,7 @@ class RevisionRequestForm extends FormRequest
         return [
             'revision_reason' => 'required|max:600',
             'reference_document_tags' => 'required',
-			'attachments' => 'required_if:proposed_revision,"<p><br></p>"'
+            'attachments' => 'required_if:proposed_revision,"<p><br></p>"'
         ];
     }
 
@@ -49,7 +51,7 @@ class RevisionRequestForm extends FormRequest
 			$files = request()->file('attachments');
 			foreach ($files as $key => $file) {
 				$sequence = Attachment::where('revision_request_id', $revisionRequest->id)->select('id')->get()->count() + 1;
-				$path                            = $file->store('attachments', 'public');
+				$path                            = Storage::putFile('attachments', new File($file));
 				$attachment                      = new Attachment();
 				$attachment->revision_request_id = $revisionRequest->id;
 				$attachment->file_name           = 'attachment_' . $sequence;

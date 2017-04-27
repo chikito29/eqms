@@ -18,7 +18,9 @@ use App\CparClosed;
 use App\CparAnswered;
 use App\CparReviewed;
 use App\DocumentVersion;
+use Illuminate\Http\File;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class CparController extends Controller {
     protected $cpars;
@@ -48,7 +50,8 @@ class CparController extends Controller {
     }
 
     public function index() {
-        return view('cpars.index', ['cpars' => $this->cpars]);
+        $cpars = Cpar::paginate(10);
+        return view('cpars.index', ['cpars' => $cpars]);
     }
 
     public function create() {
@@ -104,7 +107,7 @@ class CparController extends Controller {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
                 $sequence                = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
-                $path                    = $file->store('attachments', 'public');
+                $path                    = Storage::putFile('attachments', new File($file));
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
                 $attachment->file_name   = 'attachment_' . $sequence;
@@ -197,14 +200,14 @@ class CparController extends Controller {
         if (request()->hasFile('attachments')) {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
-                $sequence                        = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
-                $path                            = $file->store('attachments', 'public');
-                $attachment                      = new Attachment();
-                $attachment->revision_request_id = $revisionRequest->id;
-                $attachment->file_name           = 'attachment_' . $sequence;
-                $attachment->file_path           = 'storage/' . $path;
-                $attachment->section             = 'edited';
-                $attachment->uploaded_by         = $responsiblePerson['first_name'] . ' ' . $responsiblePerson['last_name'];
+                $sequence                = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
+                $path                    = Storage::putFile('attachments', new File($file));
+                $attachment              = new Attachment();
+                $attachment->cpar_id     = $cpar->id;
+                $attachment->file_name   = 'attachment_' . $sequence;
+                $attachment->file_path   = 'storage/' . $path;
+                $attachment->section     = 'edited';
+                $attachment->uploaded_by = $responsiblePerson['first_name'] . ' ' . $responsiblePerson['last_name'];
                 $attachment->save();
             }
         }
@@ -344,7 +347,7 @@ class CparController extends Controller {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
                 $sequence                = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
-                $path                    = $file->store('attachments', 'public');
+                $path                    = Storage::putFile('attachments', new File($file));
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
                 $attachment->file_name   = 'attachment_' . $sequence;
@@ -440,7 +443,7 @@ class CparController extends Controller {
             $files = request()->file('attachments');
             foreach ($files as $key => $file) {
                 $sequence                = Attachment::where('cpar_id', $cpar->id)->select('id')->get()->count() + 1;
-                $path                    = $file->store('attachments', 'public');
+                $path                    = Storage::putFile('attachments', new File($file));
                 $attachment              = new Attachment();
                 $attachment->cpar_id     = $cpar->id;
                 $attachment->file_name   = 'attachment_' . $sequence;

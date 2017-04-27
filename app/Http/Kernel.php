@@ -57,5 +57,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'na.authenticate' => \App\Http\Middleware\NAAuthentication::class,
+        'nice_artisan' => \App\Http\Middleware\NiceArtisan::class,
     ];
 }

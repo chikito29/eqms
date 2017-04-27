@@ -10,6 +10,8 @@ use App\CparReviewed;
 use App\EqmsUser;
 use App\NA;
 use App\ResponsiblePerson;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
 class DevRoutes extends Controller {
@@ -48,6 +50,6 @@ class DevRoutes extends Controller {
     }
 
     function test() {
-        return \App\EqmsUser::mainDocumentController()->email;
+        return Artisan::call('route:list');
     }
 }
