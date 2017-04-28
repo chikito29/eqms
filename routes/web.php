@@ -15,6 +15,7 @@ Route::resource('documents', 'DocumentController');
 Route::resource('sections', 'SectionController');
 Route::resource('settings', 'SettingController');
 Route::resource('cpars', 'CparController');
+Route::resource('logs', 'LogController');
 
 // For printing revision-requests
 Route::get('revision-requests/{revision_request}/print', 'RevisionRequestController@printRevisionRequest')->name('revision-requests.print');
