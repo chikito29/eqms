@@ -385,7 +385,6 @@ class RevisionRequestController extends Controller {
         Mail::to(\App\EqmsUser::adminEmail())->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
         session()->flash('notify', ['message' => 'Sending revision request appeal successful.', 'type' => 'success']);
 
-        $user = collect(NA::user($revisionRequest->user_id));
         Make::log(
             'successfully submitted his/her appeal to his/her denied Revision Request',
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
