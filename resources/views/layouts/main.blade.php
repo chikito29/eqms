@@ -98,7 +98,7 @@
                 return false;
             });
 
-            $('body').bind('cut copy paste', function (e) {
+            $('body').bind('cut copy', function (e) {
                 e.preventDefault();
             });
 
