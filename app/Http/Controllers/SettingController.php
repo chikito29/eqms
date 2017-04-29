@@ -14,6 +14,12 @@ class SettingController extends Controller {
     }
 
     public function index() {
+        Make::log(
+            'visited the eQMS Administrators index',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $employees = collect(NA::users());
         $naUsers   = $employees->whereNotIn('id', $this->eqmsUsers->pluck('user_id'));
 
@@ -21,6 +27,12 @@ class SettingController extends Controller {
     }
 
     public function store() {
+        Make::log(
+            'tried to add an administrator',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $this->validate(request(), [
             'user_id'    => 'unique:eqms_users,user_id',
             'branch'     => 'required',
@@ -37,11 +49,24 @@ class SettingController extends Controller {
         $eqms_user->email      = request('email');
         $eqms_user->save();
 
+        Make::log(
+            'successfully added an administrator',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         return redirect()->route('settings.index');
     }
 
     public function destroy($id) {
         $eqmsUser = EqmsUser::find($id);
+
+        Make::log(
+            'deleted administrator ' . $eqmsUser->fullname,
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $eqmsUser->delete();
 
         return back();
@@ -52,6 +77,12 @@ class SettingController extends Controller {
     }
 
     public function update(EqmsUser $setting) {
+        Make::log(
+            'edited administrator ' . $setting->fullname,
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $setting->user_id    = request('employee_id');
         $setting->added_by   = request('user.first_name') . ' ' . request('user.last_name');
         $setting->fullname   = request('fullname');
