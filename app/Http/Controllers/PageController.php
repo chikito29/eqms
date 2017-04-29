@@ -20,6 +20,12 @@ class PageController extends Controller {
     }
 
     public function dashboard() {
+        Make::log(
+            'visited dashboard',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         if(request('user.role') != 'default') {
             $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
             $chartData        = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
@@ -32,10 +38,24 @@ class PageController extends Controller {
     }
 
     public function actionSummary(Cpar $cpar) {
+        $user = collect(NA::user($cpar->person_responsible));
+        Make::log(
+            'printed copy of CPAR of ' . $user['first_name'] .' '. $user['last_name'],
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         return view('pages.action-summary', compact('cpar'));
     }
 
     public function answerCparLogin($id) {
+        $user = collect(NA::user($cpar->person_responsible));
+        Make::log(
+            'access login page for CPAR of ' . $user['first_name'] .' '. $user['last_name'],
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $cpar = Cpar::find($id);
         if ($cpar->cparClosed->status == 1) {
             return redirect('page-not-found');
@@ -51,6 +71,13 @@ class PageController extends Controller {
     }
 
     public function answerCparLoginPost(Cpar $cpar) {
+        $user = collect(NA::user($cpar->person_responsible));
+        Make::log(
+            'tried to answer CPAR of ' . $user['first_name'] .' '. $user['last_name'],
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $this->validate(request(), [
             'code' => 'required'
         ]);
