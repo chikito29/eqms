@@ -7,7 +7,7 @@
 @section('nav-settings') active @endsection
 
 @section('page-content')
-    <div class="page-content-wrap" style="margin-top: 50px; height: 90vh;">
+    <div class="page-content-wrap" style="margin-top: 50px;">
         <div class="page-title">
             <h2><span class="fa fa-eye"></span> eQMS Logs</h2>
         </div>
