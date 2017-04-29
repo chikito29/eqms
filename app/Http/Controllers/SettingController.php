@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EqmsUser;
+use App\HelperClasses\Make;
 use App\NA;
 
 class SettingController extends Controller {
