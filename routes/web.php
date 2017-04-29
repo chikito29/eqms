@@ -34,6 +34,7 @@ Route::get('cpar-on-review/{cpar}', 'CparController@onReview')->name('cpars.on-r
 Route::get('cpars/verify/{cpar}', 'CparController@verify')->name('cpars.verify');
 Route::get('cpars/review/{cpar}', 'CparController@review')->name('cpars.review');
 Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
+Route::get('user-details/{user}', 'LogController@getUser')->middleware('na.authenticate');
 Route::get('revision-requests/appeal/{revision_request}', 'RevisionRequestController@appeal')->name('revision-requests.appeal');
 
 //Route GET Closure
