@@ -161,8 +161,9 @@ class CparController extends Controller {
         ]);
 
         session()->flash('notify', ['message' => 'CPAR successfully created.', 'type' => 'success']);
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
-            'successfully created a CPAR',
+            'successfully created a CPAR for ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
@@ -173,7 +174,7 @@ class CparController extends Controller {
     }
 
     public function show(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'viewed CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -198,7 +199,7 @@ class CparController extends Controller {
     }
 
     public function edit(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'visited editing page for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -211,7 +212,7 @@ class CparController extends Controller {
     }
 
     public function update(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'tried to update CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -258,7 +259,7 @@ class CparController extends Controller {
         }
 
         session()->flash('notify', ['message' => 'CPAR successfully updated.', 'type' => 'success']);
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'successfully updated CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -269,7 +270,7 @@ class CparController extends Controller {
     }
 
     public function close(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'closed CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -287,7 +288,7 @@ class CparController extends Controller {
     }
 
     public function answerCpar(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'visited the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -400,7 +401,7 @@ class CparController extends Controller {
     }
 
     public function answer(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'tried to answer CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -446,7 +447,7 @@ class CparController extends Controller {
 
         Mail::to($this->getEmail($cpar->chief))->send(new AnsweredCpar($cpar->id));
 
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'successfully answered CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -467,7 +468,7 @@ class CparController extends Controller {
     }
 
     public function review(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'visited reviewing page for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -499,7 +500,7 @@ class CparController extends Controller {
     }
 
     public function saveReview(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'tried to review the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -550,7 +551,7 @@ class CparController extends Controller {
         Mail::to(EqmsUser::mainDocumentController()->email)->send(new CparFinalized($cpar->id));
 
         session()->flash('attention', ['body' => '<strong>To finalize the CPAR that has been reviewed</strong>, the Document Controller needs to add its <strong>CPAR Number</strong>', 'color' => 'info']);
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'successfully reviewed the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -561,7 +562,7 @@ class CparController extends Controller {
     }
 
     public function verify(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'visited verifying page for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -606,7 +607,7 @@ class CparController extends Controller {
         Mail::to(EqmsUser::where('role', 'Admin')->get()[0]->email)->send(new CparFinalized($cpar->id));
 
         session()->flash('attention', ['body' => 'CPAR has been sent to QMR for review. You will receive an email when the review process has been finalized. Thank you.', 'color' => 'info']);
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'successfully finalized the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -617,7 +618,7 @@ class CparController extends Controller {
     }
 
     public function saveAsDraft(Cpar $cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'save a draft of the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -640,7 +641,7 @@ class CparController extends Controller {
     }
 
     public function createCparNumber($cpar) {
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'tried to create CPAR number for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
@@ -673,7 +674,7 @@ class CparController extends Controller {
         Mail::to($this->getEmail($updateCpar->chief))->send(new ReviewedCpar($cpar));
 
         session()->flash('notify', ['message' => 'CPAR number successfully added.', 'type' => 'success']);
-        $user = collect(NA::user($cpar->user_id));
+        $user = collect(NA::user($cpar->person_responsible));
         Make::log(
             'successfully created CPAR number for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
