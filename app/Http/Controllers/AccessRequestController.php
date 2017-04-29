@@ -53,7 +53,7 @@ class AccessRequestController extends Controller
         session()->flash('notify', ['message' => 'Request has been denied.', 'type' => 'success']);
         $user = collect(NA::user($accessRequest->user_id));
         Make::log(
-            request('user.first_name') .' '. request('user.last_name') . ' denied ' . $user['first_name'] .' '. $user['last_name'] .'\''. ' access request',
+            'denied ' . $user['first_name'] .' '. $user['last_name'] .'\''. ' access request',
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
@@ -69,7 +69,7 @@ class AccessRequestController extends Controller
             session()->flash('notify', ['message' => 'Access has been granted.', 'type' => 'success']);
             $user = collect(NA::user($accessRequest->user_id));
             Make::log(
-                request('user.first_name') .' '. request('user.last_name') . ' granted ' . $user['first_name'] .' '. $user['last_name'] .'\''. ' access request',
+                'granted ' . $user['first_name'] .' '. $user['last_name'] .'\''. ' access request',
                 $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
                 $_SERVER['REMOTE_ADDR']
             );
@@ -88,7 +88,7 @@ class AccessRequestController extends Controller
             session()->flash('notify', ['message' => 'Access has been revoked.', 'type' => 'success']);
             $user = collect(NA::user($accessRequest->user_id));
             Make::log(
-                request('user.first_name') .' '. request('user.last_name') . ' revoked ' . $user['first_name'] .' '. $user['last_name'] .'\''. ' access request',
+                'revoked ' . $user['first_name'] .' '. $user['last_name'] .'\''. ' access request',
                 $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
                 $_SERVER['REMOTE_ADDR']
             );
