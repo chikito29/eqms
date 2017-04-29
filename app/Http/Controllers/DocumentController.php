@@ -54,7 +54,7 @@ class DocumentController extends Controller {
 
         session()->flash('notify', ['message' => 'Posting \'' . $document->title . '\' successfull!', 'type' => 'success']);
         Make::log(
-            'successfully created a document with title ' . $document->title. 'under section ' . Section::find($document->section_id)->name,
+            'successfully created a document with title ' . $document->title. ' under section ' . Section::find($document->section_id)->name,
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
@@ -66,7 +66,7 @@ class DocumentController extends Controller {
         $document = Document::find($id);
 
         Make::log(
-            'viewed document with title ' . $document->title. 'under section ' . Section::find($document->section_id)->name,
+            'viewed document with title ' . $document->title. ' under section ' . Section::find($document->section_id)->name,
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
@@ -85,7 +85,7 @@ class DocumentController extends Controller {
         $sections = Section::all();
 
         Make::log(
-            'visited viewing of document with title ' . $document->title. 'under section ' . Section::find($document->section_id)->name,
+            'visited viewing of document with title ' . $document->title. ' under section ' . Section::find($document->section_id)->name,
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
@@ -97,7 +97,7 @@ class DocumentController extends Controller {
         $document             = Document::find($id);
 
         Make::log(
-            'tried to edit document with title ' . $document->title. 'under section ' . Section::find($document->section_id)->name,
+            'tried to edit document with title ' . $document->title. ' under section ' . Section::find($document->section_id)->name,
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
@@ -123,7 +123,7 @@ class DocumentController extends Controller {
         $document = Document::find($id);
 
         Make::log(
-            'deleted document with title ' .$document->title. 'under section ' . Section::find($document->section_id)->name,
+            'deleted document with title ' .$document->title. ' under section ' . Section::find($document->section_id)->name,
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
