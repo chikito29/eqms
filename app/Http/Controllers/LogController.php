@@ -2,19 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Logs;
+use App\Log;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-class LogsController extends Controller
-{
+class LogController extends Controller {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return view('logs.index');
+    public function getUser($id) {
+        $client = new Client();
+        try {
+            $response = $client->get(env('NA_URL') . '/api/users/' . $id, [
+                'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
+                'query'   => ['client_id' => env('NA_CLIENT_ID', 0)]
+            ]);
+        } catch (RequestException $e) {
+        }
+        return (string)$response->getBody();
+    }
+
+    public function index() {
+        $logs = Log::paginate(20);
+
+        return view('logs.index', compact('logs'));
     }
 
     /**
@@ -22,64 +35,58 @@ class LogsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Logs  $logs
+     * @param  \App\Log $logs
      * @return \Illuminate\Http\Response
      */
-    public function show(Logs $logs)
-    {
+    public function show(Logs $logs) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Logs  $logs
+     * @param  \App\Log $logs
      * @return \Illuminate\Http\Response
      */
-    public function edit(Logs $logs)
-    {
+    public function edit(Logs $logs) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Logs  $logs
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Log $logs
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Logs $logs)
-    {
+    public function update(Request $request, Logs $logs) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Logs  $logs
+     * @param  \App\Log $logs
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Logs $logs)
-    {
+    public function destroy(Logs $logs) {
         //
     }
 }
