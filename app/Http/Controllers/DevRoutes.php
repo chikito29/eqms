@@ -10,9 +10,6 @@ use App\CparReviewed;
 use App\EqmsUser;
 use App\NA;
 use App\ResponsiblePerson;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 class DevRoutes extends Controller {
     function resetCpars() {
@@ -50,6 +47,7 @@ class DevRoutes extends Controller {
     }
 
     function test() {
-        return Artisan::call('route:list');
+        $user = collect(NA::user(1));
+        return collect(NA::user(1))['first_name'];
     }
 }
