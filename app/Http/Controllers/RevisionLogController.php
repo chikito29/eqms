@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Document;
+use App\HelperClasses\Make;
 use App\RevisionLog;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,12 @@ class RevisionLogController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+        Make::log(
+            'visited Revision Logs index',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $logs = RevisionLog::paginate(10);
         $documentTitle = Document::select('id', 'title')->get();
 
@@ -29,6 +36,12 @@ class RevisionLogController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store() {
+        Make::log(
+            'tried to make a Revision Log',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
+
         $this->validate(request(), [
             'date' => 'required',
             'document-id' => 'required',
@@ -50,6 +63,12 @@ class RevisionLogController extends Controller {
             'encoded_by' => request('user.first_name') . ' ' . request('user.last_name')
         ]);
         RevisionLog::reguard();
+
+        Make::log(
+            'succesfully added a Revision Log',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
 
         return redirect()->route('revision-logs.index');
     }
@@ -93,6 +112,12 @@ class RevisionLogController extends Controller {
      */
     public function destroy(RevisionLog $revision_log) {
         $revision_log->delete();
+
+        Make::log(
+            'succesfully deleted a Revision Log',
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
 
         return redirect()->route('revision-logs.index');
     }
