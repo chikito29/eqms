@@ -44,10 +44,11 @@
                             </table>
                         </div>
                     </div>
+                    {{ $logs->links() }}
                 </div>
                 <!-- END BASIC TABLE SAMPLE -->
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="position: fixed; top: 12em; right: 1em;">
 
                 <div class="panel panel-default form-horizontal">
                     <div class="panel-body">
