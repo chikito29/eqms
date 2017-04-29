@@ -290,7 +290,7 @@ class CparController extends Controller {
     public function answerCpar(Cpar $cpar) {
         $user = collect(NA::user($cpar->person_responsible));
         Make::log(
-            'visited the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
+            'visited the answering page for CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
