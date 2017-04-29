@@ -64,5 +64,11 @@ class RevisionRequestForm extends FormRequest
 
         Mail::to(\App\EqmsUser::adminEmail())->send(new NewRevisionRequest(RevisionRequest::with('reference_document')->find($revisionRequest->id)));
         session()->flash('notify', ['message' => 'Sending revision request successful.', 'type' => 'success']);
+        $user = collect(NA::user($revisionRequest->user_id));
+        Make::log(
+            'successfully created a Revision Request for ' . $user['first_name'] .' '. $user['last_name'],
+            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
+            $_SERVER['REMOTE_ADDR']
+        );
     }
 }
