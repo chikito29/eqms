@@ -30,7 +30,7 @@
                                 <tbody>
                                 @if($logs->count() != 0)
                                 @foreach($logs as $log)
-                                <tr onclick="getUser({{ $log->user_id }})">
+                                <tr onclick="getUser({{ $log->user_id }})" style="cursor: pointer;">
                                     <td>{{ $log->action }}</td>
                                     <td>{{ $log->page_url }}</td>
                                     <td>{{ $log->ip_address }}</td>
