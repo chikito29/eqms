@@ -1,5 +1,13 @@
 @extends('layouts.main')
 
+@section('style')
+    <style>
+        div p {
+            font-size: 1em;
+        }
+    </style>
+@stop
+
 @section('page-title'){{ $document->title }} | eQMS @endsection
 
 @section('nav-document') active @endsection
