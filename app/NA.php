@@ -101,7 +101,8 @@ class NA extends Model {
             $response = $client->get(env('NA_URL') . '/api/temporary-access/revoke', [
                 'headers' => ['Authorization' => 'Bearer ' . session('na_access_token')],
                 'query'   => [
-                    'client_id' => env('NA_CLIENT_ID', 0)
+                    'client_id' => env('NA_CLIENT_ID', 0),
+                    'user_id'   => $id
                 ]
             ]);
         } catch (RequestException $e) {
