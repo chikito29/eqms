@@ -105,51 +105,32 @@
             </form>
 
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" style="position: fixed; top: 12em; right: 1em;">
 
-            <div class="panel panel-primary">
+            <div class="panel panel-default form-horizontal">
                 <div class="panel-body">
-                    <h3>Search</h3>
-                    <form id="faqForm">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="faqSearchKeyword" placeholder="Search..."/>
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary" id="faqSearch">Search</button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="push-up-10"><strong>Search Result:</strong> <span id="faqSearchResult">Please fill keyword field</span></div>
-                    <div class="push-up-10">
-                        <button class="btn btn-primary" id="faqRemoveHighlights">Remove Highlights</button>
-                        <div class="pull-right">
-                            <button class="btn btn-default" id="faqOpenAll"><span class="fa fa-angle-down"></span> Open All</button>
-                            <button class="btn btn-default" id="faqCloseAll"><span class="fa fa-angle-up"></span> Close All</button>
-                        </div>
+                    <h3><span class="fa fa-info-circle"></span> Quick Info</h3>
+                    <p>Some quick info about this user</p>
+                </div>
+                <div class="panel-body form-group-separated">
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Full name</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">{{ request('user.first_name') }} {{ request('user.last_name') }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Username</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">{{ request('user.username') }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Department</label>
+                        <div class="col-md-8 col-xs-7">{{ request('user.department') }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-5 control-label">Branch</label>
+                        <div class="col-md-8 col-xs-7 line-height-30">{{ request('user.branch') }}</div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <h3>Contact</h3>
-                    <p>Feel free to contact us for any issues you might have with our products.</p>
-                    <div class="form-group">
-                        <label>E-mail</label>
-                        <input type="email" class="form-control" placeholder="youremail@domain.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <input type="email" class="form-control" placeholder="Message subject">
-                    </div>
-                    <div class="form-group">
-                        <label>Message</label>
-                        <textarea class="form-control" placeholder="Your message" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <button class="btn btn-default"><span class="fa fa-paperclip"></span> Add attachment</button>
-                    <button class="btn btn-success pull-right"><span class="fa fa-envelope-o"></span> Send</button>
-                </div>
             </div>
 
         </div>
