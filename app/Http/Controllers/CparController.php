@@ -184,11 +184,11 @@ class CparController extends Controller {
         $sections = Section::with('documents')->get();
 
         $document = Document::find($cpar->document_id);
-        $body     = str_replace('&nbsp;', ' ', $document->body);
+        $body     = str_replace('&nbsp;', '', $document->body);
         $tags     = explode(',', $cpar->tags);
 
         foreach ($tags as $tag) {
-            $body = str_ireplace(str_replace('&nbsp;', ' ', $tag), '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
         session()->flash('attention', ['body' => '<strong class="text text-danger">Disclaimer</strong>: If the <strong>Document Reference</strong> does not show any <strong>highlighting</strong>, this means that the target
@@ -288,13 +288,6 @@ class CparController extends Controller {
     }
 
     public function answerCpar(Cpar $cpar) {
-        $user = collect(NA::user($cpar->person_responsible));
-        Make::log(
-            'visited the answering page for CPAR of ' . $user['first_name'] .' '. $user['last_name'],
-            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
-            $_SERVER['REMOTE_ADDR']
-        );
-
         $due                = Carbon::parse($cpar->proposed_date);
         $due                = $due->diffInDays($cpar->created_at);
         $this->businessDays = $due + 1;
@@ -307,11 +300,11 @@ class CparController extends Controller {
         }
 
         $document = Document::find($cpar->document_id);
-        $body     = str_replace('&nbsp;', ' ', $document->body);
+        $body     = str_replace('&nbsp;', '', $document->body);
         $tags     = explode(',', $cpar->tags);
 
         foreach ($tags as $tag) {
-            $body = str_ireplace(str_replace('&nbsp;', ' ', $tag), '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
+            $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
         $dueDate = $this->holidays($cpar, 2017);
@@ -401,13 +394,6 @@ class CparController extends Controller {
     }
 
     public function answer(Cpar $cpar) {
-        $user = collect(NA::user($cpar->person_responsible));
-        Make::log(
-            'tried to answer CPAR of ' . $user['first_name'] .' '. $user['last_name'],
-            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
-            $_SERVER['REMOTE_ADDR']
-        );
-
         $this->validate(request(), [
             'correction' => 'required',
             'root_cause' => 'required',
@@ -446,13 +432,6 @@ class CparController extends Controller {
         $cpar->save();
 
         Mail::to($this->getEmail($cpar->chief))->send(new AnsweredCpar($cpar->id));
-
-        $user = collect(NA::user($cpar->person_responsible));
-        Make::log(
-            'successfully answered CPAR of ' . $user['first_name'] .' '. $user['last_name'],
-            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
-            $_SERVER['REMOTE_ADDR']
-        );
 
         return redirect("cpar-on-review/$cpar->id");
     }
