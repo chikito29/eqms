@@ -53,13 +53,6 @@ class PageController extends Controller {
     public function answerCparLogin($id) {
         $cpar = Cpar::find($id);
 
-        $user = collect(NA::user($cpar->person_responsible));
-        Make::log(
-            'access login page for CPAR of ' . $user['first_name'] .' '. $user['last_name'],
-            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
-            $_SERVER['REMOTE_ADDR']
-        );
-
         if ($cpar->cparClosed->status == 1) {
             return redirect('page-not-found');
         }
