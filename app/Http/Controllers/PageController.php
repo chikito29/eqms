@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Cpar;
+use App\NA;
 use App\ResponsiblePerson;
 use App\RevisionLog;
 use App\RevisionRequest;
+use App\HelperClasses\Make;
 
 class PageController extends Controller {
     public function __construct() {
