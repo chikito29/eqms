@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\RevisionRequest;
 use App\Attachment;
+use App\NA;
 use App\Mail\NewRevisionRequest;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Mail;
