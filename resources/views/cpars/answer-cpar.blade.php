@@ -222,10 +222,7 @@
             <div class="modal-body">
                 <p>This CPAR has been issued <strong class="text text-info">{{ $cpar->created_at->toDayDateTimeString() }}</strong>.</p>
                 <p>You are given {{ $due }} working day/s (Saturdays included) to answer.</p>
-                <p>Due date of answering this CPAR is at the end of <strong class="text text-danger">{{ $dueDate->toFormattedDateString() }}</strong>.</p>
-                @if(\Carbon\Carbon::parse($cpar->proposed_date)->startOfDay()->eq(\Carbon\Carbon::now()->startOfDay())) <p>You still have <strong class="text text-success">{{ 24 - Carbon\Carbon::now()->hour }}</strong> remaining working hour/s to comply.</p>
-                @else <p>You still have <strong class="text text-success">{{ $cpar->created_at->diffInDays($dueDate) }}</strong> remaining working day/s to comply.</p>
-                @endif
+                <p>Due date of answering this CPAR is at the end of <strong class="text text-danger">{{ $due->toFormattedDateString() }}</strong>.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

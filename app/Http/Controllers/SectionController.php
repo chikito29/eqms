@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\HelperClasses\Make;
 use App\Section;
 
 class SectionController extends Controller {

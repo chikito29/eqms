@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\HelperClasses\Make;
 use App\AccessRequest;
 use App\NA;
 use Illuminate\Support\Facades\Validator;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 
 class AccessRequestController extends Controller
 {
@@ -34,13 +33,6 @@ class AccessRequestController extends Controller
         $accessRequest->user_name = $request->user_name;
         $accessRequest->purpose = $request->purpose;
         $accessRequest->save();
-
-        $user = collect(NA::user($accessRequest->user_id));
-        Make::log(
-            $user['first_name'] .' '. $user['last_name'] .' '. 'requested an access for on eQMS for ' . $accessRequest->purpose,
-            $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
-            $_SERVER['REMOTE_ADDR']
-        );
 
         return redirect('pending');
     }

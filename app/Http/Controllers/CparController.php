@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Storage;
 
 class CparController extends Controller {
     protected $cpars;
-    protected $businessDays;
 
     function __construct(Cpar $cpars, EqmsUser $eqmsUsers) {
         $this->cpars = $cpars->latest()->get();
@@ -290,7 +289,6 @@ class CparController extends Controller {
     public function answerCpar(Cpar $cpar) {
         $due                = Carbon::parse($cpar->proposed_date);
         $due                = $due->diffInDays($cpar->created_at);
-        $this->businessDays = $due + 1;
 
         if ($cpar->cparClosed->status == 1) {
             return redirect("cpar-on-review/$cpar->id")->withErrors(['code' => 'CPAR is already closed.']);
@@ -307,90 +305,10 @@ class CparController extends Controller {
             $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
         }
 
-        $dueDate = $this->holidays($cpar, 2017);
-        $due     = $this->businessDays;
+        $due                = Carbon::parse($cpar->proposed_date);
+        $due                = $due->diffInDays($cpar->created_at);
 
-        return view('cpars.answer-cpar', compact('cpar', 'body', 'dueDate', 'due'));
-    }
-
-    public function holidays($cpar, $year) {
-        $holidays = [
-            Carbon::createFromDate($year, 1, 1), // New Year's Day
-            Carbon::createFromDate($year, 1, 2), // Public Holiday
-            Carbon::createFromDate($year, 1, 28), // Chinese New Year
-            Carbon::createFromDate($year, 2, 25), // People Power Revolution
-            Carbon::createFromDate($year, 4, 9), // The Day Of Valor
-            Carbon::createFromDate($year, 4, 13), // Maundy Thursday
-            Carbon::createFromDate($year, 4, 14), // Good Friday
-            Carbon::createFromDate($year, 4, 15), // Black Saturday
-            Carbon::createFromDate($year, 5, 1), // Labor Day
-            Carbon::createFromDate($year, 6, 12), // Independence Day
-            Carbon::createFromDate($year, 6, 26), // Eid-UI-Fitr
-            Carbon::createFromDate($year, 8, 21), // Ninoy Aquino Day
-            Carbon::createFromDate($year, 8, 28), // National Heroes Day
-            Carbon::createFromDate($year, 9, 1), // Eid-Al-Adha
-            Carbon::createFromDate($year, 10, 31), // Public Holiday
-            Carbon::createFromDate($year, 1, 1), // All Saints Day
-            Carbon::createFromDate($year, 1, 30), // Bonifacio Day
-            Carbon::createFromDate($year, 12, 25), // Christmas Day
-            Carbon::createFromDate($year, 12, 30), // Rizal Day
-            Carbon::createFromDate($year, 12, 31) // New Year's Eve
-        ];
-
-        $dateCreated = $cpar->created_at->startOfDay();
-
-        for ($i = 0; $i < $this->businessDays; $i++) {
-            $tempDate = $dateCreated->addDay();
-            foreach ($holidays as $holiday) {
-                if ($holiday->startOfDay()->eq($tempDate->startOfDay())) {
-                    $this->businessDays = $this->businessDays + 1;
-                    break;
-                }
-            }
-        }
-
-        return $cpar->created_at->addDays($this->businessDays);
-    }
-
-    public static function holiday($cpar, $year, $lastDay, $due) {
-        $holidays = [
-            Carbon::createFromDate($year, 1, 1), // New Year's Day
-            Carbon::createFromDate($year, 1, 2), // Public Holiday
-            Carbon::createFromDate($year, 1, 28), // Chinese New Year
-            Carbon::createFromDate($year, 2, 25), // People Power Revolution
-            Carbon::createFromDate($year, 4, 9), // The Day Of Valor
-            Carbon::createFromDate($year, 4, 13), // Maundy Thursday
-            Carbon::createFromDate($year, 4, 14), // Good Friday
-            Carbon::createFromDate($year, 4, 15), // Black Saturday
-            Carbon::createFromDate($year, 5, 1), // Labor Day
-            Carbon::createFromDate($year, 6, 12), // Independence Day
-            Carbon::createFromDate($year, 6, 26), // Eid-UI-Fitr
-            Carbon::createFromDate($year, 8, 21), // Ninoy Aquino Day
-            Carbon::createFromDate($year, 8, 28), // National Heroes Day
-            Carbon::createFromDate($year, 9, 1), // Eid-Al-Adha
-            Carbon::createFromDate($year, 10, 31), // Public Holiday
-            Carbon::createFromDate($year, 1, 1), // All Saints Day
-            Carbon::createFromDate($year, 1, 30), // Bonifacio Day
-            Carbon::createFromDate($year, 12, 25), // Christmas Day
-            Carbon::createFromDate($year, 12, 30), // Rizal Day
-            Carbon::createFromDate($year, 12, 31) // New Year's Eve
-        ];
-
-        $businessDays = 0;
-        $dateCreated  = $cpar->created_at->startOfDay();
-        $lastDay      = $lastDay->startOfDay();
-
-        for ($i = 0; $i < $due; $i++) {
-            $tempDate = $dateCreated->addDay();
-            foreach ($holidays as $holiday) {
-                if ($holiday->startOfDay()->eq($tempDate->startOfDay()) && $tempDate->day <> 0) $businessDays++;
-            }
-            if ($dateCreated->eq($lastDay)) {
-                break;
-            }
-        }
-
-        return $dateCreated->addDays($businessDays);
+        return view('cpars.answer-cpar', compact('cpar', 'body', 'due'));
     }
 
     public function answer(Cpar $cpar) {
@@ -439,11 +357,8 @@ class CparController extends Controller {
     public function onReview(Cpar $cpar) {
         $due                = Carbon::parse($cpar->proposed_date);
         $due                = $due->diffInDays($cpar->created_at);
-        $this->businessDays = $due + 1;
 
-        $dueDate = $this->holidays($cpar, 2017);
-
-        return view('cpars.cpar-on-review', compact('cpar', 'dueDate'));
+        return view('cpars.cpar-on-review', compact('cpar', 'due'));
     }
 
     public function review(Cpar $cpar) {
@@ -557,7 +472,7 @@ class CparController extends Controller {
                 $cparReviewed->save();
 
                 $document = Document::find($cpar->document_id);
-                $body     = $document->body;
+                $body     = str_replace('&nbsp;', '', $document->body);
                 $tags     = explode(',', $cpar->tags);
 
                 foreach ($tags as $tag) {
@@ -619,15 +534,14 @@ class CparController extends Controller {
         return back();
     }
 
-    public function createCparNumber($cpar) {
-        $user = collect(NA::user($cpar->person_responsible));
+    public function createCparNumber($id) {
+        $updateCpar = Cpar::find($id);
+        $user = collect(NA::user($updateCpar->person_responsible));
         Make::log(
             'tried to create CPAR number for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
-
-        $updateCpar = Cpar::find($cpar);
 
         $this->validate(request(), [
             'cpar_number' => 'required|unique:cpars,cpar_number'
@@ -636,12 +550,12 @@ class CparController extends Controller {
         $updateCpar->cpar_number = request('cpar_number');
         $updateCpar->save();
 
-        $cparReviewed           = CparReviewed::find($cpar);
+        $cparReviewed           = CparReviewed::find($id);
         $cparReviewed->status   = 1;
         $cparReviewed->notified = 1;
         $cparReviewed->save();
 
-        $cparClosed = CparClosed::find($cpar);
+        $cparClosed = CparClosed::find($id);
         //close reviewed cpar
         $cparClosed->status    = 1;
         $cparClosed->notified  = 1;
@@ -650,10 +564,10 @@ class CparController extends Controller {
         $cparClosed->save();
 
         //notify department head
-        Mail::to($this->getEmail($updateCpar->chief))->send(new ReviewedCpar($cpar));
+        Mail::to($this->getEmail($updateCpar->chief))->send(new ReviewedCpar($id));
 
         session()->flash('notify', ['message' => 'CPAR number successfully added.', 'type' => 'success']);
-        $user = collect(NA::user($cpar->person_responsible));
+        $user = collect(NA::user($updateCpar->person_responsible));
         Make::log(
             'successfully created CPAR number for the CPAR of ' . $user['first_name'] .' '. $user['last_name'],
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],

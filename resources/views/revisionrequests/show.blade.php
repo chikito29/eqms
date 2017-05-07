@@ -103,8 +103,8 @@
             <!-- End Section A -->
 
         @if($revisionRequest->status == 'Denied' ||
-            (($revisionRequest->status == 'Approved' && $revisionRequest->revision_request_number <> null)
-            || request('user.role') == 'admin'))
+            ($revisionRequest->section_c->approved == 1 && $revisionRequest->revision_request_number <> null)
+            || request('user.role') == 'admin')
 
             <!-- Start Section B -->
             <form enctype="multipart/form-data" class="form-horizontal" action="{{ route('revision-requests.update', $revisionRequest->id) }}" method="post">

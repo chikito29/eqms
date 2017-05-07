@@ -61,7 +61,9 @@
                                             <td>
                                                 <a href="{{ route('revision-requests.show', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm"><span class="fa fa-eye"></span> View</a>
                                                 @if($revisionRequest->revision_request_number)
-                                                    <a href="{{ route('revision-requests.print', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm" target="_blank" style="margin-left: 4px;"><span class="fa fa-print"></span> Print</a>
+                                                    @if(request('user.role') == 'document-controller' || request('user.role') == 'admin')
+                                                        <a href="{{ route('revision-requests.print', $revisionRequest->id) }}" class="btn btn-default btn-rounded btn-condensed btn-sm" target="_blank" style="margin-left: 4px;"><span class="fa fa-print"></span> Print</a>
+                                                    @endif
                                                 @elseif($revisionRequest->section_d)
                                                     @if(request('user.role') == 'document-controller')
                                                         <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="showModal({{ $revisionRequest->id }}); return false;" style="margin-left: 4px;"><span class="fa fa-plus" style="color: rgb(180, 70, 69)"></span> Revision Request No.</a>

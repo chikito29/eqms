@@ -135,7 +135,8 @@
                                     {{ $cpar->date_confirmed }}
                                 @endcomponent
                             @endif
-                            @if($cpar->cparAnswered->status == 1)
+                            @if(($cpar->cparAnswered->status == 1 && request('user.role') == 'admin') ||
+                                ($cpar->cparClosed->status == 1 || $cpar->cpar_number <> null))
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <h4><strong>To Be Filled By The QMR / Auditor</strong></h4>
@@ -175,30 +176,30 @@
                                         {{ $cpar->result }}
                                     @endcomponent
                                 @endif
-								<div class="form-group">
-                                    <label class="col-md-3 col-xs-5 control-label">Attachments</label>
-                                    <div class="col-md-9 col-xs-7">
-										@if($cpar->attachments->count() > 0)
-                                            @if(request('user.role') == 'default')
-                                                <label class="control-label">Confidential</label>
-                                            @elseif(request('user.id') == $cpar->raised_by || request('user.id') == $cpar->person_responsible
-                                            || request('user.role') == 'admin' || request('user.role') == 'document-controller')
-                                                @foreach($cpar->attachments as $attachment)
-                                                    <a class="control-label" href="{{ asset($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a> uploaded by: {{ $attachment->uploaded_by }}<br>
-                                                @endforeach
-                                            @endif
-                                        @else
-                                            No Attachment Avaible For This CPAR
+                            @endif
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Attachments</label>
+                                <div class="col-md-9 col-xs-7">
+                                    @if($cpar->attachments->count() > 0)
+                                        @if(request('user.role') == 'default')
+                                            <label class="control-label">Confidential</label>
+                                        @elseif(request('user.id') == $cpar->raised_by || request('user.id') == $cpar->person_responsible
+                                        || request('user.role') == 'admin' || request('user.role') == 'document-controller')
+                                            @foreach($cpar->attachments as $attachment)
+                                                <a class="control-label" href="{{ asset($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a> uploaded by: {{ $attachment->uploaded_by }}<br>
+                                            @endforeach
                                         @endif
-									</div>
-                                </div>
-                                <div class="panel-footer">
-                                    @yield('verify-button')
-                                    @if(request('user.role') == 'admin')
-                                        <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
+                                    @else
+                                        No Attachment Avaible For This CPAR
                                     @endif
                                 </div>
+                            </div>
+                            <div class="panel-footer">
+                                @yield('verify-button')
+                                @if(request('user.role') == 'admin')
+                                    <button class="btn btn-primary btn-rounded pull-right">Print CPAR</button>
                                 @endif
+                            </div>
                             </div>
                         </div>
                     </form>

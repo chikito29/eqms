@@ -27,40 +27,46 @@
                                     <th>STATUS</th>
                                     <th>ACTION</th>
                                 </tr>
-                                @foreach($accessRequests as $accessRequest)
-                                <tr>
-                                    <td width="20%">
-                                        <a href="#" class="x-user"><img src="{{ url('img/no-profile-image.png') }}"><span>{{ $accessRequest->user_name }}</span></a>
-                                    </td>
-                                    <td>
-                                        {{ $accessRequest->purpose }}
-                                    </td>
-                                    <td width="15%">
-                                        {{ $accessRequest->created_at->toDayDateTimeString() }}
-                                    </td>
-                                    <td width="10%">
-                                        @if($accessRequest->status == 'Pending')
-                                        <span class="label label-info" style="color: white;">{{ $accessRequest->status }}</span>
-                                        @elseif($accessRequest->status == 'Denied')
-                                            <span class="label label-danger" style="color: white;">{{ $accessRequest->status }}</span>
-                                        @elseif($accessRequest->status == 'Revoked')
-                                            <span class="label label-warning" style="color: white;">{{ $accessRequest->status }}</span>
-                                        @else
-                                        <span class="label label-success" style="color: white;">{{ $accessRequest->status }}</span>
-                                        @endif
-                                    </td>
-                                    <td width="10%">
-                                        @if($accessRequest->status == 'Pending')
-                                        <a href="#" class="btn btn-success btn-rounded btn-condensed btn-sm" onclick="showModal({{ $accessRequest->id }}); return false;" ><span class="fa fa-check" style="color:rgb(149,183,93)"></span></button>
-                                        <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="deny_request({{ $accessRequest->id }})" style="margin-left: 4px;"><span class="fa fa-times" style="color:rgb(182,70,69)"></span></button>
-                                        @else
-                                        <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="revoke_access({{ $accessRequest->id }})" style="margin-left: 4px;">Revoke</button>
-                                        @endif
-                                    </td>
-                                    <form method="POST" action="{{ route('access-requests.destroy', $accessRequest->id) }}" accept-charset="UTF-8" id="form-delete{{ $accessRequest->id }}">{{ csrf_field() }}{{ method_field('delete') }}</form>
-                                    <form method="POST" action="{{ route('access-requests.revoke', $accessRequest->id) }}" accept-charset="UTF-8" id="form-revoke{{ $accessRequest->id }}">{{ csrf_field() }}</form>
-                                </tr>
-                                @endforeach
+                                @if($accessRequests->count() <> 0)
+                                    @foreach($accessRequests->count() as $accessRequest)
+                                            <tr>
+                                                <td width="20%">
+                                                    <a href="#" class="x-user"><img src="{{ url('img/no-profile-image.png') }}"><span>{{ $accessRequest->user_name }}</span></a>
+                                                </td>
+                                                <td>
+                                                    {{ $accessRequest->purpose }}
+                                                </td>
+                                                <td width="15%">
+                                                    {{ $accessRequest->created_at->toDayDateTimeString() }}
+                                                </td>
+                                                <td width="10%">
+                                                    @if($accessRequest->status == 'Pending')
+                                                        <span class="label label-info" style="color: white;">{{ $accessRequest->status }}</span>
+                                                    @elseif($accessRequest->status == 'Denied')
+                                                        <span class="label label-danger" style="color: white;">{{ $accessRequest->status }}</span>
+                                                    @elseif($accessRequest->status == 'Revoked')
+                                                        <span class="label label-warning" style="color: white;">{{ $accessRequest->status }}</span>
+                                                    @else
+                                                        <span class="label label-success" style="color: white;">{{ $accessRequest->status }}</span>
+                                                    @endif
+                                                </td>
+                                                <td width="10%">
+                                                    @if($accessRequest->status == 'Pending')
+                                                        <a href="#" class="btn btn-success btn-rounded btn-condensed btn-sm" onclick="showModal({{ $accessRequest->id }}); return false;" ><span class="fa fa-check" style="color:rgb(149,183,93)"></span></button>
+                                                            <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="deny_request({{ $accessRequest->id }})" style="margin-left: 4px;"><span class="fa fa-times" style="color:rgb(182,70,69)"></span></button>
+                                                                @else
+                                                                    <a href="#" class="btn btn-danger btn-rounded btn-condensed btn-sm" onclick="revoke_access({{ $accessRequest->id }})" style="margin-left: 4px;">Revoke</button>
+                                                    @endif
+                                                </td>
+                                                <form method="POST" action="{{ route('access-requests.destroy', $accessRequest->id) }}" accept-charset="UTF-8" id="form-delete{{ $accessRequest->id }}">{{ csrf_field() }}{{ method_field('delete') }}</form>
+                                                <form method="POST" action="{{ route('access-requests.revoke', $accessRequest->id) }}" accept-charset="UTF-8" id="form-revoke{{ $accessRequest->id }}">{{ csrf_field() }}</form>
+                                            </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5" align="center"><strong>Hooray! There is no pending access request!</strong></td>
+                                    </tr>
+                                @endif
                             </table>
                         </div>
                     </div>

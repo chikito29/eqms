@@ -16,7 +16,7 @@ Please inform
     @endif
 @endforeach
 to answer the CPAR on or before
-{{ \App\Http\Controllers\CparController::holiday($cpar,2017,\Carbon\Carbon::parse($cpar->proposed_date),\Carbon\Carbon::parse($cpar->proposed_date)->diffInDays($cpar->created_at))->format('l jS \\of F Y') }}.
+{{ \Carbon\Carbon::parse($cpar->proposed_date)->format('l jS \\of F Y') }}.
 
 He/she may access the said CPAR using this code: <strong>{{ $cpar->responsiblePerson->code }}</strong>
 
