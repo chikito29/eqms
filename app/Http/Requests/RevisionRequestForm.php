@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\HelperClasses\Make;
 use App\RevisionRequest;
 use App\Attachment;
 use App\NA;
