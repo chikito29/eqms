@@ -28,7 +28,7 @@
                                     <th>ACTION</th>
                                 </tr>
                                 @if($accessRequests->count() <> 0)
-                                    @foreach($accessRequests->count() as $accessRequest)
+                                    @foreach($accessRequests as $accessRequest)
                                             <tr>
                                                 <td width="20%">
                                                     <a href="#" class="x-user"><img src="{{ url('img/no-profile-image.png') }}"><span>{{ $accessRequest->user_name }}</span></a>
