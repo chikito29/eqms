@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\HelperClasses\Make;
+use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\RevisionRequest;
@@ -175,7 +176,7 @@ class RevisionRequestController extends Controller {
                     $attachment->revision_request_id = $revisionRequest->id;
                     $attachment->file_name           = 'attachment_' . $sequence;
                     $attachment->file_path           = 'storage/' . $path;
-                    $attachment->section             = 'revision-request-a';
+                    $attachment->section             = 'revision-request-c';
                     $attachment->uploaded_by         = $revisionRequest->user['first_name'] . ' ' . $revisionRequest->user['last_name'];
                     $attachment->save();
                 }
