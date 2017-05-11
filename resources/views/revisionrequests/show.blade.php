@@ -103,7 +103,7 @@
             <!-- End Section A -->
 
         @if($revisionRequest->status == 'Denied' ||
-            ($revisionRequest->section_c->approved == 1 && $revisionRequest->revision_request_number <> null)
+            ($revisionRequest->section_c <> null && $revisionRequest->revision_request_number <> null)
             || request('user.role') == 'admin')
 
             <!-- Start Section B -->
