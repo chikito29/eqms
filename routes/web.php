@@ -62,7 +62,5 @@ Route::group(['middleware' => 'na.authenticate'], function() {
 });
 
 Route::get('/foo', function () {
-    return $exitCode = Artisan::call('route:list');
-
-    //
+  dd(App\NA::user(5));
 });
