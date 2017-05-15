@@ -62,5 +62,6 @@ Route::group(['middleware' => 'na.authenticate'], function() {
 });
 
 Route::get('/foo', function () {
-  dd(App\NA::user(5));
+  $cpar = \App\Cpar::find(1);
+  dd($cpar);
 });

@@ -7,7 +7,7 @@
             <a href="#">CPAR issued
                 <strong class="text text-warning">{{ $cpar->created_at->diffForHumans() }}</strong>,
                 Please answer the CPAR on or before
-                <strong class="text text-warning">{{ $dueDate->toFormattedDateString() }}</strong>
+                <strong class="text text-warning">{{ \Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}</strong>
             </a>
         </li>
     </ul>

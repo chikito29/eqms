@@ -289,9 +289,6 @@ class CparController extends Controller {
   }
 
   public function answerCpar(Cpar $cpar) {
-    $due = Carbon::parse($cpar->proposed_date);
-    $due = $due->diffInDays($cpar->created_at);
-
     if ($cpar->cparClosed->status == 1) {
       return redirect("cpar-on-review/$cpar->id")->withErrors(['code' => 'CPAR is already closed.']);
     }
@@ -307,10 +304,7 @@ class CparController extends Controller {
       $body = str_ireplace($tag, '<mark style="background-color: yellow;">' . ucfirst($tag) . '</mark>', $body);
     }
 
-    $due = Carbon::parse($cpar->proposed_date);
-    $due = $due->diffInDays($cpar->created_at);
-
-    return view('cpars.answer-cpar', compact('cpar', 'body', 'due'));
+    return view('cpars.answer-cpar', compact('cpar', 'body'));
   }
 
   public function answer(Cpar $cpar) {
