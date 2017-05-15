@@ -37,13 +37,13 @@ class CparController extends Controller {
 
   public function colorize($severity) {
     if ($severity == 'Observation') {
-      $severity = '<span class="label label-info">' . request('severity') . '</span>';
+      $severity = '<span class="label label-info">' . $severity . '</span>';
     }
     elseif ($severity == 'Minor') {
-      $severity = '<span class="label label-warning">' . request('severity') . '</span>';
+      $severity = '<span class="label label-warning">' . $severity . '</span>';
     }
     else {
-      $severity = '<span class="label label-danger">' . request('severity') . '</span>';
+      $severity = '<span class="label label-danger">' . $severity . '</span>';
     }
 
     return $severity;
@@ -227,12 +227,11 @@ class CparController extends Controller {
 
     $severity = $this->colorize(request('severity'));
 
+    $cpar->severity           = $severity;
     $cpar->person_responsible = request('person_responsible');
     $cpar->root_cause         = request('root_cause');
-    $cpar->severity           = $severity;
     $cpar->department         = request('department');
     $cpar->proposed_date      = request('proposed_date');
-    $cpar->severity           = request('severity');
     $cpar->document_id        = request('reference');
     $cpar->tags               = request('tags');
     $cpar->source             = request('source');
@@ -240,6 +239,8 @@ class CparController extends Controller {
     $cpar->details            = request('details');
     $cpar->chief              = request('department_head');
     $cpar->save();
+
+    return $cpar;
 
     $responsiblePerson = collect(NA::user($cpar->responsiblePerson->user_id));
 

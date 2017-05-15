@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +17,6 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     public function boot() {
-
         // Passing sections collection on header load
         View::composer(['headers.admin', 'headers.super-admin', 'headers.default'], function($view) {
             $view->with(['sections' => Section::with('documents')->get()]);
