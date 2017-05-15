@@ -351,10 +351,7 @@ class CparController extends Controller {
   }
 
   public function onReview(Cpar $cpar) {
-    $due = Carbon::parse($cpar->proposed_date);
-    $due = $due->diffInDays($cpar->created_at);
-
-    return view('cpars.cpar-on-review', compact('cpar', 'due'));
+    return view('cpars.cpar-on-review', compact('cpar'));
   }
 
   public function review(Cpar $cpar) {

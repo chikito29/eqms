@@ -36,11 +36,11 @@
                                 <div class="error-subtext">The CPAR you are trying to view was already closed.</div>
                                 <div class="error-subtext">If you need a copy of the CPAR please contact the QMR for details.</div>
                             </div>
-                        @elseif(Carbon::now()->startOfDay()->gt($due->startOfDay()) && $cpar->cparAnswered->status != 1)
+                        @elseif(Carbon::now()->startOfDay()->gt(\Carbon\Carbon::parse($cpar->proposed_date)->startOfDay()) && $cpar->cparAnswered->status != 1)
                             <div class="error-container">
                                 <div class="error-text">CPAR form expired</div>
                                 <div class="error-subtext">You have failed to answer your cpar issued {{ $cpar->created_at->toFormattedDateString() }} <br>
-                                    to be answered last {{ $due->toFormattedDateString() }}.</div>
+                                    to be answered last {{ \Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}.</div>
                                 <div class="error-subtext">Your department head has also been notified regarding this issue.</div>
                             </div>
                         @elseif($cpar->date_confirmed == NULL)

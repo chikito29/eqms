@@ -18,7 +18,8 @@
         <div class="row">
             <div class="col-md-9">
 
-                <form class="form-horizontal" role="form" id="form-cpar" action="/action-summary/{{ $cpar->id }}" method="GET" target="_blank">
+                <form class="form-horizontal" role="form" id="form-cpar" action="/action-summary/{{ $cpar->id }}"
+                      method="GET" target="_blank">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
@@ -181,12 +182,14 @@
                                 <label class="col-md-3 col-xs-5 control-label">Attachments</label>
                                 <div class="col-md-9 col-xs-7">
                                     @if($cpar->attachments->count() > 0)
-                                        @if(request('user.role') == 'default')
+                                        @if(request('user.role') == 'default' && request('user.id') != $cpar->chief)
                                             <label class="control-label">Confidential</label>
                                         @elseif(request('user.id') == $cpar->raised_by || request('user.id') == $cpar->person_responsible
-                                        || request('user.role') == 'admin' || request('user.role') == 'document-controller')
+                                        || request('user.role') == 'admin' || request('user.role') == 'document-controller'
+                                        || request('user.id') == $cpar->chief)
                                             @foreach($cpar->attachments as $attachment)
-                                                <a class="control-label" href="{{ asset($attachment->file_path) }}" target="_blank">{{ $attachment->file_name }}</a> uploaded by: {{ $attachment->uploaded_by }}<br>
+                                                <a class="control-label" href="{{ asset($attachment->file_path) }}" target="_blank">
+                                                    {{ $attachment->file_name }}</a> uploaded by: {{ $attachment->uploaded_by }}<br>
                                             @endforeach
                                         @endif
                                     @else
