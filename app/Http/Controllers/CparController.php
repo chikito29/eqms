@@ -56,7 +56,7 @@ class CparController extends Controller {
         $_SERVER['REMOTE_ADDR']
     );
 
-    $cpars = Cpar::paginate(10);
+    $cpars = Cpar::latest()->paginate(10);
 
     return view('cpars.index', ['cpars' => $cpars]);
   }
