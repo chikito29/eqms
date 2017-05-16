@@ -93,26 +93,14 @@
                     noty({text: '{{ $notify['message'] }}', layout: 'topRight', type: '{{ $notify['type'] }}'});
                 @endif
             });
-
-            $("body").on("contextmenu",function(e){
-                return false;
-            });
-
-            $('body').bind('cut copy', function (e) {
-                e.preventDefault();
-            });
-
-            $(window).bind('keydown', function(event) {
-                if (event.ctrlKey || event.metaKey) {
-                    switch (String.fromCharCode(event.which).toLowerCase()) {
-                        case 's':
-                            event.preventDefault();
-                            break;
-                    }
-                }
-            });
         </script>
         <!-- END THIS PAGE PLUGINS-->
+
+        @if(request('user.role') == 'admin' || request('user.role') == 'document-controller')
+
+        @else
+            <script src="{{ url('js/restrict.js') }}"></script>
+        @endifgit
 
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="{{ url('js/plugins.js') }}"></script>
