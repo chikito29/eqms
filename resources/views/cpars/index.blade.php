@@ -20,6 +20,9 @@
                         <div class="x-block">
                             <div class="x-block-head">
                                 <h3>CPAR List</h3>
+                                <div class="pull-right">
+                                    <strong>Legends</strong>: <span class="label label-success">Observation</span>&nbsp;<span class="label label-warning">Minor</span>&nbsp;<span class="label label-danger">Major</span>
+                                </div>
                             </div>
                             <table class="table table-striped" id="cpars-table">
                                 <thead>
