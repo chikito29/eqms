@@ -16,6 +16,7 @@ class CreateCparsTable extends Migration
         Schema::create('cpars', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('document_id');
+            $table->string('audit_type');
             $table->integer('cpar_answered_id')->nullable();
             $table->integer('cpar_reviewed_id')->nullable();
             $table->integer('cpar_closed_id')->nullable();

@@ -230,7 +230,7 @@
                             <label class="col-md-3 col-xs-5 control-label">Remarks</label>
                             <div class="col-md-9 col-xs-7">
                                 @if( ! $revisionRequest->section_c)
-                                <textarea class="form-control" rows="5" name="ceo_remarks"></textarea>
+                                <textarea class="form-control" rows="5" name="ceo_remarks">{{ old('ceo_remarks') }}</textarea>
                                 @else
                                 <div class="panel-body" style="background-color: rgb(249,249,249); padding: 20px; border-radius: 5px;">
                                     {{ $revisionRequest->section_c->ceo_remarks }}

@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('page-title')
-    CPAR Forms | Cpar Index
+    CPAR Index | eQMS
 @endsection
 
 @section('nav-view') active @endsection

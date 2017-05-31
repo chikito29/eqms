@@ -221,8 +221,7 @@
             </div>
             <div class="modal-body">
                 <p>This CPAR has been issued <strong class="text text-info">{{ $cpar->created_at->toDayDateTimeString() }}</strong>.</p>
-                <p>You are given {{ $due }} working day/s (Saturdays included) to answer.</p>
-                <p>Due date of answering this CPAR is at the end of <strong class="text text-danger">{{ $due->toFormattedDateString() }}</strong>.</p>
+                <p>Due date of answering this CPAR is at the end of <strong class="text text-danger">{{ \Carbon\Carbon::parse($cpar->proposed_date)->toFormattedDateString() }}</strong>.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

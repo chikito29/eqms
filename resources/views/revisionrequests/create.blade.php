@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-5 control-label">Reference Document</label>
                             <div class="col-md-10 col-xs-7">
-                                <a href="{{ route('documents.show', $referenceDocument->id) }}" target="_blank" id="#denied_link"><label class="control-label">{{ $referenceDocument->title }}</label></a>
+                                <a href="{{ route('documents.show', $referenceDocument->id) }}" target="_blank" id="#denied_link"><span class="control-label">{{ $referenceDocument->title }}</span></a>
                                 <input type="hidden" name="reference_document_id" value="{{ $referenceDocument->id }}">
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="col-md-10 col-xs-7">
 								@if(isset($revisionRequest) && $revisionRequest->proposed_revision <> "<p><br></p>")
 									@include('revisionrequests.appeal-elements.old-proposed-revision', ['revisionRequest'])
-								@endif
+								@endif <br/><br/>
                                 <textarea class="summernote" name="proposed_revision">{{ old('proposed_revision') }}</textarea>
                                 <span class="help-block">You may use this editor to submit your revision request or upload a document.</span>
                             </div>

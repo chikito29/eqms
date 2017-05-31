@@ -23,6 +23,17 @@
                     {{--End Hidden inputs--}}
                     <div class="panel panel-default">
                         <div class="panel-body form-group-separated">
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-12 control-label">Audit Type</label>
+                                <div class="col-md-9 col-xs-12">
+                                    <select class="form-control select" name="audit_type" id="audit_type">
+                                        <option value="DNV">DNV AUDIT</option>
+                                        <option value="IA">INTERNAL AUDIT</option>
+                                        <option value="MARINA">MARINA AUDIT</option>
+                                    </select>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
                             @component('components.show-single-line')
                                 @slot('label') Raised By @endslot
                                 {{ request('user.first_name'). ' ' .request('user.last_name') }}

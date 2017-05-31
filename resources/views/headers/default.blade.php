@@ -1,6 +1,6 @@
 <div class="x-hnavigation no-print" style="margin-bottom: 30px;">
     <div class="x-hnavigation-logo">
-        <a href="{{ url('/') }}">eQMS</a>
+        <img src="" alt="">
     </div>
     <ul>
         <li class="@yield('nav-home')">

@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <link rel="icon" href="{{ url('favicon.ico') }}" type="image/x-icon" />
+        <link rel="icon" href="{{ url('favicon.png') }}" type="image/x-icon" />
         <!-- END META SECTION -->
 
         <!-- CSS INCLUDE -->
@@ -100,7 +100,7 @@
 
         @else
             <script src="{{ url('js/restrict.js') }}"></script>
-        @endifgit
+        @endif
 
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="{{ url('js/plugins.js') }}"></script>
