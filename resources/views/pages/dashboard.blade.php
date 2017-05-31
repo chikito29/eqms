@@ -26,7 +26,7 @@
                         <div class="x-chart-widget-head">
                             <div class="x-chart-widget-title">
                                 <h3>eQMS Activity</h3>
-                                <p>Account Type: <span>Business</span></p>
+                                {{--<p>Account Type: <span>Business</span></p>--}}
                             </div>
                             <div class="pull-right">
                                 <button class="btn btn-default">EXPORT</button>
@@ -38,8 +38,6 @@
                                 <h4>SUMMARY</h4>
                                 <div class="pull-right">
                                     <div class="btn-group">
-                                        <button class="btn btn-default">DAY</button>
-                                        <button class="btn btn-primary">WEEK</button>
                                         <button class="btn btn-default">MONTH</button>
                                         <button class="btn btn-default">YEAR</button>
                                     </div>
@@ -143,10 +141,10 @@
               element: 'x-dashboard-line',
               data: [
                 @foreach($chartData as $data)
-                { y: '{{ $data->day }}', a: {{ $data->revision_request }} ,b: {{ $data->revision_request }}},
+                { y: '{{ $data->day }}', a: '{{ $data->revision_request }}'},
                 @endforeach
 				@foreach($chartDataCpar as $data)
-                { y: '{{ $data->day }}', a: {{ $data->cpar }} ,b: {{ $data->cpar }}},
+                { y: '{{ $data->day }}', b: '{{ $data->cpar }}'},
                 @endforeach
               ],
               xkey: 'y',
