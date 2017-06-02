@@ -36,6 +36,7 @@ Route::get('cpars/review/{cpar}', 'CparController@review')->name('cpars.review')
 Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
 Route::get('user-details/{user}', 'LogController@getUser')->middleware('na.authenticate');
 Route::get('revision-requests/appeal/{revision_request}', 'RevisionRequestController@appeal')->name('revision-requests.appeal');
+Route::get('get-cpars-by-columns/', 'CparController@filterCpars');
 
 //Route GET Closure
 Route::get('unauthorize', function () { return view('errors.unauthorize'); });
@@ -54,14 +55,12 @@ Route::post('revision-requests/appeal/{revision_request}', 'RevisionRequestContr
 
 //development routes
 Route::group(['middleware' => 'na.authenticate'], function() {
-    Route::get('reset-cpars', 'DevRoutes@resetCpars');
     Route::get('eqms-users/{role?}', 'DevRoutes@showEqmsUsers');
     Route::get('na-users/{chief?}/{id?}', 'DevRoutes@showNAUsers');
     Route::get('show-cpars/{id?}', 'DevRoutes@showCpars');
     Route::get('test', 'DevRoutes@test');
 });
 
-Route::get('/foo', function () {
-  $cpar = \App\Cpar::find(1);
-  dd($cpar);
+Route::get('test', function(\Illuminate\Http\Request $request) {
+  return \Carbon\Carbon::parse('2016');
 });

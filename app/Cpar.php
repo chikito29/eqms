@@ -29,4 +29,21 @@ class Cpar extends Model {
     public function responsiblePerson() {
         return $this->hasOne(ResponsiblePerson::class);
     }
+
+    public static function filterBy($query, $key, $value) {
+        return $query->where($key, 'like', '%' .$value. '%');
+    }
+
+    public static function filterByDateRange($query, $from, $to) {
+        return $query->whereDate('created_at', '>=', \Carbon\Carbon::parse($from))
+                     ->whereDate('created_at', '<=', \Carbon\Carbon::parse($to));
+    }
+
+    public function scopeSearchCparBy($query, $keyword) {
+        return $query->where('cpar_number', 'like', '%' .$keyword. '%')
+                     ->orWhere('branch', $keyword)
+                     ->orWhere('department', $keyword)
+                     ->orWhere('created_at', 'like', '%' .$keyword. '%')
+                     ->orWhere('severity', 'like', '%' .$keyword. '%');
+    } 
 }

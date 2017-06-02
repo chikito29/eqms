@@ -19,14 +19,15 @@
                     <div class="col-md-12">
                         <div class="x-block">
                             <div class="x-block-head">
-                                <h3>CPAR List</h3>
                                 <div class="pull-right">
                                     <strong>Legends</strong>: <span class="label label-success">Observation</span>&nbsp;<span class="label label-warning">Minor</span>&nbsp;<span class="label label-danger">Major</span>
                                 </div>
                             </div>
+                            @include('layouts.filter')
                             <table class="table table-striped" id="cpars-table">
                                 <thead>
                                 <tr>
+                                    <th>Audit Type</th>
                                     <th>CPAR #</th>
                                     <th>RAISED BY</th>
                                     <th>SEVERITY</th>
@@ -90,6 +91,9 @@
 @stop
 
 @section('scripts')
+    <script src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
+    <script src="{{ url('js/plugins/bootstrap/bootstrap-datepicker.js') }}"></script>
+
     <script>
         var confirmModalBody;
         cparId = '';
@@ -130,5 +134,51 @@
 		if($('#cpars-table-body').children().length == 0) {
 			$('#cpars-table-body').html('<tr><td colspan="6" align="center">No CPAR Available.</td></tr>');
 		}
+    </script>
+
+    <script>
+        disableDetailedSearch();
+
+        $('#quick').on('change', function(){
+            if($(this).is(':checked')) {
+                disableDetailedSearch();
+            }
+        });
+
+        $('#detailed').on('change', function(){
+            if($(this).is(':checked')) {
+                reEnableDetailedSearch();
+                $('#search').attr('disabled', 'disabled');
+            }
+        });
+
+        function disableDetailedSearch() {
+            $('select[name="audit_type"]').attr('disabled', 'disabled');
+            $('select[name="audit_type"]').selectpicker('refresh');
+            $('select[name="branch"]').attr('disabled', 'disabled');
+            $('select[name="branch"]').selectpicker('refresh');
+            $('select[name="department"]').attr('disabled', 'disabled');
+            $('select[name="department"]').selectpicker('refresh');
+            $('select[name="severity"]').attr('disabled', 'disabled');
+            $('select[name="severity"]').selectpicker('refresh');
+            $('input[name="tags"]').attr('disabled', 'disabled');
+            $('input[name="created_at"]').attr('disabled', 'disabled');
+            $('input[name="updated_at"]').attr('disabled', 'disabled');
+            $('#search').removeAttr('disabled');
+        }
+
+        function reEnableDetailedSearch() {
+            $('select[name="audit_type"]').removeAttr('disabled');
+            $('select[name="audit_type"]').selectpicker('refresh');
+            $('select[name="branch"]').removeAttr('disabled');
+            $('select[name="branch"]').selectpicker('refresh');
+            $('select[name="department"]').removeAttr('disabled');
+            $('select[name="department"]').selectpicker('refresh');
+            $('select[name="severity"]').removeAttr('disabled');
+            $('select[name="severity"]').selectpicker('refresh');
+            $('input[name="tags"]').removeAttr('disabled');
+            $('input[name="created_at"]').removeAttr('disabled');
+            $('input[name="updated_at"]').removeAttr('disabled');
+        }
     </script>
 @endsection

@@ -1,6 +1,7 @@
 @foreach($cpars as $cpar)
 	@if(request('user.role') != 'default')
 		<tr>
+			<td>{{ strtoupper($cpar->audit_type) }}</td>
 			<td>{{ $cpar->cpar_number }}</td>
 			<td>
 				@foreach($employees as $employee)
@@ -43,6 +44,7 @@
 		@if((request('user.branch') == $cpar->branch && request('user.department') == $cpar->department)
 		|| request('user.id') == $cpar->raised_by || request('user.id') == $cpar->chief)
 			<tr>
+				<td>{{ strtoupper($cpar->audit_type) }}</td>
 				<td>{{ $cpar->cpar_number }}</td>
 				<td>
 					@foreach($employees as $employee)

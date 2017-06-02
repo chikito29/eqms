@@ -96,11 +96,11 @@
         </script>
         <!-- END THIS PAGE PLUGINS-->
 
-        @if(request('user.role') == 'admin' || request('user.role') == 'document-controller')
+        {{--@if(request('user.role') == 'admin' || request('user.role') == 'document-controller')--}}
 
-        @else
-            <script src="{{ url('js/restrict.js') }}"></script>
-        @endif
+        {{--@else--}}
+            {{--<script src="{{ url('js/restrict.js') }}"></script>--}}
+        {{--@endif--}}
 
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="{{ url('js/plugins.js') }}"></script>

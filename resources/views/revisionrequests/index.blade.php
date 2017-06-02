@@ -20,6 +20,28 @@
             <div class="row">
                 <div class="col-md-12">
 
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="background-color: #95b75d;">
+                            <h3 class="panel-title"><strong>Filter/Search Revision Requests</strong></h3>
+                            <ul class="panel-controls">
+                                <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal" action="{{ route('revision-requests.index') }}" method="get">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="search-type" id="quick" checked>Do quick search by: Revision Request#, Branch, Department, Status or the year it was created. **One keyword per search only**
+                                    </label>
+                                </div>
+                                <div class="form-group col-md-5" id="normal-search">
+                                    <input type="text" name="search" id="search" class="form-control" placeholder="To fetch all revision requests, leave this field empty then click submit">
+                                </div>
+                                <div class="col-md-12 pull-right"><button class="btn btn-success">Submit</button></div>
+                            </form>
+                        </div>
+                    </div>
+
                     <div class="x-block">
                         <div class="x-block-head">
                             <h3>REVISION REQUESTS</h3>

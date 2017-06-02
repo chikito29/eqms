@@ -25,14 +25,17 @@ class RevisionRequestController extends Controller {
         $this->middleware('na.authenticate');
     }
 
-    public function index() {
+    public function index(Request $request) {
         Make::log(
             'visited Revision Requests index',
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
 
-        $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->paginate(5);
+        if($request->has('search')) {
+            $query = RevisionRequest::lookFor($request->search);
+            $revisionRequests = $query->with('reference_document', 'attachments', 'section_b')->paginate(5);
+        } else { $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->paginate(5); }
 
         return view('revisionrequests.index', compact('revisionRequests'));
     }

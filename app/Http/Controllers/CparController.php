@@ -22,18 +22,19 @@ use App\DocumentVersion;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 
 class CparController extends Controller {
     protected $cpars;
-
+ 
     function __construct(Cpar $cpars, EqmsUser $eqmsUsers) {
         $this->cpars = $cpars->latest()->get();
         $this->middleware('na.authenticate')->except(['answerCpar', 'answer']);
     }
 
     public function getEmail($id) {
-        return $employee = NA::user($id)->email;
-    }
+        return $employee = NA::user($id)->email; 
+    } 
 
     public function colorize($severity) {
         if ($severity == 'Observation') {
@@ -49,14 +50,43 @@ class CparController extends Controller {
         return $severity;
     }
 
-    public function index() {
+    public function index(Request $request) {
         Make::log(
             'visited CPARs index',
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
 
-        $cpars = Cpar::latest()->paginate(10);
+        if($request->has('search')) {
+            $cpars = Cpar::searchCparBy($request->search);
+            $cpars = $cpars->paginate(10);
+        } elseif(! $request->has('search')) {
+            $this->validate($request, [ 'updated_at' => 'required_unless:created_at,""' ], [ 'updated_at.required_unless' => 'Date range must be complete or empty.' ]);
+
+            $query = Cpar::query();
+
+            foreach($request->except('user', 'page', 'search-type', 'created_at', 'updated_at') as $key => $value) {
+                if($value == null) continue;
+                else { $query = Cpar::filterBy($query, $key, $value); }
+            }
+
+            if($request->has('created_at')) {
+                $query = Cpar::filterByDateRange($query, $request->created_at, $request->updated_at);
+            }
+
+            $cpars = $query->latest()->paginate(10);
+        } else {
+            $cpars = Cpar::latest()->paginate(10);
+        }
+
+        $params = '?';
+
+        foreach($request->except('user', 'page', 'search-type') as $key => $value) {
+          if($params == '?') { $params = $params .$key. '=' .$value; }
+          else { $params = $params .'&'. $key .'='. $value; }
+        }
+
+        $cpars->setPath($request->url() . $params);
 
         return view('cpars.index', ['cpars' => $cpars]);
     }
@@ -571,5 +601,15 @@ class CparController extends Controller {
         );
 
         return back();
+    }
+
+    public function filterCpars(Request $request) {
+        $query = Cpar::query();
+
+        foreach($request->except('user') as $key => $value) {
+            $query = Cpar::filterBy($query, $key, $value);
+        }
+
+        return $query->paginate(1);
     }
 }

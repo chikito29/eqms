@@ -38,4 +38,10 @@ class RevisionRequest extends Model
     public function section_d() {
         return $this->hasOne(RevisionRequestSectionD::class, 'revision_request_id');
     }
+
+    public function scopeLookFor($query, $keyword) {
+        return $query->orWhere('revision_request_number', 'like', '%' .$keyword. '%')
+                     ->orWhere('status', 'like', '%' .$keyword. '%')
+                     ->orWhere('created_at', 'like', '%' .$keyword. '%');
+    }
 }
