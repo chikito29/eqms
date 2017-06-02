@@ -82,38 +82,18 @@
                     <div class="x-widget-timeline">
                         <div class="x-widget-timelime-head">
                             <h3>NOTIFICATIONS</h3>
-                            <div class="pull-right"><a href="#">Settings <span class="fa fa-cog"></span></a></div>
                         </div>
                         <div class="x-widget-timeline-content">
-                            <div class="item item-blue">
-                                <a href="#">Maria Jackson</a> Sent you a <strong>message</strong>
-                                <span>3 minutes ago</span>
-                            </div>
-                            <div class="item item-green">
-                                <a href="#">Brian Dawson</a> Invited you to <strong>Linkedin</strong>
-                                <span>16.09.2015 1:27 pm</span>
-                            </div>
-                            <div class="item item-green">
-                                <a href="#">Hannah Jensen</a> Invited you to like her on <strong>facebook</strong>
-                                <span>16.09.2015 1:13 pm</span>
-                            </div>
-                            <div class="item item-red">
-                                <a href="#">Nancy Watson</a> You got 3 new <strong>notifications</strong>
-                                <span>16.09.2015 11:41 am</span>
-                            </div>
-                            <div class="item item-red">
-                                <a href="#">Nancy Watson</a> You got 1 requests to <strong>add friends</strong>
-                                <span>16.09.2015 11:23 am</span>
-                            </div>
-                            <div class="item item-greay">
-                                <a href="#">Hannah Jensen</a> Invited you to like her on <strong>facebook</strong>
-                                <span>16.09.2015 10:26 am</span>
-                            </div>
-                            <div class="item item-blue">
-                                <a href="#">Douglas Cook</a> Sent you a <strong>message</strong>
-                                <span>16.09.2015 09:15 am</span>
-                            </div>
-                            <button class="btn btn-default btn-block">Load more...</button>
+                           @if($newlyCreatedCpars->count() > 0)
+                                @foreach($newlyCreatedCpars as $cpar)
+                                    <div class="item item-blue">
+                                        a new <a href="{{ route('cpars.review', $cpar->id) }}">CPAR</a> has been <strong>created</strong>
+                                        <span>{{ \Carbon\Carbon::parse($cpar->created_at)->diffForHumans() }}</span>
+                                    </div>
+                                @endforeach
+                           @else
+                               No new notifications available!
+                           @endif
                         </div>
                     </div>
 

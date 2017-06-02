@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Cpar extends Model {
     use SoftDeletes;
@@ -45,5 +46,15 @@ class Cpar extends Model {
                      ->orWhere('department', $keyword)
                      ->orWhere('created_at', 'like', '%' .$keyword. '%')
                      ->orWhere('severity', 'like', '%' .$keyword. '%');
-    } 
+    }
+
+    public static function newlyCreated() {
+        return $cpars = DB::table('cpars')
+            ->join('cpar_answered', 'cpars.id', '=', 'cpar_answered.cpar_id')
+            ->join('cpar_closed', 'cpars.id', '=', 'cpar_closed.cpar_id')
+            ->select('cpars.*', 'cpar_answered.status', 'cpar_closed.status')
+            ->where('cpar_answered.status', 0)
+            ->where('cpar_closed.status', 0)
+            ->get();
+    }
 }
