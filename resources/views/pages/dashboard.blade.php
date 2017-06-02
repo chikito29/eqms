@@ -10,9 +10,6 @@
     <div class="x-content-tabs">
         <ul>
             <li><a href="#main-tab" class="icon active"><span class="fa fa-desktop"></span></a></li>
-            <li><a href="#second-tab"><span class="fa fa-life-ring"></span><span>Second tab</span></a></li>
-            <li><a href="#third-tab"><span class="fa fa-microphone"></span><span>Third tab</span></a></li>
-            <li><a href="#new-tab" class="icon"><span class="fa fa-plus"></span></a></li>
         </ul>
     </div>
     <div class="x-content">
@@ -29,8 +26,7 @@
                                 {{--<p>Account Type: <span>Business</span></p>--}}
                             </div>
                             <div class="pull-right">
-                                <button class="btn btn-default">EXPORT</button>
-                                <button class="btn btn-default">TODAY: 14 SEP.2015</button>
+                                <strong>Legend: </strong> <span class="label label-danger">CPARS</span> <span class="label label-success">Revision Requests</span>
                             </div>
                         </div>
                         <div class="x-chart-widget-content">
@@ -49,26 +45,26 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="x-chart-widget-informer-item">
-                                                    <div class="count">223<span>34% <i class="fa fa-arrow-up"></i></span></div>
-                                                    <div class="title">Views of your profile</div>
+                                                    <div class="count">{{ $cparsOld->count() }}</div>
+                                                    <div class="title">Last year's CPAR count</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="x-chart-widget-informer-item">
-                                                    <div class="count">190<span>17% <i class="fa fa-arrow-up"></i></span></div>
-                                                    <div class="title">Views of your works</div>
+                                                    <div class="count">{{ $cparsNew->count() }}<span>{{ $cparsNew->count() - $cparsOld->count() / $cparsOld->count() }}% <i class="fa fa-arrow-up"></i></span></div>
+                                                    <div class="title">This year's CPAR count</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="x-chart-widget-informer-item">
-                                                    <div class="count">223<span class="negative">22% <i class="fa fa-arrow-down"></i></span></div>
-                                                    <div class="title">Likes</div>
+                                                    <div class="count">{{ $revisionRequestsOld->count() }}</div>
+                                                    <div class="title">Last year's revision requests count</div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="x-chart-widget-informer-item last">
-                                                    <div class="count">160<span>3% <i class="fa fa-arrow-up"></i></span></div>
-                                                    <div class="title">Comments</div>
+                                                    <div class="count">{{ $revisionRequestsNew->count() }}<span>{{ $revisionRequestsNew->count() - $revisionRequestsOld->count() / $revisionRequestsOld->count() }}% <i class="fa fa-arrow-up"></i></span></div>
+                                                    <div class="title">This year's revision requests count</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,9 +120,6 @@
                 </div>
             </div>
         </div>
-        <div id="second-tab"></div>
-        <div id="third-tab"></div>
-        <div id="fourth-tab"></div>
     </div>
 @endsection
 

@@ -13,7 +13,7 @@ var morrisCharts = function() {
       ],
       xkey: 'y',
       ykeys: ['a', 'b'],
-      labels: ['Series A', 'Series B'],
+      labels: ['Revision Requests', 'Cpars'],
       resize: true,
       lineColors: ['#33414E', '#95B75D']
     });

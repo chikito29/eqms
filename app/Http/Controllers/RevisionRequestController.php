@@ -362,8 +362,9 @@ class RevisionRequestController extends Controller {
             'status'                  => 'Appeal'
         ]);
 
-        $old_revision_request             = RevisionRequest::find(request('reference_document_id'));
+        $old_revision_request             = RevisionRequest::find($id);
         $old_revision_request->has_appeal = 1;
+        $old_revision_request->appeal_id = $revisionRequest->id;
         $old_revision_request->save();
 
         $uses_old_attachment = request('uses_old_attachment');

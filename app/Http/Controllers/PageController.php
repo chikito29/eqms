@@ -8,6 +8,8 @@ use App\ResponsiblePerson;
 use App\RevisionLog;
 use App\RevisionRequest;
 use App\HelperClasses\Make;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller {
     public function __construct() {
@@ -29,11 +31,14 @@ class PageController extends Controller {
         );
 
         if(request('user.role') != 'default') {
-            $revisionRequests = RevisionRequest::with('reference_document', 'attachments', 'section_b')->orderBy('created_at', 'desc')->get();
+            $cparsOld = Cpar::where( DB::raw('YEAR(created_at)'), '=', Carbon::now()->year-1 )->get();
+            $revisionRequestsOld = RevisionRequest::where( DB::raw('YEAR(created_at)'), '=', Carbon::now()->year-1 )->get();
+            $cparsNew = Cpar::where( DB::raw('YEAR(created_at)'), '=', Carbon::now()->year )->get();
+            $revisionRequestsNew = RevisionRequest::where( DB::raw('YEAR(created_at)'), '=', Carbon::now()->year )->get();
             $chartData        = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
             $chartDataCpar    = \App\Cpar::selectRaw('date(created_at) AS day, COUNT(*) cpar')->groupBy('day')->get();
 
-            return view('pages.dashboard', compact('chartData', 'chartDataCpar', 'revisionRequests'));
+            return view('pages.dashboard', compact('chartData', 'chartDataCpar', 'revisionRequestsOld', 'cparsOld', 'revisionRequestsNew', 'cparsNew'));
         } else {
             return view('errors.404');
         }

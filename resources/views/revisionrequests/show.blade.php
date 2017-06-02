@@ -23,8 +23,7 @@
                         <p>This is to formalize a request for a revision to the document as follows:</p>
                     </div>
                     <div class="panel-body form-group-separated">
-                        @php $appeal = \App\RevisionRequest::find($revisionRequest->revision_request_id) @endphp
-                        @if($appeal <> null && ($revisionRequest->appeal_id <> null && ($appeal->status == 'Denied' || $appeal->status == 'Approved')))
+                        @if($revisionRequest->has_appeal == 1)
                             @include('revisionrequests.appeal-elements.appeal-link', ['revisioRequest' => $revisionRequest])
                         @elseif($revisionRequest->appeal_id <> null)
                             <div class="form-group" style="text-align: center;">
