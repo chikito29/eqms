@@ -6,7 +6,7 @@
 
 @section('page-content')
     <div class="page-content-wrap" style="margin-top: -25px;">
-        <div class="x-content" >
+        <div class="x-content" style="margin-top:-20px; height: 90vh;">
             <div class="x-content-inner" style="margin-top:-20px;">
                 <div class="row">
                     <div class="col-md-12">

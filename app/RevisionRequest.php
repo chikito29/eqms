@@ -9,6 +9,7 @@ use App\Attachment;
 use App\RevisionRequestSectionB;
 use App\RevisionRequestSectionC;
 use App\RevisionRequestSectionD;
+use Illuminate\Support\Facades\DB;
 
 
 class RevisionRequest extends Model
@@ -43,5 +44,10 @@ class RevisionRequest extends Model
         return $query->orWhere('revision_request_number', 'like', '%' .$keyword. '%')
                      ->orWhere('status', 'like', '%' .$keyword. '%')
                      ->orWhere('created_at', 'like', '%' .$keyword. '%');
+    }
+
+    public function scopeNewlyCreated() {
+        return RevisionRequest::where('status', 'New')
+            ->orWhere('status', 'Appeal')->get();
     }
 }

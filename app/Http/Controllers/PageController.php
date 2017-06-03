@@ -32,6 +32,7 @@ class PageController extends Controller {
 
         if(request('user.role') != 'default') {
             $newlyCreatedCpars = Cpar::newlyCreated();
+            $newlyCreatedRevisionRequests = RevisionRequest::newlyCreated();
 
             $cparsOld = Cpar::where( DB::raw('YEAR(created_at)'), '=', Carbon::now()->year-1 )->get();
             $revisionRequestsOld = RevisionRequest::where( DB::raw('YEAR(created_at)'), '=', Carbon::now()->year-1 )->get();
@@ -40,7 +41,7 @@ class PageController extends Controller {
             $chartData        = RevisionRequest::selectRaw('date(created_at) AS day, COUNT(*) revision_request')->groupBy('day')->get();
             $chartDataCpar    = \App\Cpar::selectRaw('date(created_at) AS day, COUNT(*) cpar')->groupBy('day')->get();
 
-            return view('pages.dashboard', compact('chartData', 'chartDataCpar', 'revisionRequestsOld', 'cparsOld', 'revisionRequestsNew', 'cparsNew', 'newlyCreatedCpars'));
+            return view('pages.dashboard', compact('chartData', 'chartDataCpar', 'revisionRequestsOld', 'cparsOld', 'revisionRequestsNew', 'cparsNew', 'newlyCreatedCpars', 'newlyCreatedRevisionRequests'));
         } else {
             return view('errors.404');
         }

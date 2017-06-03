@@ -5,7 +5,7 @@
 @section('nav-actions') active @endsection
 
 @section('page-content')
-    <div class="page-content-wrap">
+    <div class="page-content-wrap" style="margin-top:-20px; height: 90vh;">
 
         <div class="page-title">
             <h2><span class="fa fa-file-text-o"></span> New Document</h2>
