@@ -1,5 +1,5 @@
 <div class="x-hnavigation no-print" style="margin-bottom: 30px;">
-    <div class="x-hnavigation-logo">
+    <div class="x-hnavigation-logo" style="margin-left: 10px;">
         <img src="" alt="">
     </div>
     <ul>
