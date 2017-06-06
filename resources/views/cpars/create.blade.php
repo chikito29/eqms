@@ -197,7 +197,7 @@
 @stop
 
 @section('scripts')
-    <script type="text/javascript" src="/js/plugins/bootstrap/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/summernote/summernote.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/bootstrap/bootstrap-select.js') }}"></script>
     <script type="text/javascript" src="{{ url('js/plugins/fileinput/fileinput.min.js') }}"></script>
