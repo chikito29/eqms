@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-9">
 
-                <form enctype="multipart/form-data" class="form-horizontal" action="/cpars" method="POST" role="form">
+                <form enctype="multipart/form-data" class="form-horizontal" action="{{ url('cpars') }}" method="POST" role="form">
                     {{ csrf_field() }}
                     {{--Hidden inputs--}}
                     <input type="text" class="hidden" value="{{ request('user.id') }}" name="raised_by"/>
