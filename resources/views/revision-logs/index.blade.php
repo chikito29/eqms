@@ -157,19 +157,19 @@
         });
 
         function confirmation(id, action, log){
+            var revision_log = JSON.parse(log);
             if(action == 'update'){
-                alert(log);
                 $('#modal-title').html('Edit Revision Log');
                 $('#log-form').attr('action', '/revision-logs/' + id);
                 $('#log-form').append('{{ method_field('patch') }}');
 
                 //populate form elements
-                $('input[name="date"]').val(log['date']);
-                $('select[name="document-id"]').val(log['id']);
+                $('input[name="date"]').val(revision_log.date);
+                $('select[name="document-id"]').val(revision_log.document_id);
                 $('select[name="document-id"]').selectpicker('refresh');
-                $('textarea[name="description"]').html(log['description']);
-                $('input[name="revision-number"]').val(log['revision_number']);
-                $('input[name="approved-by"]').val(log['approved_by']);
+                $('textarea[name="description"]').html(revision_log.description);
+                $('input[name="revision-number"]').val(revision_log.revision_number);
+                $('input[name="approved-by"]').val(revision_log.approved_by);
 
                 $('#add-modal').modal('toggle');
             } else {
