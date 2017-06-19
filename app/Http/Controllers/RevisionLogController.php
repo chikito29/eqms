@@ -100,8 +100,27 @@ class RevisionLogController extends Controller {
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id) {
-        //
+    public function update(Request $request, RevisionLog $revisionLog) {
+        $this->validate($request, [
+            'date' => 'required',
+            'document-id' => 'required',
+            'description' => 'required',
+            'revision-number' => 'required',
+            'approved-by' => 'required'
+        ]);
+
+        $revisionLog->date = request('date');
+        $revisionLog->revision_number = request('revision-number');
+        $revisionLog->description = request('description');
+        $revisionLog->approved_by = request('approved-by');
+        if(request('document-id') == $revisionLog->document->id) { $revisionLog->manual_reference = $revisionLog->document->title; }
+        else {
+            $revisionLog->document_id = request('document-id');
+            $revisionLog->manual_reference = Document::select('title')->where('id', request('document-id'))->first()->title;
+        }
+        $revisionLog->save();
+
+        return back();
     }
 
     /**

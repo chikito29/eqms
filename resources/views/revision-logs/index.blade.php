@@ -169,7 +169,8 @@
                 $('select[name="document-id"]').selectpicker('refresh');
                 $('textarea[name="description"]').html(revision_log.description);
                 $('input[name="revision-number"]').val(revision_log.revision_number);
-                $('input[name="approved-by"]').val(revision_log.approved_by);
+                $('select[name="approved-by"]').val(revision_log.approved_by);
+                $('select[name="approved-by"]').selectpicker('refresh');
 
                 $('#add-modal').modal('toggle');
             } else {
