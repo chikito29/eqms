@@ -113,6 +113,7 @@ class CparController extends Controller {
 
         //TODO: extract this validation to the model
         $document = Document::find(request('reference'));
+        $now = Carbon::now();
 
         $this->validate(request(), [
             'tags'               => 'required',
@@ -120,9 +121,9 @@ class CparController extends Controller {
             'other_source'       => 'required',
             'details'            => 'required',
             'person_responsible' => 'required',
-            'proposed_date'      => 'required',
+            'proposed_date'      => "required|date|after_or_equal:$now",
             'chief'              => 'required',
-        ]);
+        ], ['proposed_date.after_or_equal' => 'Proposed date must be ON or AFTER its creation.']);
 
         if (request('branch') == '') {
             session([

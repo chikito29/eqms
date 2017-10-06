@@ -24,8 +24,8 @@
         <li class="xn-openable @yield('nav-view')">
             <a href="#">View</a>
             <ul>
-                <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
-                <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-shield"></span> Access Requests</a></li>
+                <!-- <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li> -->
+                <!-- <li><a href="{{ route('access-requests.index') }}"><span class="fa fa-shield"></span> Access Requests</a></li> -->
                 <li><a href="{{ route('cpars.index') }}"><span class="fa fa-list"></span> CPARs</a></li>
                 <li><a href="{{ route('revision-logs.index') }}"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>

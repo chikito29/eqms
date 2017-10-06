@@ -1,6 +1,6 @@
 <div class="x-hnavigation no-print" style="margin-bottom: 30px;">
     <div class="x-hnavigation-logo" style="margin-left: 10px;">
-        <img src="" alt="">
+        <a href="{{ url('/') }}">eQMS</a>
     </div>
     <ul>
         <li class="@yield('nav-home')">
@@ -24,7 +24,7 @@
         <li class="xn-openable @yield('nav-view')">
             <a href="#">View</a>
             <ul>
-                <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li>
+                <!-- <li><a href="{{ route('revision-requests.index') }}"><span class="fa fa-paste"></span> Revision Requests</a></li> -->
                 <li><a href="{{ route('cpars.index') }}"><span class="fa fa-list"></span> CPARs</a></li>
                 <li><a href="{{ route('revision-logs.index') }}"><span class="fa fa-files-o"></span> Revision Logs</a></li>
             </ul>
