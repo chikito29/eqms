@@ -12,33 +12,30 @@
 
                 <!-- START SEARCH RESULT -->
                 <div class="search-results">
+                    @if($documents->count() > 0)
+                        @foreach($documents as $document)
+                            <div class="sr-item">
+                                <a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" class="sr-item-title">{{ $document->title }}</a>
+                                <div class="sr-item-link">{{ URL::to('documents/' . $document->id) }}</div>
+                                <p class="limit">	{!!
+                                            substr(
+                                                ucfirst(
+                                                    str_replace( request('search'), '<mark style="background-color: yellow;">' .request('search'). '</mark>', substr(strip_tags(strtolower($document->body)), strpos(strip_tags(strtolower($document->body)), request('search')), 400))
+                                                    ), 0, 400) !!}	</p>
 
-                    @foreach($documents as $document)
+                                <p class="sr-item-links"><a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" target="_new">Open in new window</a> </p>
+                            </div>
+                        @endforeach
+                    @else
                         <div class="sr-item">
-                            <a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" class="sr-item-title">{{ $document->title }}</a>
-                            <div class="sr-item-link">{{ URL::to('documents/' . $document->id) }}</div>
-                            <p class="limit">	{!!
-                            			substr(
-                            				ucfirst(
-                            					str_replace( request('search'), '<mark style="background-color: yellow;">' .request('search'). '</mark>', substr(strip_tags(strtolower($document->body)), strpos(strip_tags(strtolower($document->body)), request('search')), 400))
-                            					), 0, 400) !!}	</p>
-
-                            <p class="sr-item-links"><a href="{{ URL::to('documents/' . $document->id) }}?search={{ request('search') }}" target="_new">Open in new window</a> </p>
+                            <a href="#" class="sr-item-title align">No result found for keyword <mark>{{ request('search') }}</mark></a>
                         </div>
-                    @endforeach
-
+                    @endif
                 </div>
                 <!-- END SEARCH RESULT -->
-
-                <ul class="pagination pagination-sm pull-right push-down-20">
-                    <li class="disabled"><a href="#">«</a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">»</a></li>
-                </ul>
-
+                @if($documents->count() > 0)
+                    {{ $documents->appends(['search' => request('search')])->links() }}
+                @endif
             </div>
         </div>
 

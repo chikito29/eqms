@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 pull-right"><button class="btn btn-success">Submit</button></div>
+            <div class="col-md-12 pull-right"><button class="btn btn-success">Submit</button> &nbsp; <a href="{{ route('cpars-report', $ids) }}" class="btn btn-warning">Print as report</a></div>
         </form>
     </div>                            
 </div>

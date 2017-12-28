@@ -137,7 +137,9 @@
     </script>
 
     <script>
-        disableDetailedSearch();
+        $(function(){
+            disableDetailedSearch();
+        })
 
         $('#quick').on('change', function(){
             if($(this).is(':checked')) {

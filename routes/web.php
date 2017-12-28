@@ -37,11 +37,13 @@ Route::get('cpars/close/{cpar}', 'CparController@close')->name('cpars.close');
 Route::get('user-details/{user}', 'LogController@getUser')->middleware('na.authenticate');
 Route::get('revision-requests/appeal/{revision_request}', 'RevisionRequestController@appeal')->name('revision-requests.appeal');
 Route::get('get-cpars-by-columns/', 'CparController@filterCpars');
+Route::get('cpars-report/{cpars}', 'ReportController@cpars')->name('cpars-report');
 
 //Route GET Closure
 Route::get('unauthorize', function () { return view('errors.unauthorize'); });
 Route::get('pending', function () { return view('accessrequests.pending'); });
 Route::get('/', function () { return view('welcome'); })->name('/');
+Route::get('eqms-user/{id}', function($id) { if(count(\App\EqmsUser::where('user_id', $id)->get()) == 1){ return 'admin'; } else { return 'not admin'; } });
 
 // Individual POST Requests
 Route::post('answer-cpar/login/{cpar}', 'PageController@answerCparLoginPost')->name('answer-cpar-login-post');
@@ -52,7 +54,3 @@ Route::post('answer/{cpar}', 'CparController@answer')->name('answer');
 Route::post('access-requests/{access_request}/grant', 'AccessRequestController@grant')->name('access-requests.grant');
 Route::post('access-requests/{access_request}/revoke', 'AccessRequestController@revoke')->name('access-requests.revoke');
 Route::post('revision-requests/appeal/{revision_request}', 'RevisionRequestController@storeAppeal')->name('revision-requests.store-appeal');
-
-Route::get('test', function(\Illuminate\Http\Request $request) {
-  return \App\RevisionRequest::newlyCreated();
-});

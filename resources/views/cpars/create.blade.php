@@ -143,11 +143,11 @@
                                     <select class="form-control select" name="chief" id="chief" data-live-search="true"></select>
                                 </div>
                             </div>
-							<div class="form-group">
+							<div class="form-group @if($errors->first('proposed-date')) has-error @endif">
 								<label class="col-md-3 col-xs-5 control-label">Attachment</label>
 								<div class="col-md-9 col-xs-7">
 									<input type="file" multiple id="file-simple" name="attachments[]"/>
-									<span class="help-block">Attach document / scanned document if needed.</span>
+                                    @if($errors->first('attachments')) @component('layouts.error') {{ $errors->first('attachments') }} @endcomponent @else <span class="help-block">Audit Report to be referenced by the responsible person.</span> @endif
 								</div>
 							</div>
                             <div class="form-group">

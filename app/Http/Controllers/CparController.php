@@ -59,6 +59,7 @@ class CparController extends Controller {
 
         if($request->has('search')) {
             $cpars = Cpar::searchCparBy($request->search);
+            $report = $cpars;
             $cpars = $cpars->paginate(10);
         } elseif(! $request->has('search')) {
             $this->validate($request, [ 'updated_at' => 'required_unless:created_at,""' ], [ 'updated_at.required_unless' => 'Date range must be complete or empty.' ]);
@@ -75,8 +76,11 @@ class CparController extends Controller {
             }
 
             $cpars = $query->latest()->paginate(10);
+            $reports = $cpars->pluck('id');
         } else {
-            $cpars = Cpar::latest()->paginate(10);
+            $cpars = Cpar::latest();
+            $report = $cpars;
+            $cpars = $cpars->paginate(10);
         }
 
         $params = '?';
@@ -88,7 +92,16 @@ class CparController extends Controller {
 
         $cpars->setPath($request->url() . $params);
 
-        return view('cpars.index', ['cpars' => $cpars]);
+        $ids = "";
+        foreach($reports as $report){
+            if($ids == "") {
+                $ids = $ids . $report;
+            } else {
+                $ids = $ids .','. $report;
+            }
+        }
+
+        return view('cpars.index', compact('cpars','ids'));
     }
 
     public function create() {
@@ -123,6 +136,7 @@ class CparController extends Controller {
             'person_responsible' => 'required',
             'proposed_date'      => "required|date|after_or_equal:$now",
             'chief'              => 'required',
+            'attachments'              => 'required',
         ], ['proposed_date.after_or_equal' => 'Proposed date must be ON or AFTER its creation.']);
 
         if (request('branch') == '') {

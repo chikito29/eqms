@@ -20,7 +20,7 @@ class DocumentController extends Controller {
             $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'],
             $_SERVER['REMOTE_ADDR']
         );
-        $documents = Document::where('body', 'like', '%' . request('search') . '%')->get();
+        $documents = Document::where('body', 'like', '%' . request('search') . '%')->paginate(5);
 
         return view('documents.search', compact('documents'));
     }

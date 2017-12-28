@@ -18,12 +18,11 @@
                 <h1>Dashboard</h1>
             </div>
             <div class="row stacked">
-                <div class="col-md-10">
+                <div class="@if($newlyCreatedCpars->count() > 0) col-md-10 @else col-md-12 @endif">
                     <div class="x-chart-widget">
                         <div class="x-chart-widget-head">
                             <div class="x-chart-widget-title">
                                 <h3>eQMS Activity</h3>
-                                {{--<p>Account Type: <span>Business</span></p>--}}
                             </div>
                             <div class="pull-right">
                                 <strong>Legend: </strong> <span class="label label-danger">CPARS</span> <span class="label label-success">Revision Requests</span>
@@ -77,34 +76,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
+                @if($newlyCreatedCpars->count() > 0)
+                    <div class="col-md-2">
 
-                    <div class="x-widget-timeline">
-                        <div class="x-widget-timelime-head">
-                            <h3>NOTIFICATIONS</h3>
+                        <div class="x-widget-timeline">
+                            <div class="x-widget-timelime-head">
+                                <h3>NOTIFICATIONS</h3>
+                            </div>
+                            <div class="x-widget-timeline-content">
+                               @if($newlyCreatedCpars->count() > 0 || $newlyCreatedRevisionRequests->count() > 0)
+                                    @foreach($newlyCreatedCpars as $cpar)
+                                        <div class="item item-blue">
+                                            a new <a href="{{ route('cpars.review', $cpar->id) }}">CPAR</a> has been <strong>created</strong>
+                                            <span>{{ \Carbon\Carbon::parse($cpar->created_at)->diffForHumans() }}</span>
+                                        </div>
+                                    @endforeach
+                                    {{--@foreach($newlyCreatedRevisionRequests as $revisionRequest)--}}
+                                        {{--<div class="item item-blue">--}}
+                                            {{--a new <a href="{{ route('revision-requests.show', $revisionRequest->id) }}">Revision Request--}}
+                                            {{--{{ $revisionRequest->status == 'Appeal' ? 'Appeal' : '' }}</a> has been <strong>created</strong>--}}
+                                            {{--<span>{{ \Carbon\Carbon::parse($revisionRequest->created_at)->diffForHumans() }}</span>--}}
+                                        {{--</div>--}}
+                                    {{--@endforeach--}}
+                               @else
+                                   No new notifications available!
+                               @endif
+                            </div>
                         </div>
-                        <div class="x-widget-timeline-content">
-                           @if($newlyCreatedCpars->count() > 0 || $newlyCreatedRevisionRequests->count() > 0)
-                                @foreach($newlyCreatedCpars as $cpar)
-                                    <div class="item item-blue">
-                                        a new <a href="{{ route('cpars.review', $cpar->id) }}">CPAR</a> has been <strong>created</strong>
-                                        <span>{{ \Carbon\Carbon::parse($cpar->created_at)->diffForHumans() }}</span>
-                                    </div>
-                                @endforeach
-                                @foreach($newlyCreatedRevisionRequests as $revisionRequest)
-                                    <div class="item item-blue">
-                                        a new <a href="{{ route('revision-requests.show', $revisionRequest->id) }}">Revision Request
-                                        {{ $revisionRequest->status == 'Appeal' ? 'Appeal' : '' }}</a> has been <strong>created</strong>
-                                        <span>{{ \Carbon\Carbon::parse($revisionRequest->created_at)->diffForHumans() }}</span>
-                                    </div>
-                                @endforeach
-                           @else
-                               No new notifications available!
-                           @endif
-                        </div>
+
                     </div>
-
-                </div>
+                @endif
             </div>
         </div>
     </div>

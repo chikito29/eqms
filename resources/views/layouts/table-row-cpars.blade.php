@@ -42,7 +42,7 @@
 		</tr>
 	@else
 		@if((request('user.branch') == $cpar->branch && request('user.department') == $cpar->department)
-		|| request('user.id') == $cpar->raised_by || request('user.id') == $cpar->chief)
+		|| request('user.id') == $cpar->raised_by)
 			<tr>
 				<td>{{ strtoupper($cpar->audit_type) }}</td>
 				<td>{{ $cpar->cpar_number }}</td>
