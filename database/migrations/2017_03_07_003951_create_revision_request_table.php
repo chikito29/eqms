@@ -15,7 +15,7 @@ class CreateRevisionRequestTable extends Migration
     {
         Schema::create('revision_requests', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('appeal_id');
+            $table->integer('appeal_id')->nullable();
             $table->string('revision_request_number')->nullable();
             $table->integer('user_id');
             $table->string('user_name');
